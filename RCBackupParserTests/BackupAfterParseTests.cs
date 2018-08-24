@@ -49,7 +49,7 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
                 Assert.IsTrue(initialCountKeysInDict > 0, "No data seen in dictionary");
 
                 // Take backup
-                await backupParser.BackupAsync(this.OnFullBackupCallback, Data.BackupOption.Full, TimeSpan.FromMinutes(30), CancellationToken.None);
+                await backupParser.BackupAsync(Data.BackupOption.Full, TimeSpan.FromMinutes(30), CancellationToken.None, this.OnFullBackupCallback);
             }
 
             // Verify full backup
@@ -108,7 +108,7 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
                 Assert.IsTrue(initialCountKeysInDict > 0, "No data seen in dictionary");
 
                 // Take backup
-                await backupParser.BackupAsync(this.OnFullBackupCallback, Data.BackupOption.Full, TimeSpan.FromMinutes(30), CancellationToken.None);
+                await backupParser.BackupAsync(Data.BackupOption.Full, TimeSpan.FromMinutes(30), CancellationToken.None, this.OnFullBackupCallback);
             }
 
             // Verify full backup
@@ -178,7 +178,7 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
                 Assert.IsTrue(initialCountKeysInDict > 0, "No data seen in dictionary");
 
                 // Take backup
-                await backupParser.BackupAsync(this.OnFullBackupCallback, Data.BackupOption.Full, TimeSpan.FromMinutes(30), CancellationToken.None);
+                await backupParser.BackupAsync(Data.BackupOption.Full, TimeSpan.FromMinutes(30), CancellationToken.None, this.OnFullBackupCallback);
 
                 using (var tx = stateManager.CreateTransaction())
                 {
@@ -191,7 +191,7 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
                 }
 
                 // Take incremental backup
-                await backupParser.BackupAsync(this.OnIncrementalBackupCallback, BackupOption.Incremental, TimeSpan.FromMinutes(3), CancellationToken.None);
+                await backupParser.BackupAsync(BackupOption.Incremental, TimeSpan.FromMinutes(3), CancellationToken.None, this.OnIncrementalBackupCallback);
             }
 
             // Verify full+incremental backups

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Fabric;
 using System.Fabric.Common;
-using System.Fabric.Common.Test;
 using System.IO;
 using System.Linq;
 using System.Threading;

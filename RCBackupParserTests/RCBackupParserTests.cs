@@ -16,7 +16,6 @@ using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Tools.RCBackupParser;
 using Microsoft.ServiceFabric.Replicator;
-using System.Fabric.Common.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.ServiceFabric.Data.Collections.ReliableConcurrentQueue;
 using Microsoft.ServiceFabric.Data.Notifications;
