@@ -1,37 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
-  <Import Project="$(EnvironmentConfig)" />
-  <Import Project="$(SRCROOT)\properties\service_fabric_managed_prod.props" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\properties\service_fabric_common.props" />
   <PropertyGroup>
+    <ProjectGuid>{0db486b3-9a47-4150-881f-e315edd7ecba}</ProjectGuid>
     <AssemblyName>Microsoft.ServiceFabric.Tools.RCBackupParserCmd</AssemblyName>
-    <RootNamespace>Microsoft.ServiceFabric.Tools.RCBackupParserCmd</RootNamespace>
-    <AssemblyTitle>Microsoft.ServiceFabric.Tools.RCBackupParserCmd</AssemblyTitle>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser Cmdline</AssemblyDescription>
-    <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
+    <ProjectReference Include="..\RCBackupParser\RCBackupParser.csproj" />
+    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.4.186-beta" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="$(SRCROOT)\prod\tools\RCBackupExplorer\RCBackupParser\RCBackupParser.csproj" />
-    <ProjectReference Include="$(SRCROOT)\prod\tools\ReliabilitySimulator\ReliabilitySimulator.csproj" />
-    <ProjectReference Include="$(SrcRoot)\prod\src\managed\Microsoft.ServiceFabric.Data.Interfaces\Microsoft.ServiceFabric.Data.Interfaces.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <ItemGroup>
-      <BinplaceFiles Include="$(OutputPath)**\*" Exclude="$(OutputPath)**\*.pdb;$(OutputPath)**\*.lib" />
-      <SymbolFiles Include="$(OutputPath)**\*.pdb" />
-    </ItemGroup>
-    <Copy SourceFIles="@(BinplaceFiles)" DestinationFolder="$(BinariesBuildTypeArchDirectory)\$(AssemblyName)\" SkipUnchangedFiles="true" />
-    <Copy SourceFIles="@(BinplaceFiles)" DestinationFolder="$(BinariesBuildTypeArchDirectory)\bin\" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(SymbolFiles)" DestinationFolder="$(BinariesBuildTypeArchDirectory)\symbols\" SkipUnchangedFiles="true" />
-  </Target>
 </Project>
