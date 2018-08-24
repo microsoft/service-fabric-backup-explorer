@@ -16,7 +16,6 @@ using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Collections.ReliableConcurrentQueue;
 using Microsoft.ServiceFabric.Replicator;
 using Microsoft.ServiceFabric.Tools.RCBackupParserTypes.UserType;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.ServiceFabric.Tools.RCBackupGenerator
 {
@@ -30,7 +29,6 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupGenerator
 
         internal async Task GenerateWithValueType<ValueType>(string logFolder, ValueType value)
         {
-
             const int NumberOfStateProviders = 6;
 
             if (FabricDirectory.Exists(logFolder))

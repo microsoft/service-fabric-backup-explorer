@@ -96,12 +96,14 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
         }
 
         [TestMethod]
-        public async Task RCBackupParser_AbleToFindAssemblyInCodePackage()
+        async Task RCBackupParser_AbleToFindAssemblyInCodePackage()
         {
-            var backupTestsFolder = Path.Combine(ClassTestPath, "..", "BackupTests");
-            var complexDataBackupFolderPath = Path.Combine(backupTestsFolder, "User", "FullBackup");
+            var complexDataBackupFolderPath = Path.Combine(ClassTestPath, "..", "UserFullBackup");
+            // from this test run's bin\Debug\netstandard2.0\<testname> dir to parent of bin
+            var codePackagePath = Path.Combine(ClassTestPath, "..", "..", "..", "..");
+            Console.WriteLine("CodePackagePath: {0}, complextdata: {1}", codePackagePath, complexDataBackupFolderPath);
 
-            using (var backupParser = new RCBackupParser.RCBackupParser(backupTestsFolder, complexDataBackupFolderPath))
+            using (var backupParser = new RCBackupParser.RCBackupParser(complexDataBackupFolderPath, codePackagePath))
             {
                 int totalUsers = 0;
 

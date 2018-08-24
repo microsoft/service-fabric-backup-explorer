@@ -13,7 +13,7 @@ using Microsoft.ServiceFabric.Data;
 namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
 {
     [TestClass]
-    class BackupAfterParseTests : RCBackupParserTestBase
+    public class BackupAfterParseTests : RCBackupParserTestBase
     {
         [ClassInitialize]
         public static async Task BackupAfterParseTestsClassInitialize(TestContext testContext)

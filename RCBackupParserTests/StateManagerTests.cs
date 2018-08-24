@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
 {
     [TestClass]
-    class StateManagerTests : RCBackupParserTestBase
+    public class StateManagerTests : RCBackupParserTestBase
     {
         [ClassInitialize]
         public static async Task StateManagerTestsClassInitialize(TestContext testContext)

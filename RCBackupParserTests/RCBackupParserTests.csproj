@@ -26,4 +26,9 @@
     <ProjectReference Include="..\RCBackupParser\RCBackupParser.csproj" />
     <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.4.186-beta" />
   </ItemGroup>
+  <ItemGroup>
+    <None
+      Include=".\UserFullBackup\**"
+      CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

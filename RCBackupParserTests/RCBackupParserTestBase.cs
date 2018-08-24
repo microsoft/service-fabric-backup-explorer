@@ -19,13 +19,24 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
     {
         public static async Task ClassInitialize(TestContext testContext)
         {
-            ClassTestPath = Path.Combine(Environment.CurrentDirectory, BaseTestFolderName);
-            await GenerateBackup(Path.Combine(ClassTestPath, Guid.NewGuid().ToString("N")));
+            lock(ClassInitializationTaskWaitObject)
+            {
+                if (ClassInitializationTask == null)
+                {
+                    ClassTestPath = Path.Combine(Environment.CurrentDirectory, BaseTestFolderName);
+                    ClassInitializationTask = GenerateBackup(Path.Combine(ClassTestPath, Guid.NewGuid().ToString("N")));
+                }
+            }
+
+            await ClassInitializationTask;
         }
 
         public static void ClassCleanup()
         {
-            FabricDirectory.Delete(ClassTestPath, true);
+            if (FabricDirectory.Exists(ClassTestPath))
+            {
+                FabricDirectory.Delete(ClassTestPath, true);
+            }
         }
 
         internal static IStateProvider2 CreateStateProvider(Uri name, Type type)
@@ -110,6 +121,8 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
             return await Task.FromResult(false);
         }
 
+        private static Task ClassInitializationTask = null;
+        private static object ClassInitializationTaskWaitObject = new object();
         protected const string BaseTestFolderName = "RCBackupParserTests";
         protected const string BackupContainerFolderName = "BackupContainer";
         protected static readonly Uri DictionaryName = new Uri("fabric:/test/dictionary");
