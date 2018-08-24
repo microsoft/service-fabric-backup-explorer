@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(EnvironmentConfig)" />
+  <ItemGroup>
+    <ProjectReference Include="RCBackupParser\RCBackupParser.csproj" />
+    <ProjectReference Include="RCBackupParserTests\RCBackupParserTests.csproj" />
+    <ProjectReference Include="RCBackupParserTests\UserType\UserType.csproj" />
+    <ProjectReference Include="RCBackupParserTests\BackupGenerator\BackupGenerator.csproj" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.Common.targets" />
+  <PropertyGroup>
+    <BuildDependsOn>ResolveReferences</BuildDependsOn>
+  </PropertyGroup>
+</Project>

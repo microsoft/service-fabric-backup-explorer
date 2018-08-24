@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- Set RepoRoot -->
+    <RepoRoot>$([System.String]::Copy('$(MSBuildThisFileDirectory)').Replace('properties\',''))</RepoRoot>
+
+    <!-- Basic coreclr settings -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Library</OutputType>
+
+    <!-- Disable adding all .cs file for compiling -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+
+    <!-- Enable delay signing with Key.snk -->
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>true</DelaySign>
+    <AssemblyOriginatorKeyFile>$(RepoRoot)/properties/Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+</Project>

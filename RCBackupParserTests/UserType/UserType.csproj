@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <Import Project="$(EnvironmentConfig)" />
+  <Import Project="$(SRCROOT)\properties\service_fabric_managed_test.props" />
+  <PropertyGroup>
+    <AssemblyName>Microsoft.ServiceFabric.Tools.RCBackupParserTypes.UserType</AssemblyName>
+    <RootNamespace>Microsoft.ServiceFabric.Tools.RCBackupParserTypes.UserType</RootNamespace>
+    <AssemblyTitle>Microsoft.ServiceFabric.Tools.RCBackupParserTypes.UserType</AssemblyTitle>
+    <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser's test complex type</AssemblyDescription>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+    <OutputType>Library</OutputType>
+    <ProjectGuid>{D67E5A3C-2098-4D12-AB9A-96B3875181E2}</ProjectGuid>
+    <FullBackupFolder>FullBackup</FullBackupFolder>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="User.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <BinplaceFiles Include="$(OutputPath)**\*" Exclude="$(OutputPath)**\*.pdb;$(OutputPath)**\*.lib" />
+      <SymbolFiles Include="$(OutputPath)**\*.pdb" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BinplaceFiles)" DestinationFolder="$(BinariesBuildTypeArchDirectory)\bin\FabricUnitTests\BackupTests\User\Code\" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(SymbolFiles)" DestinationFolder="$(BinariesBuildTypeArchDirectory)\symbols\" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(BackupFiles)" DestinationFolder="$(BinariesBuildTypeArchDirectory)\bin\FabricUnitTests\BackupTests\User\FullBackup\" SkipUnchangedFiles="true" />
+  </Target>
+  <ItemGroup>
+    <Robocopy Include="FullBackup">
+      <DestinationFolder>$(BinariesBuildTypeArchDirectory)\bin\FabricUnitTests\BackupTests\User\FullBackup</DestinationFolder>
+    </Robocopy>
+  </ItemGroup>
+  <Target Name="RobocopyFilesToFabricUnitTests" AfterTargets="AfterBuild" DependsOnTargets="$(RobocopyFilesDependsOn)" Condition="'@(Robocopy)' != ''">
+    <Robocopy RetryCount="$(RobocopyRetryCount)" RetryWait="$(RobocopyRetryWait)" ShowDiagnosticTrace="$(RobocopyShowDiagnosticTrace)" ShowErrorOnRetry="$(RobocopyShowErrorOnRetry)" Sources="@(Robocopy)" Condition="'@(Robocopy)' != ''" />
+  </Target>
+</Project>
