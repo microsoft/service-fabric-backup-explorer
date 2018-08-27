@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <Import Project="..\..\properties\service_fabric_common_test.props" />
   <PropertyGroup>
-    <ProjectGuid>{F9A204A8-4878-446B-B437-BAB888906760}</ProjectGuid>
+    <ProjectGuid>{2E09E042-C9E5-4D1C-BA54-43281C1DCC35}</ProjectGuid>
     <AssemblyName>Microsoft.ServiceFabric.Tools.RCBackupParserTypes.UserType</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
