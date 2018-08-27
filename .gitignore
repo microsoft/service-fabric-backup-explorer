@@ -29,3 +29,6 @@ bld/
 
 # Don't include msbuild logs
 msbuild.log
+
+# Don't include restore packages
+packages

@@ -25,6 +25,6 @@
     <BuildVersion>5</BuildVersion>
 
     <!-- Nupkg related settings to use in csproj -->
-    <BinaryDropFolder>$(RepoRoot)\bin\publish\</BinaryDropFolder>
+    <BinaryDropFolder>$(RepoRoot)bin\publish</BinaryDropFolder>
   </PropertyGroup>
 </Project>
