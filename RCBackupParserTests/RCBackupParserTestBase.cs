@@ -121,7 +121,7 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
             return await Task.FromResult(false);
         }
 
-        private static Task ClassInitializationTask = null;
+        private static volatile Task ClassInitializationTask = null;
         private static object ClassInitializationTaskWaitObject = new object();
         protected const string BaseTestFolderName = "RCBackupParserTests";
         protected const string BackupContainerFolderName = "BackupContainer";
