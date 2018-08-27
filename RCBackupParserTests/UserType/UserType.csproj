@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <Import Project="..\..\properties\service_fabric_common_test.props" />
   <PropertyGroup>
     <ProjectGuid>{F9A204A8-4878-446B-B437-BAB888906760}</ProjectGuid>
