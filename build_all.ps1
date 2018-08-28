@@ -10,6 +10,9 @@ param
     # build code
     [switch]$build,
 
+    # publish for nupkg generation
+    [switch]$publishForNupkg,
+
     # generate nupkg
     [switch]$generateNupkg
 );
@@ -27,14 +30,15 @@ if ($build) {
     dotnet build service-fabric-backup-explorer.sln
 }
 
-if ($generateNupkg) {
-    Write-Host "Generating nupkg:"
-
+if ($publishForNupkg -Or $generateNupkg) {
     # publish for nupkg generation
     pushd RCBackupParser
     dotnet publish
     popd
+}
 
+if ($generateNupkg) {
+    Write-Host "Generating nupkg:"
     # nuget restore
     nuget restore service-fabric-backup-explorer.sln
 
