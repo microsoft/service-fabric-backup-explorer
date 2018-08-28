@@ -5,19 +5,19 @@
 param
 (
     # show versions of all tools used
-    [switch]$showVersion
+    [switch]$showVersion,
 
     # build code
-    [switch]$build
+    [switch]$build,
 
     # generate nupkg
     [switch]$generateNupkg
-)
+);
 
 if ($showVersion) {
     Write-Host "Version of all tools:"
     dotnet --info
-    msbuild --version
+    msbuild /version
     nuget
 }
 
