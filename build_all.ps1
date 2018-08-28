@@ -39,6 +39,6 @@ if ($generateNupkg) {
     # nuget restore
     nuget.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages
     # generate nupkg
-    msbuild Microsoft.ServiceFabric.Tools.RCBackupParser.nuproj
+    msbuild Microsoft.ServiceFabric.Tools.RCBackupParser.nuproj /p:OutputPath=$PSScriptRoot\bin\nupkg
     popd
 }
