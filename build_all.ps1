@@ -10,9 +10,6 @@ param
     # build code
     [switch]$build,
 
-    # publish for nupkg generation
-    [switch]$publishForNupkg,
-
     # generate nupkg
     [switch]$generateNupkg
 );
@@ -28,9 +25,7 @@ if ($build) {
     # build all projects
     Write-Host "Building code and tests:"
     dotnet build service-fabric-backup-explorer.sln
-}
 
-if ($publishForNupkg -Or $generateNupkg) {
     # publish for nupkg generation
     pushd RCBackupParser
     dotnet publish
@@ -39,11 +34,11 @@ if ($publishForNupkg -Or $generateNupkg) {
 
 if ($generateNupkg) {
     Write-Host "Generating nupkg:"
-    # nuget restore
-    nuget restore service-fabric-backup-explorer.sln
 
-    # generate nupkg
     pushd nuprojs
+    # nuget restore
+    nuget.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages
+    # generate nupkg
     msbuild Microsoft.ServiceFabric.Tools.RCBackupParser.nuproj
     popd
 }
