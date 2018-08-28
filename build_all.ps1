@@ -1,3 +1,8 @@
+# print dotnet version
+dotnet --info
+
+msbuild --version
+
 # build all projects
 dotnet build service-fabric-backup-explorer.sln
 
