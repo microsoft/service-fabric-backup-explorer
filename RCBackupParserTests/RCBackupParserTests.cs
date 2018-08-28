@@ -95,45 +95,45 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
                 "Test like RCBackupParser_AbleToFindAssemblyInCodePackage will pass even if functionality is broken.", userAssembly.FirstOrDefault()));
         }
 
-        [TestMethod]
-        public async Task RCBackupParser_AbleToFindAssemblyInCodePackage()
-        {
-            var complexDataBackupFolderPath = Path.Combine(ClassTestPath, @"..\UserFullBackup");
-            // from this test run's bin\Debug\netstandard2.0\<testname> dir to parent of bin
-            var codePackagePath = Path.Combine(ClassTestPath, @"..\..\..\..\UserType\bin\Debug\netstandard2.0\");
-            Console.WriteLine("CodePackagePath: {0}, complextdata: {1}", codePackagePath, complexDataBackupFolderPath);
+        // [TestMethod]
+        // public async Task RCBackupParser_AbleToFindAssemblyInCodePackage()
+        // {
+        //     var complexDataBackupFolderPath = Path.Combine(ClassTestPath, @"..\UserFullBackup");
+        //     // from this test run's bin\Debug\netstandard2.0\<testname> dir to parent of bin
+        //     var codePackagePath = Path.Combine(ClassTestPath, @"..\..\..\..\UserType\bin\Debug\netstandard2.0\");
+        //     Console.WriteLine("CodePackagePath: {0}, complextdata: {1}", codePackagePath, complexDataBackupFolderPath);
 
-            using (var backupParser = new RCBackupParser.RCBackupParser(complexDataBackupFolderPath, codePackagePath))
-            {
-                int totalUsers = 0;
+        //     using (var backupParser = new RCBackupParser.RCBackupParser(complexDataBackupFolderPath, codePackagePath))
+        //     {
+        //         int totalUsers = 0;
 
-                backupParser.TransactionApplied += (sender, args) =>
-                {
-                    foreach (var reliableStateChange in args.Changes)
-                    {
-                        if (reliableStateChange.Name == DictionaryName)
-                        {
-                            foreach (var change in reliableStateChange.Changes)
-                            {
-                                // we can't link against User project as that will make it easy to load the dll.
-                                bool isAddChange = GenericUtils.IsSubClassOfGeneric(change.GetType(), typeof(NotifyDictionaryChangedEventArgs<,>));
-                                if (isAddChange)
-                                {
-                                    // make sure that this is Add event with User type.
-                                    if (change.GetType().ToString().Contains("UserType.User"))
-                                    {
-                                        totalUsers++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
+        //         backupParser.TransactionApplied += (sender, args) =>
+        //         {
+        //             foreach (var reliableStateChange in args.Changes)
+        //             {
+        //                 if (reliableStateChange.Name == DictionaryName)
+        //                 {
+        //                     foreach (var change in reliableStateChange.Changes)
+        //                     {
+        //                         // we can't link against User project as that will make it easy to load the dll.
+        //                         bool isAddChange = GenericUtils.IsSubClassOfGeneric(change.GetType(), typeof(NotifyDictionaryChangedEventArgs<,>));
+        //                         if (isAddChange)
+        //                         {
+        //                             // make sure that this is Add event with User type.
+        //                             if (change.GetType().ToString().Contains("UserType.User"))
+        //                             {
+        //                                 totalUsers++;
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         };
 
-                await backupParser.ParseAsync(CancellationToken.None);
+        //         await backupParser.ParseAsync(CancellationToken.None);
 
-                Assert.IsTrue(totalUsers > 0, "Could not parse any user from backup");
-            }
-        }
+        //         Assert.IsTrue(totalUsers > 0, "Could not parse any user from backup");
+        //     }
+        // }
     }
 }
