@@ -11,19 +11,28 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParser
         public CodePackageInfo(string packagePath)
         {
             this.packagePath = packagePath;
-            AppDomain.CurrentDomain.AssemblyResolve += CodePackageAssemblyResolveHandler;
+            if (!String.IsNullOrWhiteSpace(this.packagePath))
+            {
+                AppDomain.CurrentDomain.AssemblyResolve += CodePackageAssemblyResolveHandler;
+            }
         }
 
         private Assembly CodePackageAssemblyResolveHandler(object sender, ResolveEventArgs args)
         {
             var assemblyName = new AssemblyName(args.Name);
             var assemblyToLoad = assemblyName.Name + ".dll";
-            var assemblyPaths = Directory.EnumerateFiles(this.packagePath, assemblyToLoad, SearchOption.AllDirectories);
 
-            foreach (var assemblyPath in assemblyPaths)
+            try
             {
-                return Assembly.LoadFrom(assemblyPath);
+                var assemblyPaths = Directory.EnumerateFiles(this.packagePath, assemblyToLoad, SearchOption.AllDirectories);
+
+                foreach (var assemblyPath in assemblyPaths)
+                {
+                    return Assembly.LoadFrom(assemblyPath);
+                }
             }
+            catch (Exception)
+            { } // eat all the exceptions.
 
             return null;
         }

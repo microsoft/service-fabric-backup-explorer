@@ -174,6 +174,7 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParser
             {
                 Directory.Delete(this.workFolder, true);
             }
+            this.codePackage.Dispose();
         }
 
         private IStateProvider2 CreateStateProvider(Uri name, Type type)
