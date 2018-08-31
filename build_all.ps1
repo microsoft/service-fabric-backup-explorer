@@ -27,9 +27,7 @@ if ($build) {
     dotnet build service-fabric-backup-explorer.sln
 
     # publish for nupkg generation
-    pushd RCBackupParser
     dotnet publish
-    popd
 }
 
 if ($generateNupkg) {

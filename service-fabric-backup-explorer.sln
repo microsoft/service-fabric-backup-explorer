@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserType", "RCBackupParserT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackupGenerator", "RCBackupParserTests\BackupGenerator\BackupGenerator.csproj", "{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RCBackupRestServer", "RCBackupRestServer\RCBackupRestServer.csproj", "{5BA3665D-D2A8-43F7-BDD8-817B8834A141}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Release|x64.Build.0 = Release|Any CPU
 		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Release|x86.ActiveCfg = Release|Any CPU
 		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Release|x86.Build.0 = Release|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Debug|x64.Build.0 = Debug|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Debug|x86.Build.0 = Debug|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Release|x64.ActiveCfg = Release|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Release|x64.Build.0 = Release|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Release|x86.ActiveCfg = Release|Any CPU
+		{5BA3665D-D2A8-43F7-BDD8-817B8834A141}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
