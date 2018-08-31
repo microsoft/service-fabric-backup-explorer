@@ -8,15 +8,13 @@
     <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser Rest Server</AssemblyDescription>
     <PublishDir>$(BinaryDropFolder)\$(AssemblyName)</PublishDir>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Controllers\ExitController.cs" />
   </ItemGroup>
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="ServiceFabric.Extensions.Services.Queryable" Version="3.1.274" />

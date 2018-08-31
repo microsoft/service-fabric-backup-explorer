@@ -177,6 +177,11 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParser
             this.codePackage.Dispose();
         }
 
+        internal StatefulServiceContext GetStatefulServiceContext()
+        {
+            return this.reliabilitySimulator.GetStatefulServiceContext();
+        }
+
         private IStateProvider2 CreateStateProvider(Uri name, Type type)
         {
             return (IStateProvider2)Activator.CreateInstance(type);

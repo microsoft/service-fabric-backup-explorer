@@ -1,4 +1,5 @@
 using System;
+using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -80,6 +81,11 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParser
         {
             get { return this.rcBackupParserImpl.StateManager; }
             internal set { }
+        }
+
+        internal StatefulServiceContext GetStatefulServiceContext()
+        {
+            return rcBackupParserImpl.GetStatefulServiceContext();
         }
 
         private RCBackupParserImpl rcBackupParserImpl;
