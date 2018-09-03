@@ -9,7 +9,6 @@
     <PublishDir>$(BinaryDropFolder)\$(AssemblyName)</PublishDir>
     <TargetFramework>net471</TargetFramework>
     <OutputType>Exe</OutputType>
-    <!-- <SignAssembly>false</SignAssembly> -->
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
