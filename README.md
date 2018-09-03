@@ -12,3 +12,23 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+
+# Building code
+```
+powershell .\build_all.ps1 -build
+```
+
+# Generating nupkg
+From Visual Studio command prompt which has msbuild defined
+```
+powershell .\build_all.ps1 -build -generateNupkg
+```
+
+# Running Rest Server
+```
+cd RCBackupRestServer
+dotnet build
+xcopy.exe /EIYS ..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\*.dll bin\Debug\net471\
+dotnet run --no-build e:\service-fabric-backup-explorer\RCBackupParserTests\UserFullBackup e:\service-fabric-backup-explorer\RCBackupParserTests\UserType\bin
+```

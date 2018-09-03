@@ -6,6 +6,7 @@
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <OutputType>Exe</OutputType>
     <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Generator</AssemblyDescription>
   </PropertyGroup>
   <ItemGroup>

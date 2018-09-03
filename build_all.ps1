@@ -29,7 +29,7 @@ if ($build) {
     # publish for nupkg generation
     dotnet publish --no-build
 
-    # copy our dlls in publish folder
+    # Rest Server: copy our dlls in publish folder
     xcopy.exe /EIYS .\packages\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\*.dll bin\publish\Microsoft.ServiceFabric.Tools.RCBackupRestServer\
 }
 

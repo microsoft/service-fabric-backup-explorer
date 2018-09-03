@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Fabric;
 using System.Linq;
 using System.Threading;
@@ -21,6 +22,9 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupRestServer
                 PrintUsage();
                 Environment.Exit(1);
             }
+
+            var process = Process.GetCurrentProcess();
+            Console.WriteLine("Process Name/Id of RestServer : {0}/{1}", process.ProcessName, process.Id);
 
             Task.Run(async () => {
                 var webHostBuilder = await CreateWebHostBuilder(args);
