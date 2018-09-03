@@ -14,6 +14,8 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupRestServer
     {
         public static void Main(string[] args)
         {
+            // e:\service-fabric-backup-explorer\RCBackupParserTests\UserFullBackup
+            // e:\service-fabric-backup-explorer\RCBackupParserTests\UserType\bin
             if (args.Length < 2)
             {
                 PrintUsage();

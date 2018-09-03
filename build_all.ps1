@@ -24,10 +24,13 @@ if ($showVersion) {
 if ($build) {
     # build all projects
     Write-Host "Building code and tests:"
-    dotnet build service-fabric-backup-explorer.sln
+    dotnet build --packages .\packages service-fabric-backup-explorer.sln
 
     # publish for nupkg generation
-    dotnet publish
+    dotnet publish --no-build
+
+    # copy our dlls in publish folder
+    xcopy.exe /EIYS .\packages\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\*.dll bin\publish\Microsoft.ServiceFabric.Tools.RCBackupRestServer\
 }
 
 if ($generateNupkg) {

@@ -7,8 +7,9 @@
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
     <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser Rest Server</AssemblyDescription>
     <PublishDir>$(BinaryDropFolder)\$(AssemblyName)</PublishDir>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net471</TargetFramework>
     <OutputType>Exe</OutputType>
+    <!-- <SignAssembly>false</SignAssembly> -->
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -16,10 +17,22 @@
     <Compile Include="Controllers\ExitController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.2" />
+    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.4.186-beta" />
     <PackageReference Include="ServiceFabric.Extensions.Services.Queryable" Version="3.1.274" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../RCBackupParser/RCBackupParser.csproj" />
+    <!-- Force our dlls in final nupkg. This is not working because AssemblyVersion is same : 6.0.0.0 -->
+    <!-- <Reference Include="..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\Microsoft.ServiceFabric.Data.dll" />
+    <Reference Include="..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\Microsoft.ServiceFabric.Data.Impl.dll" />
+    <Reference Include="..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\Microsoft.ServiceFabric.Data.Interfaces.dll" />
+    <Reference Include="..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\Microsoft.ServiceFabric.Internal.dll" />
+    <Reference Include="..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\Microsoft.ServiceFabric.Internal.Strings.dll" />
+    <Reference Include="..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\System.Fabric.dll" />
+    <Reference Include="..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\System.Fabric.Management.ServiceModel.dll" />
+    <Reference Include="..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\system.fabric.strings.dll" /> -->
   </ItemGroup>
 </Project>
