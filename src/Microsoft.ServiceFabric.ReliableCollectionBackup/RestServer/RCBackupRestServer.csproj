@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-  <Import Project="..\properties\service_fabric_common.props" />
+  <Import Project="..\..\..\properties\service_fabric_common.props" />
   <PropertyGroup>
     <ProjectGuid>{5BA3665D-D2A8-43F7-BDD8-817B8834A141}</ProjectGuid>
     <AssemblyName>Microsoft.ServiceFabric.Tools.RCBackupRestServer</AssemblyName>
@@ -9,6 +9,7 @@
     <PublishDir>$(BinaryDropFolder)\$(AssemblyName)</PublishDir>
     <TargetFramework>net471</TargetFramework>
     <OutputType>Exe</OutputType>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -20,10 +21,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.2" />
     <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.4.186-beta" />
     <PackageReference Include="ServiceFabric.Extensions.Services.Queryable" Version="3.1.301" />
-    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="../RCBackupParser/RCBackupParser.csproj" />
+    <ProjectReference Include="../Parser/RCBackupParser.csproj" />
     <!-- Force our dlls in final nupkg. This is not working because AssemblyVersion is same : 6.0.0.0 -->
     <!-- <Reference Include="..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\Microsoft.ServiceFabric.Data.dll" />
     <Reference Include="..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\Microsoft.ServiceFabric.Data.Impl.dll" />
