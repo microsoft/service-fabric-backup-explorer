@@ -36,7 +36,7 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupRestServer
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseODataQueryable();
+            app.UseODataQueryable(true /* isStandaloneReplica */);
             app.UseMvc();
         }
     }

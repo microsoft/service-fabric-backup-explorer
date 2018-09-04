@@ -135,8 +135,8 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupGenerator
         }
 
         string logFolder;
-        internal static readonly Uri DictionaryName = new Uri("fabric:/testDictionary");
-        internal static readonly Uri QueueName = new Uri("fabric:/testQueue");
-        internal static readonly Uri ConcurrentQueueName = new Uri("fabric:/testConcurrentQueue");
+        internal static readonly Uri DictionaryName = new Uri("urn:testDictionary");
+        internal static readonly Uri QueueName = new Uri("urn:testQueue");
+        internal static readonly Uri ConcurrentQueueName = new Uri("urn:testConcurrentQueue");
     }
 }

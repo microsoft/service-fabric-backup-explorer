@@ -165,12 +165,8 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParser
 
         public Task<ConditionalValue<T>> TryGetAsync<T>(string name) where T : IReliableState
         {
-            if (!name.StartsWith("fabric:/", StringComparison.OrdinalIgnoreCase))
-            {
-                name += "fabric:/";
-            }
-
-            return this.TryGetAsync<T>(new Uri(name));
+            var uriName = "urn:" + Uri.EscapeDataString(name);
+            return this.TryGetAsync<T>(new Uri(uriName));
         }
 
         public bool TryAddStateSerializer<T>(IStateSerializer<T> stateSerializer)

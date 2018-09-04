@@ -29,7 +29,7 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserCmd
                     {
                         foreach (var reliableStateChange in transactionArgs.Changes)
                         {
-                            if (reliableStateChange.Name == new Uri("fabric:/testDictionary"))
+                            if (reliableStateChange.Name == new Uri("urn:testDictionary"))
                             {
                                 foreach (var change in reliableStateChange.Changes)
                                 {

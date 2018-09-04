@@ -125,9 +125,9 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
         private static object ClassInitializationTaskWaitObject = new object();
         protected const string BaseTestFolderName = "RCBackupParserTests";
         protected const string BackupContainerFolderName = "BackupContainer";
-        protected static readonly Uri DictionaryName = new Uri("fabric:/testDictionary");
-        protected static readonly Uri QueueName = new Uri("fabric:/testQueue");
-        protected static readonly Uri ConcurrentQueueName = new Uri("fabric:/testConcurrentQueue");
+        protected static readonly Uri DictionaryName = new Uri("urn:testDictionary");
+        protected static readonly Uri QueueName = new Uri("urn:testQueue");
+        protected static readonly Uri ConcurrentQueueName = new Uri("urn:testConcurrentQueue");
 
         protected static string ClassTestPath { get; set; }
         protected static string BackupFolderPath { get; set; }
