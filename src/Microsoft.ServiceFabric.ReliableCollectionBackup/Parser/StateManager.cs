@@ -16,7 +16,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         ///
         /// </summary>
         /// <param name="reliabilitySimulator"></param>
-        public StateManager(ReliabilitySimulator.ReliabilitySimulator reliabilitySimulator)
+        public StateManager(ReliabilitySimulator reliabilitySimulator)
         {
             this.reliabilitySimulator = reliabilitySimulator;
         }
@@ -191,7 +191,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             get { return this.reliabilitySimulator.GetTransactionalReplicator(); }
         }
 
-        private ReliabilitySimulator.ReliabilitySimulator reliabilitySimulator;
+        private ReliabilitySimulator reliabilitySimulator;
         private readonly StateManagerTypeCache _typeCache = new StateManagerTypeCache();
         private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(4);
     }

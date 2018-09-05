@@ -15,6 +15,7 @@ using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Collections.ReliableConcurrentQueue;
 using Microsoft.ServiceFabric.Replicator;
+using Microsoft.ServiceFabric.Tools.ReliabilitySimulator;
 using Microsoft.ServiceFabric.ReliableCollectionBackup.UserType;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
@@ -40,7 +41,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
 
             var rand = new Random();
 
-            var reliabilitySimulator = new ReliabilitySimulator.ReliabilitySimulator(
+            var reliabilitySimulator = new ReliabilitySimulator(
                 logFolder,
                 new Uri("fabric:/unittest/service" + rand.Next()),
                 OnDataLossCallback, // we are never calling OnDataLossAsync on this ReliabilitySimulator.

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Data;
+using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 {
@@ -39,7 +40,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                     services => services
                                 .AddSingleton<StatefulServiceContext>(backupParser.GetStatefulServiceContext())
                                 .AddSingleton<IReliableStateManager>(backupParser.StateManager)
-                                .AddSingleton<RCBackupParser.RCBackupParser>(backupParser))
+                                .AddSingleton<RCBackupParser>(backupParser))
                 .UseStartup<Startup>();
         }
 
@@ -50,11 +51,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             Console.WriteLine("2. Location of code packages");
         }
 
-        static async Task<RCBackupParser.RCBackupParser> BringupBackupParser(string[] args)
+        static async Task<RCBackupParser> BringupBackupParser(string[] args)
         {
             var backupDirectory = args[0];
             var codeDirectory = args[1];
-            var backupParser = new RCBackupParser.RCBackupParser(backupDirectory, codeDirectory);
+            var backupParser = new RCBackupParser(backupDirectory, codeDirectory);
             await backupParser.ParseAsync(CancellationToken.None);
             return backupParser;
         }

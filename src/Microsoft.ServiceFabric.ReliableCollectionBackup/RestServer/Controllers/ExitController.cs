@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Tools;
+using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controllers
 {
@@ -11,7 +12,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
     [ApiController]
     public class ExitController : ControllerBase
     {
-        public ExitController(RCBackupParser.RCBackupParser backupParser)
+        public ExitController(RCBackupParser backupParser)
         {
             this.backupParser = backupParser;
         }
@@ -25,6 +26,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
             Environment.Exit(0);
         }
 
-        RCBackupParser.RCBackupParser backupParser;
+        RCBackupParser backupParser;
     }
 }

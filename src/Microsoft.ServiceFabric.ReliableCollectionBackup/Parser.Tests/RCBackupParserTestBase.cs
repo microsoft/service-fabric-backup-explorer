@@ -10,6 +10,7 @@ using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Collections.ReliableConcurrentQueue;
 using Microsoft.ServiceFabric.Replicator;
+using Microsoft.ServiceFabric.Tools.ReliabilitySimulator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
@@ -55,7 +56,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 
             FabricDirectory.CreateDirectory(logFolder);
 
-            var reliabilitySimulator = new ReliabilitySimulator.ReliabilitySimulator(
+            var reliabilitySimulator = new ReliabilitySimulator(
                 logFolder,
                 new Uri("fabric:/unittest/service"),
                 OnDataLossCallback, // we are never calling OnDataLossAsync on this ReliabilitySimulator.

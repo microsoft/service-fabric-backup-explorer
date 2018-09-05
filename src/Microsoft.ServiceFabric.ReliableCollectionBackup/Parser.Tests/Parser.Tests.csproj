@@ -24,7 +24,7 @@
     <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.4.186-beta" />
+    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.4.187-beta" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".\UserFullBackup\**" CopyToOutputDirectory="PreserveNewest" />

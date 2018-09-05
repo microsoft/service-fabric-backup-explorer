@@ -24,7 +24,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
             Directory.CreateDirectory(this.workFolder);
 
-            this.reliabilitySimulator = new ReliabilitySimulator.ReliabilitySimulator(
+            this.reliabilitySimulator = new ReliabilitySimulator(
                 this.workFolder,
                 new Uri("fabric:/rcbackupapp/rcbackupservice"),
                 this.OnDataLossCallback,
@@ -200,7 +200,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         private BackupChainInfo backupChain;
         private CodePackageInfo codePackage;
-        private ReliabilitySimulator.ReliabilitySimulator reliabilitySimulator;
+        private ReliabilitySimulator reliabilitySimulator;
         private StateManager stateManager;
         private string workFolder;
         private bool seenFirstTransaction;

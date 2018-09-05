@@ -40,7 +40,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         [TestMethod]
         public async Task RCBackupParser_FireTransactionAppliedEvents()
         {
-            using (var backupParser = new RCBackupParser.RCBackupParser(BackupFolderPath, ""))
+            using (var backupParser = new RCBackupParser(BackupFolderPath, ""))
             {
                 bool transactionSeen = false;
 
@@ -58,7 +58,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         [TestMethod]
         public async Task RCBackupParser_CollectChangesInTransactionAppliedEvents()
         {
-            using (var backupParser = new RCBackupParser.RCBackupParser(BackupFolderPath, ""))
+            using (var backupParser = new RCBackupParser(BackupFolderPath, ""))
             {
                 int totalDictionaryAdds = 0;
 
@@ -102,7 +102,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // from this test run's bin\Debug\netstandard2.0\<testname> dir to parent of bin
             var codePackagePath = Path.Combine(ClassTestPath, @"..\..\..\..\UserType\bin\Debug\netstandard2.0\");
 
-            using (var backupParser = new RCBackupParser.RCBackupParser(complexDataBackupFolderPath, codePackagePath))
+            using (var backupParser = new RCBackupParser(complexDataBackupFolderPath, codePackagePath))
             {
                 int totalUsers = 0;
 
