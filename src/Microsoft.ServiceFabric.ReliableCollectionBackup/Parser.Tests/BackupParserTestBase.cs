@@ -113,7 +113,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             TotalDictionaryInserts = batchCount * batchSize;
         }
 
-
         internal static Task<bool> BackupCallbackAsync(Data.BackupInfo backupInfo, CancellationToken cancellationToken)
         {
             Assert.IsFalse(cancellationToken.IsCancellationRequested);

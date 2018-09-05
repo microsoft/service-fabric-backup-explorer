@@ -107,7 +107,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             }
         }
 
-
         private void AssignDictionaryChangedHandle<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {

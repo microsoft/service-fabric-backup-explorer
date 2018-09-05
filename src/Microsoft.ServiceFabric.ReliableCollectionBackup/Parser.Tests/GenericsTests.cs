@@ -26,7 +26,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             Assert.IsTrue(GenericUtils.IsSubClassOfGeneric(new ReliableConcurrentQueue<long>().GetType(), typeof(IReliableConcurrentQueue<>)));
         }
 
-
         [TestMethod]
         public void RCBackupParser_IsSubClassOfGenericFalse()
         {
