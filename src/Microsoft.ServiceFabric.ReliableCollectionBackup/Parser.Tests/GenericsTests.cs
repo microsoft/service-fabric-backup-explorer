@@ -5,7 +5,6 @@
 
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Collections.ReliableConcurrentQueue;
-using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests

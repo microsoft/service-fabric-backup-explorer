@@ -4,20 +4,13 @@
 // ------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Fabric;
-using System.Fabric.Common;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.ServiceFabric.Data;
-using Microsoft.ServiceFabric.Data.Collections;
-using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
-using Microsoft.ServiceFabric.Replicator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.ServiceFabric.Data.Collections.ReliableConcurrentQueue;
 using Microsoft.ServiceFabric.Data.Notifications;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests

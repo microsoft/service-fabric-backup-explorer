@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
 {
     /// <summary>
-    /// User type
+    /// User type used in creating and validating backups in tests and rest server.
     /// </summary>
     [DataContract(Name = "User", Namespace = "http://www.rcbackupparser.com")]
     public class User : IExtensibleDataObject

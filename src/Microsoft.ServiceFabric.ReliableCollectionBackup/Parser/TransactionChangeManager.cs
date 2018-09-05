@@ -8,45 +8,51 @@ using System.Collections.Generic;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
+    /// <summary>
+    /// TransactionChangeManager keeps track of changes in Reliable Collections of a replica in a transaction.
+    /// </summary>
     internal class TransactionChangeManager
     {
+        /// <summary>
+        /// Constructor of TransactionChangeManager.
+        /// </summary>
         public TransactionChangeManager()
         {
-            this.reliableCollectionChanges = new Dictionary<Uri, ReliableCollectionChange>();
+            this.reliableCollectionsChanges = new Dictionary<Uri, ReliableCollectionChange>();
         }
 
         /// <summary>
         /// Add a new change in the transaction.
         /// </summary>
-        /// <param name="reliableCollectionName"></param>
-        /// <param name="changes"></param>
+        /// <param name="reliableCollectionName">Name of Reliable Collection which changed in this transaction.</param>
+        /// <param name="changes">Changes in ReliableCollection.</param>
         public void CollectChanges(Uri reliableCollectionName, EventArgs changes)
         {
-            if (!this.reliableCollectionChanges.ContainsKey(reliableCollectionName))
+            if (!this.reliableCollectionsChanges.ContainsKey(reliableCollectionName))
             {
-                this.reliableCollectionChanges[reliableCollectionName] = new ReliableCollectionChange(reliableCollectionName);
+                this.reliableCollectionsChanges[reliableCollectionName] = new ReliableCollectionChange(reliableCollectionName);
             }
 
-            this.reliableCollectionChanges[reliableCollectionName].Changes.Add(changes);
+            this.reliableCollectionsChanges[reliableCollectionName].Changes.Add(changes);
         }
 
         /// <summary>
-        /// Clear the changes in the transaction.
+        /// Clears the changes in the transaction to get prepared for next transaction.
         /// </summary>
         public void TransactionCompleted()
         {
-            this.reliableCollectionChanges.Clear();
+            this.reliableCollectionsChanges.Clear();
         }
 
         /// <summary>
-        /// Shows the changes collection till now.
+        /// Gets Reliable Collection changes collected till now.
         /// </summary>
-        /// <returns></returns>
-        public IEnumerable<ReliableCollectionChange> ShowChanges()
+        /// <returns>All reliable collection changes collected.</returns>
+        public IEnumerable<ReliableCollectionChange> GetAllChanges()
         {
-            return this.reliableCollectionChanges.Values;
+            return this.reliableCollectionsChanges.Values;
         }
 
-        private Dictionary<Uri, ReliableCollectionChange> reliableCollectionChanges;
+        private Dictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;
     }
 }

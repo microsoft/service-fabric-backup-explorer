@@ -4,14 +4,12 @@
 // ------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Fabric.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data;
 

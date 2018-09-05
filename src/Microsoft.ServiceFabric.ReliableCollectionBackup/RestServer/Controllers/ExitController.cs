@@ -4,16 +4,15 @@
 // ------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.ServiceFabric.Tools;
 using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controllers
 {
+    /// <summary>
+    /// ExitController for exiting the process.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ExitController : ControllerBase
@@ -27,7 +26,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
         [HttpGet]
         public void Get()
         {
-            // Dispose backup parser
+            // Dispose backup parser for cleanup.
             this.backupParser.Dispose();
             Environment.Exit(0);
         }

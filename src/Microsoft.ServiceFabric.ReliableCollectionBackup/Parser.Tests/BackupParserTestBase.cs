@@ -64,7 +64,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             var reliabilitySimulator = new ReliabilitySimulator(
                 logFolder,
                 new Uri("fabric:/unittest/service"),
-                OnDataLossCallback, // we are never calling OnDataLossAsync on this ReliabilitySimulator.
+                OnDataLossCallback,
                 CreateStateProvider);
 
             reliabilitySimulator.CreateReplica(true, false);

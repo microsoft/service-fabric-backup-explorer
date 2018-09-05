@@ -16,7 +16,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <summary>
         /// Constructor of ReliableCollectionChange
         /// </summary>
-        /// <param name="name">Name of Reliable Collection</param>
+        /// <param name="name">Name of Reliable Collection whose changes wer are collecting.</param>
         public ReliableCollectionChange(Uri name)
         {
             this.Name = name;
@@ -29,7 +29,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         public Uri Name { get; }
 
         /// <summary>
-        /// Events that are received from this Reliable State.
+        /// List of changes that are received for this Reliable State.
         /// </summary>
         public List<EventArgs> Changes { get; }
     }

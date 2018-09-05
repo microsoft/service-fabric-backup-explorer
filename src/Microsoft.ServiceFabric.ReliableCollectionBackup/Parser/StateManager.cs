@@ -15,12 +15,16 @@ using Microsoft.ServiceFabric.Tools.ReliabilitySimulator;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
+    /// <summary>
+    /// StateManager is <see cref="IReliableStateManager"/> for <see cref="BackupParser"/>.
+    /// This wraps over the ReliabilitySimulator's TransactionalReplicator.
+    /// </summary>
     internal class StateManager : IReliableStateManager
     {
         /// <summary>
-        ///
+        /// Constructor of StateManager.
         /// </summary>
-        /// <param name="reliabilitySimulator"></param>
+        /// <param name="reliabilitySimulator">ReliabilitySimulator that </param>
         public StateManager(ReliabilitySimulator reliabilitySimulator)
         {
             this.reliabilitySimulator = reliabilitySimulator;

@@ -20,7 +20,10 @@ using Microsoft.ServiceFabric.ReliableCollectionBackup.UserType;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
 {
-    class ComplexTypesBackupGenerator
+    /// <summary>
+    /// Used for generating Backups for complex type : UserType.
+    /// </summary>
+    internal class ComplexTypesBackupGenerator
     {
         public async Task GenerateUserData(string logFolder)
         {
@@ -30,20 +33,18 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
 
         internal async Task GenerateWithValueType<ValueType>(string logFolder, ValueType value)
         {
-            const int NumberOfStateProviders = 6;
-
+            // directory setup
             if (FabricDirectory.Exists(logFolder))
             {
                 FabricDirectory.Delete(logFolder, true);
             }
-
             FabricDirectory.CreateDirectory(logFolder);
 
             var rand = new Random();
 
             var reliabilitySimulator = new ReliabilitySimulator(
                 logFolder,
-                new Uri("fabric:/unittest/service" + rand.Next()),
+                new Uri("fabric:/unittest/service" + rand.Next()), // random service name.
                 OnDataLossCallback, // we are never calling OnDataLossAsync on this ReliabilitySimulator.
                 CreateStateProvider);
 
@@ -67,13 +68,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
             using (var txn = replicator.CreateTransaction())
             {
                 await replicator.AddStateProviderAsync(txn, DictionaryName, distributedDictionary).ConfigureAwait(false);
-                await replicator.AddStateProviderAsync(txn, QueueName, distributedQueue).ConfigureAwait(false);
-                await replicator.AddStateProviderAsync(txn, ConcurrentQueueName, concurrentQueue).ConfigureAwait(false);
                 await txn.CommitAsync().ConfigureAwait(false);
             }
 
             result = replicator.CreateAsyncEnumerable(false, false);
-            Assert.AreEqual(NumberOfStateProviders, result.ToEnumerable().Count(), "State Manager must include all the state providers");
+            Assert.AreEqual(2, result.ToEnumerable().Count(), "State Manager must include all the state providers");
 
             await PopulateDictionaryAsync(replicator, DictionaryName, 0, 8, 8, value).ConfigureAwait(false);
 
@@ -106,10 +105,12 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
                         await dictionary.AddAsync(txn, key, value).ConfigureAwait(false);
                     }
 
+                    // Data has not been added yet.
                     Assert.AreEqual(startingCount + (batchIndex * batchSize), distributedDictionary.Count);
                     await txn.CommitAsync().ConfigureAwait(false);
                 }
 
+                // Data is added and committed now.
                 Assert.AreEqual(startingCount + ((batchIndex + 1) * batchSize), distributedDictionary.Count);
             }
 

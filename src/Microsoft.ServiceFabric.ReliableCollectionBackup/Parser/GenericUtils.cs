@@ -4,16 +4,21 @@
 // ------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
-    static class GenericUtils
+    /// <summary>
+    /// Utility functions for Generic types
+    /// </summary>
+    internal static class GenericUtils
     {
+        /// <summary>
+        /// Finds if <paramref name="child"/> Type is subclass of <paramref name="parent"/> Type.
+        /// </summary>
+        /// <param name="child">child type</param>
+        /// <param name="parent">parent type</param>
+        /// <returns>True if child type is subclass for parent type.</returns>
         public static bool IsSubClassOfGeneric(this Type child, Type parent)
         {
             while (child != null && child != typeof(object))

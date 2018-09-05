@@ -4,22 +4,22 @@
 // ------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
-    class ComMtaHelper
+    /// <summary>
+    /// Helper COM methods
+    /// </summary>
+    internal class ComMtaHelper
     {
-        public static TResult WrapNativeSyncInvokeInMTA<TResult>(Func<TResult> func, string functionTag)
+        public static TResult WrapNativeSyncInvokeInMTA<TResult>(Func<TResult> func)
         {
-            return RunInMTA(() => { return WrapNativeSyncInvoke<TResult>(func, functionTag); });
+            return RunInMTA(() => { return WrapNativeSyncInvoke<TResult>(func); });
         }
 
-        static TResult WrapNativeSyncInvoke<TResult>(Func<TResult> func, string functionTag, string functionArgs = "")
+        static TResult WrapNativeSyncInvoke<TResult>(Func<TResult> func)
         {
             TResult result = func();
             return result;

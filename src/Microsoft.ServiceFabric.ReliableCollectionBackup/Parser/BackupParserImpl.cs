@@ -4,7 +4,6 @@
 // ------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Fabric;
 using System.IO;
 using System.Reflection;
@@ -19,8 +18,16 @@ using Microsoft.ServiceFabric.Replicator;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
+    /// <summary>
+    /// Actual implementation of BackupParserImpl.
+    /// </summary>
     internal class BackupParserImpl : IDisposable
     {
+        /// <summary>
+        /// Constructor for BackupParserImpl.
+        /// </summary>
+        /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
+        /// <param name="codePackagePath">Code packages of the service whose backups are provided in <paramref name="backupChainPath" />.</param>
         public BackupParserImpl(string backupChainPath, string codePackagePath)
         {
             this.backupChainPath = backupChainPath;
@@ -43,10 +50,20 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             this.transactionChangeManager = new TransactionChangeManager();
         }
 
+        /// <summary>
+        /// Events that notifies about the committed transactions.
+        /// </summary>
         public event EventHandler<NotifyTransactionAppliedEventArgs> TransactionApplied;
 
+        /// <summary>
+        /// Parses the backup.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token to stop backup parsing.</param>
+        /// <returns>Task associated with parsing.</returns>
         public async Task ParseAsync(CancellationToken cancellationToken)
         {
+            // Since these are COM calls, we need to wrap them to run in MTA.
+            // asnegi: I am still not sure why we need this even when lower native layer has a similar wrapper.
             await ComMtaHelper.WrapNativeSyncInvokeInMTA(async () =>
             {
                 var transactionalReplicatorSettings = TransactionalReplicatorSettingsHelper.Create(
@@ -65,21 +82,37 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 this.Replicator.StateManager.StateManagerChanged += this.OnStateManagerChanged;
 
                 await this.reliabilitySimulator.OnDataLossAsync(cancellationToken).ConfigureAwait(false);
-            },
-            "backupParserImpl.ParseAsync");
+            });
         }
 
+        /// <summary>
+        /// StateManager associated with this Parser.
+        /// </summary>
         public StateManager StateManager
         {
             get { return this.stateManager; }
-            internal set { }
+            internal set { this.stateManager = value; }
         }
 
+        /// <summary>
+        /// Creates a backup of current replica.
+        /// </summary>
+        /// <param name="backupCallback">Backup callback to trigger at finish of Backup operation.</param>
+        /// <param name="backupOption">The type of backup to perform.</param>
+        /// <param name="timeout">The timeout for this operation.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>Task representing this asynchronous backup operation.</returns>
         public async Task BackupAsync(Func<BackupInfo, CancellationToken, Task<bool>> backupCallback, BackupOption backupOption, TimeSpan timeout, CancellationToken cancellationToken)
         {
             await this.Replicator.BackupAsync(backupCallback, backupOption, timeout, cancellationToken);
         }
 
+        /// <summary>
+        /// Listens for StateManager change events to hook into ReliableStates for any change events.
+        /// These change events are then collected to add to show when the Transaction is committed.
+        /// </summary>
+        /// <param name="sender">Sender of event.</param>
+        /// <param name="e">StateManager change event arguments.</param>
         private void OnStateManagerChanged(object sender, NotifyStateManagerChangedEventArgs e)
         {
             var operation = e as NotifyStateManagerSingleEntityChangedEventArgs;
@@ -98,14 +131,15 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                     var keyType = reliableStateType.GetGenericArguments()[0];
                     var valueType = reliableStateType.GetGenericArguments()[1];
 
-                    this.GetType().GetMethod("AssignDictionaryChangedHandle", BindingFlags.Instance | BindingFlags.NonPublic)
+                    // use reflection to call my own method because key/value types are known at runtime.
+                    this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
                         .MakeGenericMethod(keyType, valueType)
                         .Invoke(this, new object[] { operation.ReliableState });
                 }
             }
         }
 
-        private void AssignDictionaryChangedHandle<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
+        private void AddDictionaryChangedHandler<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             dictionary.DictionaryChanged += this.OnDictionaryChanged;
@@ -129,12 +163,15 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         {
             if (e.Action == NotifyTransactionChangedAction.Commit)
             {
+                // If this is first transaction we have seen, open Replica for reads 
+                // before notifying about committed transactions.
                 if (!this.seenFirstTransaction)
                 {
                     this.SetUpReplicaForReads();
                     this.seenFirstTransaction = true;
                 }
 
+                // todo : Can we have multiple transactions coming here in multi threaded environment ?
                 this.OnTransactionCommitted(sender, e);
                 this.transactionChangeManager.TransactionCompleted();
             }
@@ -152,7 +189,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             {
                 var transactionAppliedEventArgs = new NotifyTransactionAppliedEventArgs(
                     e.Transaction,
-                    this.transactionChangeManager.ShowChanges());
+                    this.transactionChangeManager.GetAllChanges());
 
                 transactionApplied.Invoke(this, transactionAppliedEventArgs);
             }
@@ -171,11 +208,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         public void Dispose()
         {
+            // delete replica.
             this.reliabilitySimulator.DropReplicaAsync().GetAwaiter().GetResult();
+            // delete work foler.
             if (Directory.Exists(this.workFolder))
             {
                 Directory.Delete(this.workFolder, true);
             }
+            // remove assemblyresolver.
             this.codePackage.Dispose();
         }
 
@@ -186,7 +226,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         private IStateProvider2 CreateStateProvider(Uri name, Type type)
         {
-            return (IStateProvider2)Activator.CreateInstance(type);
+            return (IStateProvider2) Activator.CreateInstance(type);
         }
 
         private void SetUpReplicaForReads()
@@ -197,7 +237,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private TransactionalReplicator Replicator
         {
             get { return this.reliabilitySimulator.GetTransactionalReplicator(); }
-            set { }
+            set { throw new InvalidOperationException("BackupParserImpl.Replicator can't be changed from outside."); }
         }
 
         private string backupChainPath;
@@ -205,7 +245,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private ReliabilitySimulator reliabilitySimulator;
         private StateManager stateManager;
         private string workFolder;
-        private bool seenFirstTransaction;
+        private bool seenFirstTransaction; // maintains state to see if we have seen first Transaction or not.
         private TransactionChangeManager transactionChangeManager;
     }
 }

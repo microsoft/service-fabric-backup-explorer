@@ -5,22 +5,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.ServiceFabric.Data;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     /// <summary>
-    /// NotifyTransactionAppliedEventArgs is used for notifying TransactionApplied event.
+    /// NotifyTransactionAppliedEventArgs is used for notifying <see cref="BackupParser.TransactionApplied"/> event.
+    /// This event contains the changes that were applied in this transaction.
     /// </summary>
     public class NotifyTransactionAppliedEventArgs : EventArgs
     {
         /// <summary>
         /// Constructor of NotifyTransactionAppliedEventArgs.
         /// </summary>
+        /// <param name="transaction">Transaction which was committed.</param>
+        /// <param name="changes">Reliable Collection changes applied in this Transaction.</param>
         public NotifyTransactionAppliedEventArgs(ITransaction transaction, IEnumerable<ReliableCollectionChange> changes)
         {
             this.TransactionId = transaction.TransactionId;

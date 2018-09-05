@@ -9,13 +9,15 @@ using System.Reflection;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
+    /// <summary>
+    /// Stores code package information required for parsing backup.
+    /// </summary>
     internal class CodePackageInfo : IDisposable
     {
-        readonly string packagePath;
-
         public CodePackageInfo(string packagePath)
         {
             this.packagePath = packagePath;
+            // empty packagePath are allowed for backups that have only primitive types.
             if (!String.IsNullOrWhiteSpace(this.packagePath))
             {
                 AppDomain.CurrentDomain.AssemblyResolve += CodePackageAssemblyResolveHandler;
@@ -29,15 +31,20 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
             try
             {
+                // Looks through all fils in code package path for required assembly.
                 var assemblyPaths = Directory.EnumerateFiles(this.packagePath, assemblyToLoad, SearchOption.AllDirectories);
-
+                
+                // assemblyPaths is a lazy list, so instead of looking at Count which forces the completition of EnumerateFiles
+                // just use enumeration to get first file.
                 foreach (var assemblyPath in assemblyPaths)
                 {
                     return Assembly.LoadFrom(assemblyPath);
                 }
             }
             catch (Exception)
-            { } // eat all the exceptions.
+            {
+                // log here.
+            }
 
             return null;
         }
@@ -46,5 +53,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         {
             AppDomain.CurrentDomain.AssemblyResolve -= CodePackageAssemblyResolveHandler;
         }
+
+        private readonly string packagePath;
     }
 }
