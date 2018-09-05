@@ -1,4 +1,9 @@
-﻿using Microsoft.ServiceFabric.Data.Collections;
+// ------------------------------------------------------------
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+// Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
+// ------------------------------------------------------------
+
+using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Collections.ReliableConcurrentQueue;
 using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
