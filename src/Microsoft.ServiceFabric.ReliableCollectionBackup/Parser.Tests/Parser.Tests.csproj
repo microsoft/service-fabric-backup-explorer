@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\properties\service_fabric_common_test.props" />
+  <PropertyGroup>
+    <ProjectGuid>{C21FA5E0-DBD5-4ECD-999E-EF4154EAD297}</ProjectGuid>
+    <AssemblyName>Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests</AssemblyName>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser Tests</AssemblyDescription>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="TakeBackupAfterParseTests.cs" />
+    <Compile Include="CollectionHelper.cs" />
+    <Compile Include="GenericsTests.cs" />
+    <Compile Include="BackupParserTestBase.cs" />
+    <Compile Include="BackupParserTests.cs" />
+    <Compile Include="StateManagerTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.4.187-beta" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".\UserFullBackup\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Parser\Parser.csproj" />
+  </ItemGroup>
+</Project>
