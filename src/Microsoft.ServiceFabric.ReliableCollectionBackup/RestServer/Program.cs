@@ -9,14 +9,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Data;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupRestServer
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            // e:\service-fabric-backup-explorer\RCBackupParserTests\UserFullBackup
-            // e:\service-fabric-backup-explorer\RCBackupParserTests\UserType\bin
             if (args.Length < 2)
             {
                 PrintUsage();

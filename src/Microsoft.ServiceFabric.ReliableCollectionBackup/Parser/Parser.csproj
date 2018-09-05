@@ -2,10 +2,10 @@
   <Import Project="..\..\..\properties\service_fabric_common.props" />
   <PropertyGroup>
     <ProjectGuid>{F9A204A8-4878-446B-B437-BAB888906760}</ProjectGuid>
-    <AssemblyName>Microsoft.ServiceFabric.Tools.RCBackupParser</AssemblyName>
+    <AssemblyName>Microsoft.ServiceFabric.ReliableCollectionBackup.Parser</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
-    <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser</AssemblyDescription>
+    <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser Library</AssemblyDescription>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
     <ErrorReport>prompt</ErrorReport>
     <NoStdLib>true</NoStdLib>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParser
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     /// <summary>
     /// ReliableCollectionChange stores the changes in a ReliableCollection during a transaction.

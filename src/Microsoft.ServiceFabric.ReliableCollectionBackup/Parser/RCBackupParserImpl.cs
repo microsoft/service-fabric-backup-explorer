@@ -12,7 +12,7 @@ using Microsoft.ServiceFabric.Data.Notifications;
 using Microsoft.ServiceFabric.Tools.ReliabilitySimulator;
 using Microsoft.ServiceFabric.Replicator;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParser
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     internal class RCBackupParserImpl : IDisposable
     {

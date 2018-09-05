@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParser
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     internal class TransactionChangeManager
     {

@@ -6,11 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.ServiceFabric.Tools.RCBackupParser;
+using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 {
     [TestClass]
     public class BackupAfterParseTests : RCBackupParserTestBase

@@ -8,7 +8,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupGenerator
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
 {
     class Program
     {

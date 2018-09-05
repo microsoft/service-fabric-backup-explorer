@@ -15,9 +15,9 @@ using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Collections.ReliableConcurrentQueue;
 using Microsoft.ServiceFabric.Replicator;
-using Microsoft.ServiceFabric.Tools.RCBackupParserTypes.UserType;
+using Microsoft.ServiceFabric.ReliableCollectionBackup.UserType;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupGenerator
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
 {
     class ComplexTypesBackupGenerator
     {

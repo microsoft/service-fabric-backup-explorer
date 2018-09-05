@@ -1,9 +1,9 @@
 ﻿using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Collections.ReliableConcurrentQueue;
-using Microsoft.ServiceFabric.Tools.RCBackupParser;
+using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 {
     [TestClass]
     public class GenericsTests

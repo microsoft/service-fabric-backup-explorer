@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Tools;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupRestServer.Controllers
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

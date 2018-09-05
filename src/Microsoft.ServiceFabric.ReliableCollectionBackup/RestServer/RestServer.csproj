@@ -2,7 +2,7 @@
   <Import Project="..\..\..\properties\service_fabric_common.props" />
   <PropertyGroup>
     <ProjectGuid>{5BA3665D-D2A8-43F7-BDD8-817B8834A141}</ProjectGuid>
-    <AssemblyName>Microsoft.ServiceFabric.Tools.RCBackupRestServer</AssemblyName>
+    <AssemblyName>Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
     <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser Rest Server</AssemblyDescription>

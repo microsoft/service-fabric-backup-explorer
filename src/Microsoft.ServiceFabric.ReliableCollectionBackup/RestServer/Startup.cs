@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ServiceFabric.Extensions.Services.Queryable;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupRestServer
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 {
     public class Startup
     {

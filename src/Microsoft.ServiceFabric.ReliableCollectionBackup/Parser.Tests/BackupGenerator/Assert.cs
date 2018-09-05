@@ -5,7 +5,7 @@
 
 using System;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupGenerator
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
 {
     internal static class Assert
     {

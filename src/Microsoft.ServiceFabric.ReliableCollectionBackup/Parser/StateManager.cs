@@ -8,7 +8,7 @@ using Microsoft.ServiceFabric.Data.Notifications;
 using Microsoft.ServiceFabric.Replicator;
 using Microsoft.ServiceFabric.Tools.ReliabilitySimulator;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParser
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     class StateManager : IReliableStateManager
     {

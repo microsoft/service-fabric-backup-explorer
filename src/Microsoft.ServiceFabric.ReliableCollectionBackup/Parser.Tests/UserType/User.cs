@@ -1,7 +1,7 @@
 using System.Xml;
 using System.Runtime.Serialization;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParserTypes.UserType
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
 {
     /// <summary>
     /// User type

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParser
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     static class GenericUtils
     {
@@ -19,7 +19,7 @@ namespace Microsoft.ServiceFabric.Tools.RCBackupParser
                 {
                     return true;
                 }
-                
+
                 child = child.BaseType;
             }
 

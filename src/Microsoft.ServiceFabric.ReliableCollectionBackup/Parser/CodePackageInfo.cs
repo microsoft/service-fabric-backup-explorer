@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParser
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     internal class CodePackageInfo : IDisposable
     {

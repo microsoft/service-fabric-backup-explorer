@@ -2,7 +2,7 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\properties\service_fabric_nuget.props" />
   <PropertyGroup>
-    <Id>Microsoft.ServiceFabric.Tools.RCBackupParser</Id>
+    <Id>Microsoft.ServiceFabric.ReliableCollectionBackup.Parser</Id>
     <Title>$(Id)</Title>
     <Description>This package contains the Microsoft Service Fabric Reliable Collection backup parser</Description>
     <Summary>This package contains the Microsoft Service Fabric Reliable Collection backup parser</Summary>

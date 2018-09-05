@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using Microsoft.ServiceFabric.Data;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParser
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     /// <summary>
     /// RCBackupParser is Service Fabric Reliable Collection's backup parser.

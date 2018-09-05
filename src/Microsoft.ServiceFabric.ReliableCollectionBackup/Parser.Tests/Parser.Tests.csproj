@@ -2,7 +2,7 @@
   <Import Project="..\..\..\properties\service_fabric_common_test.props" />
   <PropertyGroup>
     <ProjectGuid>{C21FA5E0-DBD5-4ECD-999E-EF4154EAD297}</ProjectGuid>
-    <AssemblyName>Microsoft.ServiceFabric.Tools.RCBackupParserTests</AssemblyName>
+    <AssemblyName>Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
     <TargetFramework>netcoreapp2.1</TargetFramework>

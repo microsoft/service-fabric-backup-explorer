@@ -30,7 +30,7 @@ if ($build) {
     dotnet publish --no-build
 
     # Rest Server: copy our dlls in publish folder
-    xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.Tools.RCBackupRestServer\
+    xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.186-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\
 }
 
 if ($generateNupkg) {
@@ -40,6 +40,6 @@ if ($generateNupkg) {
     # nuget restore
     nuget.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages
     # generate nupkg
-    msbuild Microsoft.ServiceFabric.Tools.RCBackupParser.nuproj /p:OutputPath=$PSScriptRoot\bin\nupkg
+    msbuild Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=$PSScriptRoot\bin\nupkg
     popd
 }

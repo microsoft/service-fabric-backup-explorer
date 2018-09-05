@@ -12,7 +12,7 @@ using Microsoft.ServiceFabric.Data.Collections.ReliableConcurrentQueue;
 using Microsoft.ServiceFabric.Replicator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.ServiceFabric.Tools.RCBackupParserTests
+namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 {
     [TestClass]
     public class RCBackupParserTestBase
