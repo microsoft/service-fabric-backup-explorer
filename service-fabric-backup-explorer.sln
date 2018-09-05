@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCBackupParser", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser\RCBackupParser.csproj", "{F9A204A8-4878-446B-B437-BAB888906760}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser\Parser.csproj", "{F9A204A8-4878-446B-B437-BAB888906760}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RCBackupParserTests", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests\RCBackupParserTests.csproj", "{C21FA5E0-DBD5-4ECD-999E-EF4154EAD297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parser.Tests", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests\Parser.Tests.csproj", "{C21FA5E0-DBD5-4ECD-999E-EF4154EAD297}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RCBackupRestServer", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\RCBackupRestServer.csproj", "{5BA3665D-D2A8-43F7-BDD8-817B8834A141}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestServer", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\RestServer.csproj", "{5BA3665D-D2A8-43F7-BDD8-817B8834A141}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackupGenerator", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests\BackupGenerator\BackupGenerator.csproj", "{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}"
 EndProject
