@@ -100,7 +100,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             var complexDataBackupFolderPath = Path.Combine(ClassTestPath, @"..\UserFullBackup");
             // from this test run's bin\Debug\netstandard2.0\<testname> dir to parent of bin
-            var codePackagePath = Path.Combine(ClassTestPath, @"..\..\..\..\UserType\bin\Debug\netstandard2.0\");
+            var codePackagePath = Path.Combine(ClassTestPath, @"..\..\..\..\UserType\bin\");
 
             using (var backupParser = new RCBackupParser(complexDataBackupFolderPath, codePackagePath))
             {
