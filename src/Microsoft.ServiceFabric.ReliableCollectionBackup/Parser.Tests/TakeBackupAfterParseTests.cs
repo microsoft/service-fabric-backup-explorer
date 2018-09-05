@@ -18,22 +18,22 @@ using Microsoft.ServiceFabric.Data;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 {
     [TestClass]
-    public class BackupAfterParseTests : RCBackupParserTestBase
+    public class TakeBackupAfterParseTests : BackupParserTestBase
     {
         [ClassInitialize]
-        public static async Task BackupAfterParseTestsClassInitialize(TestContext testContext)
+        public static async Task TakeBackupAfterParseTestsClassInitialize(TestContext testContext)
         {
-            await RCBackupParserTestBase.ClassInitialize(testContext);
+            await BackupParserTestBase.ClassInitialize(testContext);
         }
 
         [ClassCleanup]
-        public static void BackupAfterParseTestsClassCleanup()
+        public static void TakeBackupAfterParseTestsClassCleanup()
         {
-            RCBackupParserTestBase.ClassCleanup();
+            BackupParserTestBase.ClassCleanup();
         }
 
         [TestMethod]
-        public async Task RCBackupParser_TakeBackupAfterParseFinish()
+        public async Task BackupParser_TakeBackupAfterParseFinish()
         {
             long initialCountKeysInDict = 0;
             // read a back and then write more keys and take a full back.
@@ -85,7 +85,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         }
 
         [TestMethod]
-        public async Task RCBackupParser_TakeBackupAfterWritingToRCs()
+        public async Task BackupParser_TakeBackupAfterWritingToRCs()
         {
             long initialCountKeysInDict = 0, numKeysToAdd = 100;
 
@@ -153,7 +153,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         }
 
         [TestMethod]
-        public async Task RCBackupParser_TakeIncrementatlBackupAfterWritingToRCs()
+        public async Task BackupParser_TakeIncrementatlBackupAfterWritingToRCs()
         {
             long initialCountKeysInDict = 0;
             const long numKeysToAdd = 100, numIncrementalKeysToAdd = 20;

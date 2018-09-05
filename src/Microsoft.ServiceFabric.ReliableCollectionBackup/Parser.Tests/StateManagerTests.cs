@@ -16,22 +16,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 {
     [TestClass]
-    public class StateManagerTests : RCBackupParserTestBase
+    public class StateManagerTests : BackupParserTestBase
     {
         [ClassInitialize]
         public static async Task StateManagerTestsClassInitialize(TestContext testContext)
         {
-            await RCBackupParserTestBase.ClassInitialize(testContext);
+            await BackupParserTestBase.ClassInitialize(testContext);
         }
 
         [ClassCleanup]
         public static void StateManagerTestsClassCleanup()
         {
-            RCBackupParserTestBase.ClassCleanup();
+            BackupParserTestBase.ClassCleanup();
         }
 
         [TestMethod]
-        public async Task RCBackupParser_StateManagerAbleToReadInTransactionApplied()
+        public async Task BackupParser_StateManagerAbleToReadInTransactionApplied()
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
@@ -67,7 +67,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         }
 
         [TestMethod]
-        public async Task RCBackupParser_StateManagerFailsToWriteDuringParse()
+        public async Task BackupParser_StateManagerFailsToWriteDuringParse()
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
@@ -111,7 +111,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         }
 
         [TestMethod]
-        public async Task RCBackupParser_StateManagerAbleToWriteAfterParseFinish()
+        public async Task BackupParser_StateManagerAbleToWriteAfterParseFinish()
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {

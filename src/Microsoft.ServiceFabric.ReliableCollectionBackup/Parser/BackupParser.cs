@@ -13,18 +13,18 @@ using Microsoft.ServiceFabric.Data;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     /// <summary>
-    /// RCBackupParser is Service Fabric Reliable Collection's backup parser.
+    /// BackupParser is Service Fabric Reliable Collection's backup parser.
     /// </summary>
     public class BackupParser : IDisposable
     {
         /// <summary>
-        /// Constructor for RCBackupParser
+        /// Constructor for BackupParser
         /// </summary>
         /// <param name="backupChainFolderPath">Folder path that contains sub folders of full and incremental backups</param>
         /// <param name="codePackagePath">Code packages of the service whose backups are provided in first param</param>
         public BackupParser(string backupChainFolderPath, string codePackagePath)
         {
-            this.rcBackupParserImpl = new BackupParserImpl(backupChainFolderPath, codePackagePath);
+            this.backupParserImpl = new BackupParserImpl(backupChainFolderPath, codePackagePath);
         }
 
         /// <summary>
@@ -37,11 +37,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         {
             add
             {
-                this.rcBackupParserImpl.TransactionApplied += value;
+                this.backupParserImpl.TransactionApplied += value;
             }
             remove
             {
-                this.rcBackupParserImpl.TransactionApplied -= value;
+                this.backupParserImpl.TransactionApplied -= value;
             }
         }
 
@@ -54,7 +54,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <returns></returns>
         public async Task ParseAsync(CancellationToken cancellationToken)
         {
-            await this.rcBackupParserImpl.ParseAsync(cancellationToken);
+            await this.backupParserImpl.ParseAsync(cancellationToken);
         }
 
         /// <summary>
@@ -67,15 +67,15 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <returns></returns>
         public async Task BackupAsync(BackupOption backupOption, TimeSpan timeout, CancellationToken cancellationToken, Func<BackupInfo, CancellationToken, Task<bool>> backupCallback)
         {
-            await this.rcBackupParserImpl.BackupAsync(backupCallback, backupOption, timeout, cancellationToken);
+            await this.backupParserImpl.BackupAsync(backupCallback, backupOption, timeout, cancellationToken);
         }
 
         /// <summary>
-        /// Dispose the RCBackupParser.
+        /// Dispose the BackupParser.
         /// </summary>
         public void Dispose()
         {
-            this.rcBackupParserImpl.Dispose();
+            this.backupParserImpl.Dispose();
         }
 
         /// <summary>
@@ -84,15 +84,20 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </summary>
         public IReliableStateManager StateManager
         {
-            get { return this.rcBackupParserImpl.StateManager; }
+            get { return this.backupParserImpl.StateManager; }
             internal set { }
         }
 
+        /// <summary>
+        /// Gets the stateful service context of the Replica.
+        /// Needed in RestServer.
+        /// </summary>
+        /// <returns>StatefulServiceContext associated with Replica of this Parser</returns>
         internal StatefulServiceContext GetStatefulServiceContext()
         {
-            return rcBackupParserImpl.GetStatefulServiceContext();
+            return this.backupParserImpl.GetStatefulServiceContext();
         }
 
-        private BackupParserImpl rcBackupParserImpl;
+        private BackupParserImpl backupParserImpl;
     }
 }

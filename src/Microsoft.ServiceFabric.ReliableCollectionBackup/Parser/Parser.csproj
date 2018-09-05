@@ -32,7 +32,6 @@
     <Compile Include="ReliableCollectionChange.cs" />
     <Compile Include="TransactionChangeManager.cs" />
     <Compile Include="_friends.cs" />
-    <Compile Include="BackupChainInfo.cs" />
     <Compile Include="CodePackageInfo.cs" />
     <Compile Include="BackupParser.cs" />
     <Compile Include="BackupParserImpl.cs" />

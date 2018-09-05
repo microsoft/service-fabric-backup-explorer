@@ -21,11 +21,13 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     internal class BackupParserImpl : IDisposable
     {
-        public BackupParserImpl(string backupChainFolderPath, string codePackagePath)
+        public BackupParserImpl(string backupChainPath, string codePackagePath)
         {
-            this.backupChain = new BackupChainInfo(new List<string>() { backupChainFolderPath });
+            this.backupChainPath = backupChainPath;
             this.codePackage = new CodePackageInfo(codePackagePath);
-            this.workFolder = Path.Combine(Directory.GetCurrentDirectory(), "RCBackupParser", Guid.NewGuid().ToString());
+            this.workFolder = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString());
+
+            Console.WriteLine("Work Folder : {0}", this.workFolder);
 
             Directory.CreateDirectory(this.workFolder);
 
@@ -37,9 +39,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             this.reliabilitySimulator.CreateReplica(true, false);
 
             this.stateManager = new StateManager(reliabilitySimulator);
-
             this.seenFirstTransaction = false;
-
             this.transactionChangeManager = new TransactionChangeManager();
         }
 
@@ -56,19 +56,17 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                     useDefaultSharedLogId: true,
                     LogManagerLoggerType : System.Fabric.Data.Log.LogManager.LoggerType.Inproc);
 
-                Console.WriteLine("Log path : {0}", transactionalReplicatorSettings.PublicSettings.SharedLogPath);
-
                 await this.reliabilitySimulator.OpenReplicaWithSettingsAsync(ReplicaOpenMode.New, transactionalReplicatorSettings).ConfigureAwait(false);
                 await this.reliabilitySimulator.PromoteReplicaAsync(false).ConfigureAwait(false);
-
                 await this.reliabilitySimulator.PrepareForDataLossAsync().ConfigureAwait(false);
 
+                // Optimization : Hook in only if we have registered any handler.
                 this.Replicator.TransactionChanged += this.OnTransactionChanged;
                 this.Replicator.StateManager.StateManagerChanged += this.OnStateManagerChanged;
 
                 await this.reliabilitySimulator.OnDataLossAsync(cancellationToken).ConfigureAwait(false);
             },
-            "RCBackupParserImpl.ParseAsync");
+            "backupParserImpl.ParseAsync");
         }
 
         public StateManager StateManager
@@ -167,7 +165,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private async Task<bool> OnDataLossCallback(CancellationToken cancellationToken)
         {
             RestorePolicy restorePolicy = RestorePolicy.Safe;
-            await this.Replicator.RestoreAsync(this.backupChain.CommonRootFolder, restorePolicy, cancellationToken).ConfigureAwait(false);
+            await this.Replicator.RestoreAsync(this.backupChainPath, restorePolicy, cancellationToken).ConfigureAwait(false);
             return true;
         }
 
@@ -202,7 +200,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             set { }
         }
 
-        private BackupChainInfo backupChain;
+        private string backupChainPath;
         private CodePackageInfo codePackage;
         private ReliabilitySimulator reliabilitySimulator;
         private StateManager stateManager;

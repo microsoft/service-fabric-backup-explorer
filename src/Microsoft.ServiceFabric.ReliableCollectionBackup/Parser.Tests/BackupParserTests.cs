@@ -23,22 +23,22 @@ using Microsoft.ServiceFabric.Data.Notifications;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 {
     [TestClass]
-    public class BackupParserTests : RCBackupParserTestBase
+    public class BackupParserTests : BackupParserTestBase
     {
         [ClassInitialize]
-        public static async Task RCBackupParserTestsClassInitialize(TestContext testContext)
+        public static async Task BackupParserTestsClassInitialize(TestContext testContext)
         {
-            await RCBackupParserTestBase.ClassInitialize(testContext);
+            await BackupParserTestBase.ClassInitialize(testContext);
         }
 
         [ClassCleanup]
-        public static void RCBackupParserTestsClassCleanup()
+        public static void BackupParserTestsClassCleanup()
         {
-            RCBackupParserTestBase.ClassCleanup();
+            BackupParserTestBase.ClassCleanup();
         }
 
         [TestMethod]
-        public async Task RCBackupParser_FireTransactionAppliedEvents()
+        public async Task BackupParser_FireTransactionAppliedEvents()
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
@@ -56,7 +56,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         }
 
         [TestMethod]
-        public async Task RCBackupParser_CollectChangesInTransactionAppliedEvents()
+        public async Task BackupParser_CollectChangesInTransactionAppliedEvents()
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
@@ -87,16 +87,16 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         }
 
         [TestMethod]
-        public void RCBackupParser_NoUserClassInDefaultAppDomain()
+        public void BackupParser_NoUserClassInDefaultAppDomain()
         {
             var appDomain = AppDomain.CurrentDomain;
             var userAssembly = appDomain.GetAssemblies().Where(assembly => assembly.FullName.Contains("User"));
             Assert.IsTrue(userAssembly.Count() == 0, string.Format("User assembly {0} is loaded in default app domain. " +
-                "Test like RCBackupParser_AbleToFindAssemblyInCodePackage will pass even if functionality is broken.", userAssembly.FirstOrDefault()));
+                "Test like BackupParser_AbleToFindAssemblyInCodePackage will pass even if functionality is broken.", userAssembly.FirstOrDefault()));
         }
 
         [TestMethod]
-        public async Task RCBackupParser_AbleToFindAssemblyInCodePackage()
+        public async Task BackupParser_AbleToFindAssemblyInCodePackage()
         {
             var complexDataBackupFolderPath = Path.Combine(ClassTestPath, @"..\UserFullBackup");
             // from this test run's bin\Debug\netstandard2.0\<testname> dir to parent of bin

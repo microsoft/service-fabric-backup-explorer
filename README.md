@@ -27,8 +27,9 @@ powershell .\build_all.ps1 -build -generateNupkg
 
 # Running Rest Server
 ```
-cd RCBackupRestServer
+pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
 dotnet build
-xcopy.exe /EIYS ..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll bin\Debug\net471\
-dotnet run --no-build e:\service-fabric-backup-explorer\RCBackupParserTests\UserFullBackup e:\service-fabric-backup-explorer\RCBackupParserTests\UserType\bin
+xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll bin\Debug\net471\
+dotnet run --no-build ..\Parser.Tests\UserFullBackup ..\Parser.Tests\UserType\bin
+popd
 ```

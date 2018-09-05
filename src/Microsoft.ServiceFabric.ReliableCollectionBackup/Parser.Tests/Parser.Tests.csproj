@@ -10,7 +10,7 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BackupAfterParseTests.cs" />
+    <Compile Include="TakeBackupAfterParseTests.cs" />
     <Compile Include="CollectionHelper.cs" />
     <Compile Include="GenericsTests.cs" />
     <Compile Include="BackupParserTestBase.cs" />

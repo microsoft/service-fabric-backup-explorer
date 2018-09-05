@@ -14,7 +14,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
     public class GenericsTests
     {
         [TestMethod]
-        public void RCBackupParser_IsSubClassOfGenericTrue()
+        public void BackupParser_IsSubClassOfGenericTrue()
         {
             Assert.IsTrue(GenericUtils.IsSubClassOfGeneric(typeof(DistributedDictionary<long, long>), typeof(IReliableDictionary<,>)));
             Assert.IsTrue(GenericUtils.IsSubClassOfGeneric(new DistributedDictionary<long, long>().GetType(), typeof(IReliableDictionary<,>)));
@@ -27,7 +27,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         }
 
         [TestMethod]
-        public void RCBackupParser_IsSubClassOfGenericFalse()
+        public void BackupParser_IsSubClassOfGenericFalse()
         {
             Assert.IsFalse(GenericUtils.IsSubClassOfGeneric(typeof(IReliableConcurrentQueue<long>), typeof(IReliableDictionary<,>)));
             Assert.IsFalse(GenericUtils.IsSubClassOfGeneric(new ReliableConcurrentQueue<long>().GetType(), typeof(IReliableDictionary<,>)));

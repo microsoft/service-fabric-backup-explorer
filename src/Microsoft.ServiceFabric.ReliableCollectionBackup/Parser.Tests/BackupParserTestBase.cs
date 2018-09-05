@@ -21,7 +21,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 {
     [TestClass]
-    public class RCBackupParserTestBase
+    public class BackupParserTestBase
     {
         public static async Task ClassInitialize(TestContext testContext)
         {
@@ -128,7 +128,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 
         private static volatile Task ClassInitializationTask = null;
         private static object ClassInitializationTaskWaitObject = new object();
-        protected const string BaseTestFolderName = "RCBackupParserTests";
+        protected const string BaseTestFolderName = "BackupParserTests";
         protected const string BackupContainerFolderName = "BackupContainer";
         protected static readonly Uri DictionaryName = new Uri("urn:testDictionary");
         protected static readonly Uri QueueName = new Uri("urn:testQueue");
