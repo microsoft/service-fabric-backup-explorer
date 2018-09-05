@@ -32,3 +32,6 @@ msbuild.log
 
 # Don't include restore packages
 packages
+
+# Ignore test logs
+*test*.log

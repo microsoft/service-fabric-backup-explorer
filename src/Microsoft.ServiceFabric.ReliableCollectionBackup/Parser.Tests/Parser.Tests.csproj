@@ -6,16 +6,15 @@
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser Cmdline</AssemblyDescription>
+    <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser Tests</AssemblyDescription>
     <IsPackable>false</IsPackable>
-    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BackupAfterParseTests.cs" />
     <Compile Include="CollectionHelper.cs" />
     <Compile Include="GenericsTests.cs" />
-    <Compile Include="RCBackupParserTestBase.cs" />
-    <Compile Include="RCBackupParserTests.cs" />
+    <Compile Include="BackupParserTestBase.cs" />
+    <Compile Include="BackupParserTests.cs" />
     <Compile Include="StateManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>

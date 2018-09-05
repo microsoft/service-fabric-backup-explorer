@@ -10,7 +10,7 @@ using Microsoft.ServiceFabric.Tools.ReliabilitySimulator;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
-    class StateManager : IReliableStateManager
+    internal class StateManager : IReliableStateManager
     {
         /// <summary>
         ///

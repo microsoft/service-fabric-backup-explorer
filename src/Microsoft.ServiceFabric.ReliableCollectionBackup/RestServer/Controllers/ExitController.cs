@@ -12,7 +12,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
     [ApiController]
     public class ExitController : ControllerBase
     {
-        public ExitController(RCBackupParser backupParser)
+        public ExitController(BackupParser backupParser)
         {
             this.backupParser = backupParser;
         }
@@ -26,6 +26,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
             Environment.Exit(0);
         }
 
-        RCBackupParser backupParser;
+        BackupParser backupParser;
     }
 }

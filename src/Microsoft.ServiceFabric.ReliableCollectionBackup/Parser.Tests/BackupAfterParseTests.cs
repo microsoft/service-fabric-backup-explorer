@@ -32,7 +32,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             long initialCountKeysInDict = 0;
             // read a back and then write more keys and take a full back.
-            using (var backupParser = new RCBackupParser(BackupFolderPath, ""))
+            using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
                 await backupParser.ParseAsync(CancellationToken.None);
                 var stateManager = backupParser.StateManager;
@@ -53,7 +53,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             }
 
             // Verify full backup
-            using (var backupParser = new RCBackupParser(this.FullBackupFolderPath, ""))
+            using (var backupParser = new BackupParser(this.FullBackupFolderPath, ""))
             {
                 await backupParser.ParseAsync(CancellationToken.None);
 
@@ -85,7 +85,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             long initialCountKeysInDict = 0, numKeysToAdd = 100;
 
             // read a back and then write more keys and take a full back.
-            using (var backupParser = new RCBackupParser(BackupFolderPath, ""))
+            using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
                 await backupParser.ParseAsync(CancellationToken.None);
 
@@ -112,7 +112,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             }
 
             // Verify full backup
-            using (var backupParser = new RCBackupParser(this.FullBackupFolderPath, ""))
+            using (var backupParser = new BackupParser(this.FullBackupFolderPath, ""))
             {
                 await backupParser.ParseAsync(CancellationToken.None);
 
@@ -154,7 +154,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             const long numKeysToAdd = 100, numIncrementalKeysToAdd = 20;
 
             // read a back and then write more keys and take a full back.
-            using (var backupParser = new RCBackupParser(BackupFolderPath, ""))
+            using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
                 await backupParser.ParseAsync(CancellationToken.None);
 
@@ -195,7 +195,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             }
 
             // Verify full+incremental backups
-            using (var backupParser = new RCBackupParser(this.FullAndIncrementalBackupFolderPath, ""))
+            using (var backupParser = new BackupParser(this.FullAndIncrementalBackupFolderPath, ""))
             {
                 await backupParser.ParseAsync(CancellationToken.None);
 

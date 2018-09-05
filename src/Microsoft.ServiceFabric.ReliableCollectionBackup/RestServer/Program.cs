@@ -40,7 +40,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                     services => services
                                 .AddSingleton<StatefulServiceContext>(backupParser.GetStatefulServiceContext())
                                 .AddSingleton<IReliableStateManager>(backupParser.StateManager)
-                                .AddSingleton<RCBackupParser>(backupParser))
+                                .AddSingleton<BackupParser>(backupParser))
                 .UseStartup<Startup>();
         }
 
@@ -51,11 +51,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             Console.WriteLine("2. Location of code packages");
         }
 
-        static async Task<RCBackupParser> BringupBackupParser(string[] args)
+        static async Task<BackupParser> BringupBackupParser(string[] args)
         {
             var backupDirectory = args[0];
             var codeDirectory = args[1];
-            var backupParser = new RCBackupParser(backupDirectory, codeDirectory);
+            var backupParser = new BackupParser(backupDirectory, codeDirectory);
             await backupParser.ParseAsync(CancellationToken.None);
             return backupParser;
         }

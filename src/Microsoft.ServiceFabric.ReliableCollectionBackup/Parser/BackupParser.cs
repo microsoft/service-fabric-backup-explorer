@@ -10,16 +10,16 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// <summary>
     /// RCBackupParser is Service Fabric Reliable Collection's backup parser.
     /// </summary>
-    public class RCBackupParser : IDisposable
+    public class BackupParser : IDisposable
     {
         /// <summary>
         /// Constructor for RCBackupParser
         /// </summary>
         /// <param name="backupChainFolderPath">Folder path that contains sub folders of full and incremental backups</param>
         /// <param name="codePackagePath">Code packages of the service whose backups are provided in first param</param>
-        public RCBackupParser(string backupChainFolderPath, string codePackagePath)
+        public BackupParser(string backupChainFolderPath, string codePackagePath)
         {
-            this.rcBackupParserImpl = new RCBackupParserImpl(backupChainFolderPath, codePackagePath);
+            this.rcBackupParserImpl = new BackupParserImpl(backupChainFolderPath, codePackagePath);
         }
 
         /// <summary>
@@ -88,6 +88,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             return rcBackupParserImpl.GetStatefulServiceContext();
         }
 
-        private RCBackupParserImpl rcBackupParserImpl;
+        private BackupParserImpl rcBackupParserImpl;
     }
 }

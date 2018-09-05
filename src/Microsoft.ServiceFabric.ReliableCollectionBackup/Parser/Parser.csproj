@@ -34,8 +34,8 @@
     <Compile Include="_friends.cs" />
     <Compile Include="BackupChainInfo.cs" />
     <Compile Include="CodePackageInfo.cs" />
-    <Compile Include="RCBackupParser.cs" />
-    <Compile Include="RCBackupParserImpl.cs" />
+    <Compile Include="BackupParser.cs" />
+    <Compile Include="BackupParserImpl.cs" />
     <Compile Include="StateManager.cs" />
   </ItemGroup>
   <ItemGroup>

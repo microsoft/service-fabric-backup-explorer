@@ -28,7 +28,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         [TestMethod]
         public async Task RCBackupParser_StateManagerAbleToReadInTransactionApplied()
         {
-            using (var backupParser = new RCBackupParser(BackupFolderPath, ""))
+            using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
                 long countValuesInDictionary = 0;
 
@@ -64,7 +64,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         [TestMethod]
         public async Task RCBackupParser_StateManagerFailsToWriteDuringParse()
         {
-            using (var backupParser = new RCBackupParser(BackupFolderPath, ""))
+            using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
                 long countValuesInDictionary = 0;
 
@@ -108,7 +108,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         [TestMethod]
         public async Task RCBackupParser_StateManagerAbleToWriteAfterParseFinish()
         {
-            using (var backupParser = new RCBackupParser(BackupFolderPath, ""))
+            using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
                 bool transactionSeen = false;
                 var stateManager = backupParser.StateManager;

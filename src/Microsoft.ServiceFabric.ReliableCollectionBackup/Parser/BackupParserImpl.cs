@@ -14,9 +14,9 @@ using Microsoft.ServiceFabric.Replicator;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
-    internal class RCBackupParserImpl : IDisposable
+    internal class BackupParserImpl : IDisposable
     {
-        public RCBackupParserImpl(string backupChainFolderPath, string codePackagePath)
+        public BackupParserImpl(string backupChainFolderPath, string codePackagePath)
         {
             this.backupChain = new BackupChainInfo(new List<string>() { backupChainFolderPath });
             this.codePackage = new CodePackageInfo(codePackagePath);
