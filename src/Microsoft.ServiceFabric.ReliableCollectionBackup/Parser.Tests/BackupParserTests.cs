@@ -203,14 +203,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
                         }
                     }
 
-                    // sleep for 100 ms - 1 secs.
-                    Thread.Sleep(rand.Next(100, 1000));
+                    // sleep for 10-200 ms.
+                    Thread.Sleep(rand.Next(10, 200));
                 };
 
                 await backupParser.ParseAsync(CancellationToken.None);
 
                 Assert.AreEqual(TotalDictionaryInserts, totalDictionaryAdds, "Not able to collect all Dictionary change events");
-                Assert.AreEqual(8, totalTransactionsSeenForDictionary, "Wrong number of transactions");
+                Assert.AreEqual(TotalDictionaryTransactions, totalTransactionsSeenForDictionary, "Wrong number of transactions");
             }
         }
 
@@ -239,8 +239,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
                         }
                     }
 
-                    // sleep for 100 ms - 1 secs.
-                    Thread.Sleep(rand.Next(100, 1000));
+                    // sleep for 10 - 200 ms.
+                    Thread.Sleep(rand.Next(10, 200));
                     totalTransactionsSeen += 1;
                 };
 

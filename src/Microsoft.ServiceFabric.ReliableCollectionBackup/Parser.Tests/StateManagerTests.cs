@@ -157,7 +157,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
                     Assert.IsTrue(countKeysInDict > 0, "No data seen in dictionary");
                 }
 
-                // Verify
+                // Verify writes
                 {
                     var result = await stateManager.TryGetAsync<IReliableDictionary<long, long>>(DictionaryName);
                     Assert.IsTrue(result.HasValue, "Not able to find IReliableDictionary<long, long> dictionary");
@@ -181,6 +181,49 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 
                     Assert.IsTrue(countKeysInDict > 0, "No data seen in dictionary");
                 }
+            }
+        }
+
+        [TestMethod]
+        public async Task BackupParser_StateManagerAbleToReadQueuesInTransactionApplied()
+        {
+            using (var backupParser = new BackupParser(BackupFolderPath, ""))
+            {
+                long countValuesInQueue = 0; //, countValuesInConcurrentQueue = -1;
+
+                backupParser.TransactionApplied += async (sender, args) =>
+                {
+                    var stateManager = backupParser.StateManager;
+                    // verify ReliableQueue
+                    {
+                        var result = await stateManager.TryGetAsync<IReliableQueue<long>>(QueueName);
+                        Assert.IsTrue(result.HasValue, "Not able to find IReliableQueue<long> queue");
+
+                        var queue = result.Value;
+                        using (var tx = stateManager.CreateTransaction())
+                        {
+                            countValuesInQueue = await queue.GetCountAsync(tx);
+                            if (countValuesInQueue > 0)
+                            {
+                                var valueResult = await queue.TryPeekAsync(tx);
+                                Assert.IsTrue(valueResult.HasValue, "Value not present in queue");
+                                Assert.AreEqual(0, valueResult.Value, "Queue head should be always first element 0");
+                            }
+                            await tx.CommitAsync();
+                        }
+                    }
+                    // verify ConcurrentQueue
+                    //{
+                    //    var result = await stateManager.TryGetAsync<IReliableConcurrentQueue<long>>(ConcurrentQueueName);
+                    //    Assert.IsTrue(result.HasValue, "Not able to find IReliableConcurrentQueue<long> queue");
+                    //    var queue = result.Value;
+                    //    Assert.IsTrue(countValuesInConcurrentQueue <= queue.Count, "Count should always increase");
+                    //    countValuesInConcurrentQueue = queue.Count;
+                    //}
+                };
+
+                await backupParser.ParseAsync(CancellationToken.None);
+                Assert.AreEqual(TotalQueueTransactions * NumOperationsPerTransaction, countValuesInQueue, "No data read in queue.");
             }
         }
     }
