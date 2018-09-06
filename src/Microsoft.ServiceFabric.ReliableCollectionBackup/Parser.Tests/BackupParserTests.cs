@@ -197,7 +197,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
                                 }
                             }
 
-                            Assert.AreEqual(8, reliableStateChange.Changes.Count(), "Wrong number of changes within a transaction");
+                            Assert.AreEqual(NumOperationsPerTransaction, reliableStateChange.Changes.Count(), "Wrong number of changes within a transaction");
 
                             totalTransactionsSeenForDictionary += 1;
                         }

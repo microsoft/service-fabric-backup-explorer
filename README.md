@@ -31,5 +31,20 @@ pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
 dotnet build
 xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll bin\Debug\net471\
 dotnet run --no-build ..\Parser.Tests\UserFullBackup ..\Parser.Tests\UserType\bin
+
+# test rest apis
+curl -v http://localhost:5000/$query/testDictionary?$top=2
+
 popd
+```
+
+# Running tests
+```
+pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests
+dotnet build
+dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed"
+popd
+
+# running one test
+dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --filter "FullyQualifiedName~BackupParser_EachTransactionHasRightChangesEvenWithBlockingTransactionAppliedEvents"
 ```
