@@ -30,6 +30,7 @@
     <Compile Include="GenericUtils.cs" />
     <Compile Include="NotifyTransactionAppliedEventArgs.cs" />
     <Compile Include="ReliableCollectionChange.cs" />
+    <Compile Include="ReliableStateKind.cs" />
     <Compile Include="TransactionChangeManager.cs" />
     <Compile Include="_friends.cs" />
     <Compile Include="CodePackageInfo.cs" />

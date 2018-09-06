@@ -77,7 +77,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 await this.reliabilitySimulator.PromoteReplicaAsync(false).ConfigureAwait(false);
                 await this.reliabilitySimulator.PrepareForDataLossAsync().ConfigureAwait(false);
 
-                // Optimization : Hook in only if we have registered any handler.
                 this.Replicator.TransactionChanged += this.OnTransactionChanged;
                 this.Replicator.StateManager.StateManagerChanged += this.OnStateManagerChanged;
 
@@ -124,17 +123,23 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             if (operation.Action == NotifyStateManagerChangedAction.Add)
             {
                 var reliableStateType = operation.ReliableState.GetType();
-                bool isReliableDict = GenericUtils.IsSubClassOfGeneric(reliableStateType, typeof(IReliableDictionary<,>));
-
-                if (isReliableDict) // move to switch
+                switch (ReliableStateKindUtils.KindOfReliableState(operation.ReliableState))
                 {
-                    var keyType = reliableStateType.GetGenericArguments()[0];
-                    var valueType = reliableStateType.GetGenericArguments()[1];
+                    case ReliableStateKind.ReliableDictionary:
+                        {
+                            var keyType = reliableStateType.GetGenericArguments()[0];
+                            var valueType = reliableStateType.GetGenericArguments()[1];
 
-                    // use reflection to call my own method because key/value types are known at runtime.
-                    this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
-                        .MakeGenericMethod(keyType, valueType)
-                        .Invoke(this, new object[] { operation.ReliableState });
+                            // use reflection to call my own method because key/value types are known at runtime.
+                            this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
+                                .MakeGenericMethod(keyType, valueType)
+                                .Invoke(this, new object[] { operation.ReliableState });
+                            break;
+                        }
+                    case ReliableStateKind.ReliableQueue:
+                    case ReliableStateKind.ReliableConcurrentQueue:
+                    default:
+                        break;
                 }
             }
         }
@@ -142,28 +147,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private void AddDictionaryChangedHandler<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            dictionary.DictionaryChanged += this.OnDictionaryChanged;
-        }
-
-        private void OnDictionaryChanged<TKey, TValue>(object sender, NotifyDictionaryChangedEventArgs<TKey, TValue> e)
-        {
-            var keyAddArgs = e as NotifyDictionaryItemAddedEventArgs<TKey, TValue>;
-            var reliableState = sender as IReliableState;
-
-            if (null == keyAddArgs || null == reliableState)
-            {
-                // log here.
-                return;
-            }
-
-            this.transactionChangeManager.CollectChanges(reliableState.Name, e);
+            dictionary.DictionaryChanged += this.transactionChangeManager.OnDictionaryChanged;
         }
 
         private void OnTransactionChanged(object sender, NotifyTransactionChangedEventArgs e)
         {
             if (e.Action == NotifyTransactionChangedAction.Commit)
             {
-                // If this is first transaction we have seen, open Replica for reads 
+                // If this is first transaction we have seen, open Replica for reads
                 // before notifying about committed transactions.
                 if (!this.seenFirstTransaction)
                 {
@@ -171,7 +162,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                     this.seenFirstTransaction = true;
                 }
 
-                // todo : Can we have multiple transactions coming here in multi threaded environment ?
                 this.OnTransactionCommitted(sender, e);
                 this.transactionChangeManager.TransactionCompleted();
             }

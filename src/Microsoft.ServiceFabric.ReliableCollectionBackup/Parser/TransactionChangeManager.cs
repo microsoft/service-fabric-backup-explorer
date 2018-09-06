@@ -6,6 +6,9 @@
 using System;
 using System.Collections.Generic;
 
+using Microsoft.ServiceFabric.Data;
+using Microsoft.ServiceFabric.Data.Notifications;
+
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     /// <summary>
@@ -51,6 +54,20 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         public IEnumerable<ReliableCollectionChange> GetAllChanges()
         {
             return this.reliableCollectionsChanges.Values;
+        }
+
+        internal void OnDictionaryChanged<TKey, TValue>(object sender, NotifyDictionaryChangedEventArgs<TKey, TValue> e)
+        {
+            var keyAddArgs = e as NotifyDictionaryItemAddedEventArgs<TKey, TValue>;
+            var reliableState = sender as IReliableState;
+
+            if (null == keyAddArgs || null == reliableState)
+            {
+                // log here.
+                return;
+            }
+
+            this.CollectChanges(reliableState.Name, e);
         }
 
         private Dictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;
