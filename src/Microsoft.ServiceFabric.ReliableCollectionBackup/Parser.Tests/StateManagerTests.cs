@@ -99,7 +99,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 
                         if (countValuesInDictionary > 0)
                         {
-                            // This time commit should fail.
+                            // If we called AddOrUpdateAsync, commit should fail.
                             Assert.Fail("This transaction should not have committed.");
                         }
                     }

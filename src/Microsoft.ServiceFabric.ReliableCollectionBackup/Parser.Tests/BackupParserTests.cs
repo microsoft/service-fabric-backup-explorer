@@ -127,5 +127,46 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
                 Assert.IsTrue(totalUsers > 0, "Could not parse any user from backup");
             }
         }
+
+        [TestMethod]
+        public async Task BackupParser_EachTransactionHasRightChanges()
+        {
+            using (var backupParser = new BackupParser(BackupFolderPath, ""))
+            {
+                int totalDictionaryAdds = 0;
+                int totalTransactionsSeenForDict = 0;
+                int lastKeyAdded = -1;
+
+                backupParser.TransactionApplied += (sender, args) =>
+                {
+                    foreach (var reliableStateChange in args.Changes)
+                    {
+                        if (reliableStateChange.Name == DictionaryName)
+                        {
+                            foreach (var change in reliableStateChange.Changes)
+                            {
+                                var addChange = change as NotifyDictionaryItemAddedEventArgs<long, long>;
+                                if (null != addChange)
+                                {
+                                    totalDictionaryAdds++;
+                                    Assert.IsTrue(addChange.Key > lastKeyAdded,
+                                        string.Format("Found wrong changes within a transaction : False : key added {0} > lastKeyAdded {1}",
+                                            totalTransactionsSeenForDict, lastKeyAdded));
+                                }
+                            }
+
+                            Assert.AreEqual(8, reliableStateChange.Changes.Count(), "Wrong number of changes within a transaction");
+
+                            totalTransactionsSeenForDict += 1;
+                        }
+                    }
+                };
+
+                await backupParser.ParseAsync(CancellationToken.None);
+
+                Assert.AreEqual(TotalDictionaryInserts, totalDictionaryAdds, "Not able to collect all Dictionary change events");
+                Assert.AreEqual(8, totalTransactionsSeenForDict, "Did not see right number of transactions");
+            }
+        }
     }
 }

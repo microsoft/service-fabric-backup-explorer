@@ -237,7 +237,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private TransactionalReplicator Replicator
         {
             get { return this.reliabilitySimulator.GetTransactionalReplicator(); }
-            set { throw new InvalidOperationException("BackupParserImpl.Replicator can't be changed from outside."); }
+            set { throw new InvalidOperationException("BackupParserImpl.Replicator can't be set from outside of ReliabilitySimulator."); }
         }
 
         private string backupChainPath;
