@@ -109,7 +109,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         /// <summary>
         /// Listens for StateManager change events to hook into ReliableStates for any change events.
-        /// These change events are then collected to add to show when the Transaction is committed.
+        /// These change events are then collected to show when the Transaction is committed.
         /// </summary>
         /// <param name="sender">Sender of event.</param>
         /// <param name="e">StateManager change event arguments.</param>
