@@ -189,7 +189,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                long countValuesInQueue = 0; //, countValuesInConcurrentQueue = -1;
+                long countValuesInQueue = 0;
 
                 backupParser.TransactionApplied += async (sender, args) =>
                 {
@@ -213,6 +213,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
                         }
                     }
                     // verify ConcurrentQueue
+                    // Does not work because it checks for TransactionalReplicator's IsReadable which is not true.
                     //{
                     //    var result = await stateManager.TryGetAsync<IReliableConcurrentQueue<long>>(ConcurrentQueueName);
                     //    Assert.IsTrue(result.HasValue, "Not able to find IReliableConcurrentQueue<long> queue");
