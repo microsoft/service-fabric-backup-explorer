@@ -6,7 +6,6 @@
 using System;
 using System.Fabric;
 using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -78,7 +77,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 await this.reliabilitySimulator.PrepareForDataLossAsync().ConfigureAwait(false);
 
                 this.Replicator.TransactionChanged += this.OnTransactionChanged;
-                this.Replicator.StateManager.StateManagerChanged += this.OnStateManagerChanged;
+                this.Replicator.StateManager.StateManagerChanged += this.transactionChangeManager.OnStateManagerChanged;
 
                 await this.reliabilitySimulator.OnDataLossAsync(cancellationToken).ConfigureAwait(false);
             });
@@ -104,44 +103,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         public async Task BackupAsync(Func<BackupInfo, CancellationToken, Task<bool>> backupCallback, BackupOption backupOption, TimeSpan timeout, CancellationToken cancellationToken)
         {
             await this.Replicator.BackupAsync(backupCallback, backupOption, timeout, cancellationToken);
-        }
-
-        /// <summary>
-        /// Listens for StateManager change events to hook into ReliableStates for any change events.
-        /// These change events are then collected to show when the Transaction is committed.
-        /// </summary>
-        /// <param name="sender">Sender of event.</param>
-        /// <param name="e">StateManager change event arguments.</param>
-        private void OnStateManagerChanged(object sender, NotifyStateManagerChangedEventArgs e)
-        {
-            var operation = e as NotifyStateManagerSingleEntityChangedEventArgs;
-            if (null == operation)
-            {
-                return;
-            }
-
-            if (operation.Action == NotifyStateManagerChangedAction.Add)
-            {
-                var reliableStateType = operation.ReliableState.GetType();
-                switch (ReliableStateKindUtils.KindOfReliableState(operation.ReliableState))
-                {
-                    case ReliableStateKind.ReliableDictionary:
-                        {
-                            var keyType = reliableStateType.GetGenericArguments()[0];
-                            var valueType = reliableStateType.GetGenericArguments()[1];
-
-                            // use reflection to call my own method because key/value types are known at runtime.
-                            this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
-                                .MakeGenericMethod(keyType, valueType)
-                                .Invoke(this, new object[] { operation.ReliableState });
-                            break;
-                        }
-                    case ReliableStateKind.ReliableQueue:
-                    case ReliableStateKind.ReliableConcurrentQueue:
-                    default:
-                        break;
-                }
-            }
         }
 
         private void AddDictionaryChangedHandler<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)

@@ -195,32 +195,24 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
                 {
                     var stateManager = backupParser.StateManager;
                     // verify ReliableQueue
-                    {
-                        var result = await stateManager.TryGetAsync<IReliableQueue<long>>(QueueName);
-                        Assert.IsTrue(result.HasValue, "Not able to find IReliableQueue<long> queue");
+                    var result = await stateManager.TryGetAsync<IReliableQueue<long>>(QueueName);
+                    Assert.IsTrue(result.HasValue, "Not able to find IReliableQueue<long> queue");
 
-                        var queue = result.Value;
-                        using (var tx = stateManager.CreateTransaction())
+                    var queue = result.Value;
+                    using (var tx = stateManager.CreateTransaction())
+                    {
+                        countValuesInQueue = await queue.GetCountAsync(tx);
+                        if (countValuesInQueue > 0)
                         {
-                            countValuesInQueue = await queue.GetCountAsync(tx);
-                            if (countValuesInQueue > 0)
-                            {
-                                var valueResult = await queue.TryPeekAsync(tx);
-                                Assert.IsTrue(valueResult.HasValue, "Value not present in queue");
-                                Assert.AreEqual(0, valueResult.Value, "Queue head should be always first element 0");
-                            }
-                            await tx.CommitAsync();
+                            var valueResult = await queue.TryPeekAsync(tx);
+                            Assert.IsTrue(valueResult.HasValue, "Value not present in queue");
+                            Assert.AreEqual(0, valueResult.Value, "Queue head should be always first element 0");
                         }
+                        await tx.CommitAsync();
                     }
-                    // verify ConcurrentQueue
-                    // Does not work because it checks for TransactionalReplicator's IsReadable which is not true.
-                    //{
-                    //    var result = await stateManager.TryGetAsync<IReliableConcurrentQueue<long>>(ConcurrentQueueName);
-                    //    Assert.IsTrue(result.HasValue, "Not able to find IReliableConcurrentQueue<long> queue");
-                    //    var queue = result.Value;
-                    //    Assert.IsTrue(countValuesInConcurrentQueue <= queue.Count, "Count should always increase");
-                    //    countValuesInConcurrentQueue = queue.Count;
-                    //}
+                    // Don't verify ConcurrentQueue
+                    // There is no read only api in ConcurrentQueue : only enque/deque.
+                    // Reading Count on queue does not work because it checks for TransactionalReplicator's IsReadable which is not true.
                 };
 
                 await backupParser.ParseAsync(CancellationToken.None);
