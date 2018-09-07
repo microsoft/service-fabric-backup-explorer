@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.ServiceFabric.Data;
-using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Notifications;
 using Microsoft.ServiceFabric.Tools.ReliabilitySimulator;
 using Microsoft.ServiceFabric.Replicator;
@@ -103,12 +102,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         public async Task BackupAsync(Func<BackupInfo, CancellationToken, Task<bool>> backupCallback, BackupOption backupOption, TimeSpan timeout, CancellationToken cancellationToken)
         {
             await this.Replicator.BackupAsync(backupCallback, backupOption, timeout, cancellationToken);
-        }
-
-        private void AddDictionaryChangedHandler<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
-            where TKey : IComparable<TKey>, IEquatable<TKey>
-        {
-            dictionary.DictionaryChanged += this.transactionChangeManager.OnDictionaryChanged;
         }
 
         private void OnTransactionChanged(object sender, NotifyTransactionChangedEventArgs e)

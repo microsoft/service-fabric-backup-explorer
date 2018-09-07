@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 using Microsoft.ServiceFabric.Data;
+using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Notifications;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
@@ -93,6 +94,12 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                         break;
                 }
             }
+        }
+
+        private void AddDictionaryChangedHandler<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
+            where TKey : IComparable<TKey>, IEquatable<TKey>
+        {
+            dictionary.DictionaryChanged += this.OnDictionaryChanged;
         }
 
         internal void OnDictionaryChanged<TKey, TValue>(object sender, NotifyDictionaryChangedEventArgs<TKey, TValue> e)
