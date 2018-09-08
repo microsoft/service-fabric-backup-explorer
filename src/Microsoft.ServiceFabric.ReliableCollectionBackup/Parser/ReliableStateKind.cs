@@ -11,7 +11,7 @@ using Microsoft.ServiceFabric.Data.Collections;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     /// <summary>
-    /// Lists different kind of ReliableState that is supported.
+    /// Lists different kind of ReliableState that are supported.
     /// </summary>
     internal enum ReliableStateKind
     {

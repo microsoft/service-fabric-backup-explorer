@@ -1,4 +1,4 @@
-// ------------------------------------------------------------
+﻿// ------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
 // ------------------------------------------------------------
@@ -8,27 +8,26 @@ using System.Runtime.Serialization;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
 {
     /// <summary>
-    /// User type used in creating and validating backups in tests and rest server.
+    /// Address type
     /// </summary>
-    [DataContract(Name = "User", Namespace = "http://www.rcbackupparser.com")]
-    public class User : IExtensibleDataObject
+    [DataContract(Name = "Address", Namespace = "http://www.rcbackupparser.com")]
+    public class Address : IExtensibleDataObject
     {
         /// <summary>
-        /// Name
+        /// Street
         /// </summary>
         [DataMember]
-        public string Name { get; internal set ; }
-
+        public string Street { get; internal set; }
         /// <summary>
-        /// Age
+        /// Country
         /// </summary>
         [DataMember]
-        public uint Age { get; internal set; }
+        public string Country { get; internal set; }
         /// <summary>
-        /// Address
+        /// PinCode
         /// </summary>
         [DataMember]
-        public Address Address { get; internal set; }
+        public uint PinCode { get; internal set; }
 
         /// <summary>
         /// ExtensionData
@@ -38,11 +37,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
         /// <summary>
         /// Constructor
         /// </summary>
-        public User()
+        public Address()
         {
-            this.Name = "Pandit Gangadhar Vidyadhar Mayadhar Omkarnath Shastri";
-            this.Age = 31;
-            this.Address = new Address();
+            this.Street = "Apollo Bandar";
+            this.Country = "India";
+            this.PinCode = 400011;
         }
 
         private ExtensionDataObject extensionData_Value;

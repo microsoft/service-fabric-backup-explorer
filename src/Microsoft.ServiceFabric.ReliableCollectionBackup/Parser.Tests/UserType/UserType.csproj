@@ -25,6 +25,12 @@
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Address.cs" />
+    <Compile Include="AddressSerializer.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="UserSerializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ServiceFabric.Data" Version="3.2.176" />
   </ItemGroup>
 </Project>
