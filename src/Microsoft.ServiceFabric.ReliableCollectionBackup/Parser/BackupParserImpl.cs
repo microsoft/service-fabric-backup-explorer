@@ -77,6 +77,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
                 this.Replicator.TransactionChanged += this.OnTransactionChanged;
                 this.Replicator.StateManager.StateManagerChanged += this.transactionChangeManager.OnStateManagerChanged;
+                this.stateManager.ReAddStateSerializers();
 
                 await this.reliabilitySimulator.OnDataLossAsync(cancellationToken).ConfigureAwait(false);
             });

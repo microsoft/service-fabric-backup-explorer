@@ -15,6 +15,13 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
     /// </summary>
     public class UserSerializer : IStateSerializer<User>
     {
+        /// <summary>
+        /// Constructor of UserSerializer
+        /// </summary>
+        public UserSerializer()
+        {
+        }
+
         User IStateSerializer<User>.Read(BinaryReader reader)
         {
             var value = new User();

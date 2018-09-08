@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.ServiceFabric.Data.Notifications;
+using Microsoft.ServiceFabric.ReliableCollectionBackup.UserType;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 {
@@ -79,17 +80,17 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             }
         }
 
-        [TestMethod]
-        public void BackupParser_NoUserClassInDefaultAppDomain()
-        {
-            var appDomain = AppDomain.CurrentDomain;
-            var userAssembly = appDomain.GetAssemblies().Where(assembly => assembly.FullName.Contains("User"));
-            Assert.IsTrue(userAssembly.Count() == 0, string.Format("User assembly {0} is loaded in default app domain. " +
-                "Test like BackupParser_AbleToFindAssemblyInCodePackage will pass even if functionality is broken.", userAssembly.FirstOrDefault()));
-        }
+        //[TestMethod]
+        //public void BackupParser_NoUserClassInDefaultAppDomain()
+        //{
+        //    var appDomain = AppDomain.CurrentDomain;
+        //    var userAssembly = appDomain.GetAssemblies().Where(assembly => assembly.FullName.Contains("User"));
+        //    Assert.IsTrue(userAssembly.Count() == 0, string.Format("User assembly {0} is loaded in default app domain. " +
+        //        "Test like BackupParser_AbleToFindAssemblyInCodePackage will pass even if functionality is broken.", userAssembly.FirstOrDefault()));
+        //}
 
         [TestMethod]
-        public async Task BackupParser_AbleToFindAssemblyInCodePackage()
+        public async Task BackupParser_ComplexTypesWithSerializers()
         {
             var complexDataBackupFolderPath = Path.Combine(ClassTestPath, @"..\UserFullBackup");
             // from this test run's bin\Debug\netstandard2.0\<testname> dir to parent of bin
@@ -97,6 +98,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 
             using (var backupParser = new BackupParser(complexDataBackupFolderPath, codePackagePath))
             {
+                backupParser.StateManager.TryAddStateSerializer<User>(new UserSerializer());
+
                 int totalUsers = 0;
 
                 backupParser.TransactionApplied += (sender, args) =>

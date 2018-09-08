@@ -28,10 +28,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
         public async Task GenerateUserData(string logFolder)
         {
             this.logFolder = logFolder;
-            await GenerateWithValueType<User>(logFolder, new User());
+            await GenerateWithValueType<User>(logFolder, new User(), new UserSerializer());
         }
 
-        internal async Task GenerateWithValueType<ValueType>(string logFolder, ValueType value)
+        internal async Task GenerateWithValueType<ValueType>(string logFolder, ValueType value, IStateSerializer<ValueType> valueSerializer)
         {
             // directory setup
             if (FabricDirectory.Exists(logFolder))
@@ -51,6 +51,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.BackupGenerator
             reliabilitySimulator.CreateReplica(true, false);
 
             var replicator = reliabilitySimulator.GetTransactionalReplicator();
+
+            replicator.TryAddStateSerializer<ValueType>(valueSerializer);
 
             // Constants
             var distributedDictionary = new DistributedDictionary<long, ValueType>();

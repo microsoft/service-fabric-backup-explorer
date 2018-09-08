@@ -16,6 +16,13 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
     public class AddressSerializer : IStateSerializer<Address>
     {
         /// <summary>
+        /// Constructor of AddressSerializer
+        /// </summary>
+        public AddressSerializer()
+        {
+        }
+
+        /// <summary>
         /// Deserialize Address from binary reader.
         /// </summary>
         /// <param name="reader">Binary reader</param>
