@@ -5,6 +5,7 @@
 
 using System.IO;
 
+using Newtonsoft.Json;
 using Microsoft.ServiceFabric.Data;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
@@ -19,9 +20,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
             var value = new User();
             value.Name = reader.ReadString();
             value.Age = reader.ReadUInt32();
-            value.Address = new Address(); // can't read it nested types.
-            // var addressSerializer = new AddressSerializer();
-            // value.Address = addressSerializer.Read(reader);
+
+            var addressSerializer = new AddressSerializer();
+            value.Address = addressSerializer.Read(reader);
             return value;
         }
 
@@ -29,8 +30,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
         {
             writer.Write(value.Name);
             writer.Write(value.Age);
-            // var addressSerializer = new AddressSerializer();
-            // addressSerializer.Write(value.Address, writer);
+
+            var addressSerializer = new AddressSerializer();
+            addressSerializer.Write(value.Address, writer);
         }
 
         // Read overload for differential de-serialization
