@@ -68,6 +68,51 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             Assert.AreEqual(0, backupInfo.Serializers.Count(), "No serializers expected");
         }
 
+        [TestMethod]
+        public void Config_BackupPathRequiredValuesConfigParseFailure()
+        {
+            string test = @"{
+                'BackupChainInfos' : [
+                    {
+                        'CodePackagePath' : 'c:/ad/df/code/'
+                    }
+                ]
+            }";
+
+            Assert.ThrowsException<InvalidDataException>(() => GetConfigParser(test));
+        }
+
+        [TestMethod]
+        public void Config_CodePackagePathRequiredValuesConfigParseFailure()
+        {
+            string test = @"{
+                'BackupChainInfos' : [
+                    {
+                        'BackupChainPath' : 'c:/ad/df/code/'
+                    }
+                ]
+            }";
+
+            Assert.ThrowsException<InvalidDataException>(() => GetConfigParser(test));
+        }
+
+        [TestMethod]
+        public void Config_SerializersNameNonEmptyTest()
+        {
+            string test = @"{
+                'BackupChainInfos' : [
+                    {
+                        'BackupChainPath' : 'c:/sad/mybackup_paths/',
+                        'CodePackagePath' : 'c:/ad/df/code/',
+                        'Serializers' : [ {'FullyQualifiedName': 'TypeName, AssemblyName'},
+                                          {'FullyQualifiedName': ''} ]
+                    }
+                ]
+            }";
+
+            Assert.ThrowsException<InvalidDataException>(() => GetConfigParser(test));
+        }
+
         ConfigParser GetConfigParser(string json)
         {
             // convert string to stream
