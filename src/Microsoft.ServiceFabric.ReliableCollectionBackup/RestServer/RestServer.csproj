@@ -12,14 +12,17 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BackupChainInfo.cs" />
+    <Compile Include="ConfigParser.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="SerializerInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Controllers\ExitController.cs" />
+    <Compile Include="_friends.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.2" />
-    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.4.187-beta" />
     <PackageReference Include="ServiceFabric.Extensions.Services.Queryable" Version="3.1.301" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.5.0" />
   </ItemGroup>
