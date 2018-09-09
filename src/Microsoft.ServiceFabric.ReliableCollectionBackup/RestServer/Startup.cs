@@ -43,7 +43,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                 app.UsePathBase(appBasePath);
             }
 
-            app.UseStaticFiles();
             app.UseODataQueryable(true /* isStandaloneReplica */);
             app.UseMvc();
         }
