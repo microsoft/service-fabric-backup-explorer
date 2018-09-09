@@ -3,6 +3,8 @@
 // Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
 // ------------------------------------------------------------
 
+using System;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +37,13 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                 app.UseDeveloperExceptionPage();
             }
 
+            var appBasePath = this.Configuration.GetValue<string>("AppBasePath");
+            if (!String.IsNullOrWhiteSpace(appBasePath))
+            {
+                app.UsePathBase(appBasePath);
+            }
+
+            app.UseStaticFiles();
             app.UseODataQueryable(true /* isStandaloneReplica */);
             app.UseMvc();
         }

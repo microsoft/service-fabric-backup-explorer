@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Fabric;
 using System.Reflection;
 using System.Threading;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
@@ -28,9 +30,13 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         async Task<IWebHostBuilder> CreateWebHostBuilder()
         {
             var backupParser = await BringupBackupParser();
+            var appBasePath = string.Format("/{0}/{1}", this.backupChainInfo.AppName, this.backupChainInfo.ServiceName);
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string> { {"AppBasePath", appBasePath} })
+                .Build();
 
-            // todo : set root host to AppName/ServiceName
             return WebHost.CreateDefaultBuilder()
+                .UseConfiguration(config)
                 .ConfigureServices(
                     services => services
                                 .AddSingleton<StatefulServiceContext>(backupParser.GetStatefulServiceContext())
