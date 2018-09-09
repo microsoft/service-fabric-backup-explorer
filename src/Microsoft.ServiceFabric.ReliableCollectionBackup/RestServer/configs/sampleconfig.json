@@ -1,0 +1,12 @@
+{
+    "BackupChainInfos" : [
+        {
+            "AppName" : "MyAppName",
+            "ServiceName" : "MyServiceName",
+            "BackupChainPath" : "../Parser.Tests/UserFullBackup/",
+            "CodePackagePath" : "../Parser.Tests/UserType/bin/",
+            "Serializers" : [ {"FullyQualifiedName": "TypeName, AssemblyName"},
+                              {"FullyQualifiedName": "TypeName2, AssemblyName2"} ]
+        }
+    ]
+}
