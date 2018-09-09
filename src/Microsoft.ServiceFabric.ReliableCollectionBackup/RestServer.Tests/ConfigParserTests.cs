@@ -23,8 +23,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
                         'ServiceName' : 'MyServiceName',
                         'BackupChainPath' : 'c:/sad/mybackup_paths/',
                         'CodePackagePath' : 'c:/ad/df/code/',
-                        'Serializers' : [ {'FullyQualifiedName': 'TypeName, AssemblyName'},
-                                          {'FullyQualifiedName': 'TypeName2, AssemblyName2'} ]
+                        'Serializers' : [ {
+                                            'StateFullyQualifiedTypeName': 'StateTypeName, AssemblyName',
+                                            'SerializerFullyQualifiedTypeName': 'SerializerTypeName, AssemblyName'
+                                          },
+                                          {
+                                            'StateFullyQualifiedTypeName': 'StateTypeName2, AssemblyName2',
+                                            'SerializerFullyQualifiedTypeName': 'SerializerTypeName2, AssemblyName2'
+                                          } ]
                     }
                 ]
             }";
@@ -40,8 +46,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             Assert.AreEqual("c:/sad/mybackup_paths/", backupInfo.BackupChainPath);
             Assert.AreEqual(2, backupInfo.Serializers.Count(), "2 serializers expected");
             var serializers = backupInfo.Serializers.ToList();
-            Assert.AreEqual("TypeName, AssemblyName", serializers[0].FullyQualifiedName);
-            Assert.AreEqual("TypeName2, AssemblyName2", serializers[1].FullyQualifiedName);
+            Assert.AreEqual("StateTypeName, AssemblyName", serializers[0].StateFullyQualifiedTypeName);
+            Assert.AreEqual("StateTypeName2, AssemblyName2", serializers[1].StateFullyQualifiedTypeName);
+            Assert.AreEqual("SerializerTypeName, AssemblyName", serializers[0].SerializerFullyQualifiedTypeName);
+            Assert.AreEqual("SerializerTypeName2, AssemblyName2", serializers[1].SerializerFullyQualifiedTypeName);
         }
 
         [TestMethod]
@@ -104,8 +112,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
                     {
                         'BackupChainPath' : 'c:/sad/mybackup_paths/',
                         'CodePackagePath' : 'c:/ad/df/code/',
-                        'Serializers' : [ {'FullyQualifiedName': 'TypeName, AssemblyName'},
-                                          {'FullyQualifiedName': ''} ]
+                        'Serializers' : [ {
+                                            'StateFullyQualifiedTypeName': 'StateTypeName, AssemblyName',
+                                            'SerializerFullyQualifiedTypeName': 'SerializerTypeName, AssemblyName'
+                                          },
+                                          {
+                                            'StateFullyQualifiedTypeName': '',
+                                            'SerializerFullyQualifiedTypeName': 'SerializerTypeName2, AssemblyName2'
+                                          } ]
                     }
                 ]
             }";

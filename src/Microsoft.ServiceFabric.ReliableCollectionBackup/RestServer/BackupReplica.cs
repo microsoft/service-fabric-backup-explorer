@@ -14,7 +14,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
     {
         public async Task<IWebHostBuilder> CreateWebHostBuilder(BackupChainInfo backupInfo)
         {
-            var backupParser = await BringupBackupParser(backupInfo.BackupChainPath, backupInfo.CodePackagePath);
+            var backupParser = await BringupBackupParser(backupInfo);
 
             // todo : set root host to AppName/ServiceName
             return WebHost.CreateDefaultBuilder()
@@ -26,9 +26,15 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                 .UseStartup<Startup>();
         }
 
-        async Task<BackupParser> BringupBackupParser(string backupChainPath, string codePackagePath)
+        async Task<BackupParser> BringupBackupParser(BackupChainInfo backupInfo)
         {
-            var backupParser = new BackupParser(backupChainPath, codePackagePath);
+            var backupParser = new BackupParser(backupInfo.BackupChainPath, backupInfo.CodePackagePath);
+            foreach (var serializer in backupInfo.Serializers)
+            {
+                var typeName = serializer.StateFullyQualifiedTypeName;
+                // backupParser.StateManager.TryAddStateSerializer<>
+            }
+
             await backupParser.ParseAsync(CancellationToken.None); // todo: take in configuration
             return backupParser;
         }

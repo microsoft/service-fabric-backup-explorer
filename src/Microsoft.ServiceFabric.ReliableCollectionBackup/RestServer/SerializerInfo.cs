@@ -5,18 +5,24 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 {
     internal class SerializerInfo
     {
-        public SerializerInfo(string fullyQualifiedName)
+        public SerializerInfo(string stateFullyQualifiedName)
         {
-            this.FullyQualifiedName = fullyQualifiedName;
+            this.StateFullyQualifiedTypeName = stateFullyQualifiedName;
         }
 
-        public string FullyQualifiedName { get; set; }
+        public string StateFullyQualifiedTypeName { get; set; }
+        public string SerializerFullyQualifiedTypeName { get; set; }
 
         internal void Validate()
         {
-            if (String.IsNullOrWhiteSpace(this.FullyQualifiedName))
+            if (String.IsNullOrWhiteSpace(this.StateFullyQualifiedTypeName))
             {
-                throw new InvalidDataException("FullyQualifedName can not be null or empty.");
+                throw new InvalidDataException("StateFullyQualifiedTypeName can not be null or empty.");
+            }
+
+            if (String.IsNullOrWhiteSpace(this.SerializerFullyQualifiedTypeName))
+            {
+                throw new InvalidDataException("SerializerFullyQualifiedTypeName can not be null or empty.");
             }
         }
     }
