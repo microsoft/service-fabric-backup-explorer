@@ -30,7 +30,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             }";
 
             var configParser = GetConfigParser(test);
-            var backupChainInfos = configParser.GetBackupChainInfo();
+            var backupChainInfos = configParser.GetConfigration().GetBackupChainInfos();
             Assert.AreEqual(1, backupChainInfos.Count(), "One backupchaininfo expected.");
 
             var backupInfo = backupChainInfos.First();
@@ -57,7 +57,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             }";
 
             var configParser = GetConfigParser(test);
-            var backupChainInfos = configParser.GetBackupChainInfo();
+            var backupChainInfos = configParser.GetConfigration().GetBackupChainInfos();
             Assert.AreEqual(1, backupChainInfos.Count(), "One backupchaininfo expected.");
 
             var backupInfo = backupChainInfos.First();

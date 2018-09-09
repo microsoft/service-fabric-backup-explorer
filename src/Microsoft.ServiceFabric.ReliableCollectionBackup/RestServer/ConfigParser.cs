@@ -20,10 +20,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         {
             this.Parse(configStream);
         }
-
-        public IEnumerable<BackupChainInfo> GetBackupChainInfo()
+        public Configuration GetConfigration()
         {
-            return this.backupChainInfos;
+            return this.configuration;
         }
 
         void Parse(Stream jsonStream)
@@ -33,6 +32,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 
             var config = JObject.Parse(jsonContent);
             JToken backupChainTokens = null;
+            var backupChainInfos = new List<BackupChainInfo>();
+
             if (config.TryGetValue(BackupChainInfosKey, System.StringComparison.OrdinalIgnoreCase, out backupChainTokens))
             {
                 foreach(var backupChainToken in backupChainTokens)
@@ -41,15 +42,15 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                 }
             }
 
-            this.Validate();
+            this.Validate(backupChainInfos);
+            this.configuration = new Configuration(backupChainInfos);
         }
 
-        void Validate()
+        void Validate(IList<BackupChainInfo> backupChainInfos)
         {
-            if (this.backupChainInfos.Count == 0)
+            if (backupChainInfos.Count == 0)
             {
-                throw new InvalidDataException(
-                    string.Format("BackupChainInfos is a required field in config : {0}", this.configPath));
+                throw new InvalidDataException("BackupChainInfos is a required field in config");
             }
 
             foreach (var backupInfo in backupChainInfos)
@@ -58,8 +59,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             }
         }
 
-        string configPath;
-        IList<BackupChainInfo> backupChainInfos = new List<BackupChainInfo>();
+        Configuration configuration;
         const string BackupChainInfosKey = "BackupChainInfos";
     }
 }
