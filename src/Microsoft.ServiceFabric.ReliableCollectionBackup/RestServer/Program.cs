@@ -37,8 +37,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 
         static async Task StartBackupReplica(BackupChainInfo backupInfo)
         {
-            var backupReplica = new BackupReplica();
-            await backupReplica.CreateWebHostBuilder(backupInfo);
+            var webHost = new BackupWebHost(backupInfo);
+            await webHost.Run();
         }
 
         static void PrintUsage()
