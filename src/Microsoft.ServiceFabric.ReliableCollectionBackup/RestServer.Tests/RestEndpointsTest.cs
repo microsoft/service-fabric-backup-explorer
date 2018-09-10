@@ -26,7 +26,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             process.StartInfo.RedirectStandardOutput = true;
             process.Start();
 
-            await Task.Delay(10000);
+            await Task.Delay(10000); // wait for 10 seconds to start taking requests.
         }
 
         [ClassCleanup]
@@ -49,26 +49,32 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
         public async Task RestEndpoint_Top2Test()
         {
             var response = await client.GetAsync(Url + "/$query/testDictionary?$top=2");
-            this.VerifyResponse(await response.Content.ReadAsStringAsync(), 2);
+            var resContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("Response : {0}", resContent);
+            this.VerifyResponse(resContent, 2, 0);
         }
 
-        void VerifyResponse(string jsonContent, int numValues)
+        void VerifyResponse(string jsonContent, int numValues, int startKey)
         {
             var config = JObject.Parse(jsonContent);
             JToken values = null;
 
-            if (config.TryGetValue(ValueKey, System.StringComparison.OrdinalIgnoreCase, out values))
+            System.Diagnostics.Debugger.Launch();
+
+            if (config.TryGetValue(ValueName, System.StringComparison.OrdinalIgnoreCase, out values))
             {
                 Assert.AreEqual(numValues, values.Count(), "Number of expected values is not same");
-                foreach (var value in values)
+                var keys = new List<int>(values.Select(value => value.Value<int>(KeyName)));
+                for (int i = 0; i < numValues; ++i)
                 {
-
+                    Assert.AreEqual(startKey + i, keys[i], "Keys are not in sorted order");
                 }
             }
         }
 
         static string Url = "http://localhost:5000";
-        static string ValueKey = "value";
+        static string ValueName = "value";
+        static string KeyName = "Key";
         static HttpClient client = new HttpClient();
         static Process process;
         static Stream outStream;
