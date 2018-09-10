@@ -44,6 +44,28 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
             this.PinCode = 400011;
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="street">Street</param>
+        /// <param name="country">Country</param>
+        /// <param name="pincode">PinCode</param>
+        public Address(string street, string country, uint pincode)
+        {
+            this.Street = street;
+            this.Country = country;
+            this.PinCode = pincode;
+        }
+
+        /// <summary>
+        /// ToString override for Address
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"Street: {this.Street}, Country: {this.Country}, PinCode: {this.PinCode}";
+        }
+
         private ExtensionDataObject extensionData_Value;
     }
 }

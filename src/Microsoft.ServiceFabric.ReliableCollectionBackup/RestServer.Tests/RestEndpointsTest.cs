@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.ServiceFabric.ReliableCollectionBackup.UserType;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
@@ -40,7 +41,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             {
                 Console.WriteLine(string.Format("/api/exit exception : {0}", ex));
             }
-            
+
             Console.WriteLine("StdErr: {0}", process.StandardError.ReadToEnd());
             Console.WriteLine("StdOut: {0}", process.StandardOutput.ReadToEnd());
         }
@@ -51,24 +52,120 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             var response = await client.GetAsync(Url + "/$query/testDictionary?$top=2");
             var resContent = await response.Content.ReadAsStringAsync();
             Console.WriteLine("Response : {0}", resContent);
-            this.VerifyResponse(resContent, 2, 0);
+            this.VerifySortedResponse(resContent, 2, 0);
         }
 
-        void VerifyResponse(string jsonContent, int numValues, int startKey)
+        [TestMethod]
+        public async Task RestEndpoint_AddDataTest()
+        {
+            var postUrl = Url + "/$query";
+            var jsonContent = @"[{
+                'Operation': 'Add',
+                'Collection': 'testDictionary',
+                'Key' : -1,
+                'Value' : {
+                    'Name' : 'RestEndpoint_AddDataTest',
+                    'Age' : 10,
+                    'Address' : {
+                        'Street' : 'ABC',
+                        'Country' : 'India',
+                        'PinCode' : 201020
+                    }
+                }
+            }]";
+
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(postUrl, content);
+            Assert.IsTrue(response.IsSuccessStatusCode, $"Failed to add data to dictionary : response : {response} : content {await response.Content.ReadAsStringAsync()}");
+        }
+
+        [TestMethod]
+        public async Task RestEndpoint_UpdateDataTest()
+        {
+            var userKey = 0;
+            var userAndEtag = await GetUserAndEtag(userKey);
+            var etag = userAndEtag.Item2;
+
+            // Update user
+            var postUrl = Url + "/$query";
+            string name = "RestEndpoint_UpdateDataTest", street = "ABC", country = "India";
+            uint pinCode = 201020, age = 10;
+            // {{ in below json string is for escaping { in $@ string interpolation in c#
+            var jsonContent = $@"[{{
+                'Operation': 'Update',
+                'Collection': 'testDictionary',
+                'Key' : {userKey},
+                'Value' : {{
+                    'Name' : '{name}',
+                    'Age' : {age},
+                    'Address' : {{
+                        'Street' : '{street}',
+                        'Country' : '{country}',
+                        'PinCode' : {pinCode}
+                    }}
+                }},
+                'Etag' : '{etag}'
+            }}]";
+
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(postUrl, content);
+            var resContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Post Response: {response} : Content {resContent}");
+            Assert.IsTrue(response.IsSuccessStatusCode, $"Failed to update data to dictionary : response : {response} : content {resContent}");
+
+            // Validate the update.
+            var expectedUser = new User(name, age, new Address(street, country, pinCode));
+            await this.VerifyUser(userKey, expectedUser);
+        }
+
+        async Task VerifyUser(int userKey, User expectedUser)
+        {
+            var updatedUserAndEtag = await GetUserAndEtag(userKey);
+            Assert.IsTrue(UserUtitilites.Compare(expectedUser, updatedUserAndEtag.Item1),
+                       $"Both users are not same : \r\nExpected : {expectedUser}\r\n Actual : {updatedUserAndEtag.Item1}");
+        }
+
+        async Task<(User, string)> GetUserAndEtag(int userKey)
+        {
+            var response = await client.GetAsync(Url + "/$query/testDictionary?$top=100");
+            var jsonContent = await response.Content.ReadAsStringAsync();
+            return ParseUserAndEtag(jsonContent, userKey);
+        }
+
+        (User, string) ParseUserAndEtag(string jsonContent, int userKey)
         {
             var config = JObject.Parse(jsonContent);
             JToken values = null;
 
-            System.Diagnostics.Debugger.Launch();
+            Assert.IsTrue(config.TryGetValue(ValueName, System.StringComparison.OrdinalIgnoreCase, out values), "Expected 'values' in reponse");
+            Assert.IsTrue(values.Count() > 0, "Number of expected values is not same");
 
-            if (config.TryGetValue(ValueName, System.StringComparison.OrdinalIgnoreCase, out values))
+            foreach (var value in values)
             {
-                Assert.AreEqual(numValues, values.Count(), "Number of expected values is not same");
-                var keys = new List<int>(values.Select(value => value.Value<int>(KeyName)));
-                for (int i = 0; i < numValues; ++i)
+                if (userKey == value.Value<int>(KeyName))
                 {
-                    Assert.AreEqual(startKey + i, keys[i], "Keys are not in sorted order");
+                    var resUser = value.Value<JObject>("Value").ToObject<User>();
+                    var etag = value.Value<string>("Etag");
+                    return (resUser, etag);
                 }
+            }
+
+            Assert.Fail($"Did not find any user with key : {userKey}");
+            return (null, null);
+        }
+
+        void VerifySortedResponse(string jsonContent, int numValues, int startKey)
+        {
+            var config = JObject.Parse(jsonContent);
+            JToken values = null;
+
+            Assert.IsTrue(config.TryGetValue(ValueName, System.StringComparison.OrdinalIgnoreCase, out values), "Expected 'values' in reponse");
+            Assert.AreEqual(numValues, values.Count(), "Number of expected values is not same");
+
+            var keys = new List<int>(values.Select(value => value.Value<int>(KeyName)));
+            for (int i = 0; i < numValues; ++i)
+            {
+                Assert.AreEqual(startKey + i, keys[i], "Keys are not in sorted order");
             }
         }
 

@@ -45,6 +45,28 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
             this.Address = new Address();
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="age">Age</param>
+        /// <param name="address">Address</param>
+        public User(string name, uint age, Address address)
+        {
+            this.Name = name;
+            this.Age = age;
+            this.Address = address;
+        }
+
+        /// <summary>
+        /// ToString override for User
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"Name: {this.Name}, Age: {this.Age}, Address: {this.Address}";
+        }
+
         private ExtensionDataObject extensionData_Value;
     }
 }

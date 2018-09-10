@@ -29,6 +29,7 @@
     <Compile Include="AddressSerializer.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserSerializer.cs" />
+    <Compile Include="UserUtitilites.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ServiceFabric.Data" Version="3.2.176" />
