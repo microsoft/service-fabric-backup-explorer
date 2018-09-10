@@ -16,6 +16,9 @@
     <Compile Include="BackupWebHost.cs" />
     <Compile Include="ConfigParser.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Controllers\BackupController.cs" />
+    <Compile Include="Controllers\BackupRequestBody.cs" />
+    <Compile Include="Controllers\Utilities.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SerializerInfo.cs" />
     <Compile Include="Startup.cs" />
