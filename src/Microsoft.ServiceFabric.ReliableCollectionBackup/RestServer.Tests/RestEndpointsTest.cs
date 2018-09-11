@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.ServiceFabric.ReliableCollectionBackup.UserType;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
 {
@@ -116,6 +117,59 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             // Validate the update.
             var expectedUser = new User(name, age, new Address(street, country, pinCode));
             await this.VerifyUser(userKey, expectedUser);
+        }
+
+        [TestMethod]
+        public async Task RestEndpoint_BackupFull()
+        {
+            var backupDirectory = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString("N"));
+            await VerifyBackup(backupDirectory, Data.BackupOption.Full);
+            Directory.Delete(backupDirectory, true);
+        }
+
+        [TestMethod]
+        public async Task RestEndpoint_BackupIncremental()
+        {
+            var backupDirectory = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString("N"));
+            await VerifyBackup(backupDirectory, Data.BackupOption.Full);
+            var incrementalDirectory = Path.Combine(backupDirectory, "incremental");
+            await VerifyBackup(incrementalDirectory, Data.BackupOption.Incremental);
+            Directory.Delete(backupDirectory, true);
+        }
+
+        async Task VerifyBackup(string backupDirectory, Data.BackupOption backupOption)
+        {
+            var backupName = backupOption == Data.BackupOption.Full ? "full" : "incremental";
+            var postUrl = Url + "/api/backup/" + backupName;
+            var twoMinuteInSecs = TimeSpan.FromMinutes(2).TotalSeconds;
+            var jsonContent = $@"{{
+                'CancellationTokenInSecs' : {twoMinuteInSecs},
+                'TimeoutInSecs' : {twoMinuteInSecs},
+                'BackupLocation' : {JsonConvert.SerializeObject(backupDirectory, Formatting.None)}
+            }}";
+
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(postUrl, content);
+            var resContent = await response.Content.ReadAsStringAsync();
+            Assert.IsTrue(response.IsSuccessStatusCode,
+                $"{postUrl} backup post with {jsonContent} : call failed : {response} content: {resContent}");
+            Assert.IsTrue(Directory.Exists(backupDirectory), "Backup folder not created");
+
+            var verifyFiles = new List<string>();
+            if (backupOption == Data.BackupOption.Full)
+            {
+                verifyFiles.AddRange(new string[] { "backup.metadata", "backup.log", "backup.chkpt" });
+            }
+            else
+            {
+                verifyFiles.AddRange(new string[] { "incremental.metadata", "backup.log" });
+            }
+
+            foreach (var file in verifyFiles)
+            {
+                Assert.AreEqual(1, Directory.GetFiles(backupDirectory, file, SearchOption.AllDirectories).Count(),
+                    $"{backupName} : {file} is not present in backup folder {backupDirectory}");
+            }
         }
 
         async Task VerifyUser(int userKey, User expectedUser)
