@@ -13,9 +13,11 @@ using Microsoft.ServiceFabric.Data;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     /// <summary>
-    /// BackupParser is Service Fabric Reliable Collection's backup parser.
-    /// This class can be used to parse a backup chain, validation data via notifications,
-    /// make additional changes and take a new backup.
+    /// BackupParser parses the backup of Service Fabric stateful service viz. Reliable Collections.
+    /// This class can be used to 
+    /// 1) Parse a backup chain,
+    /// 2) Validate data via notifications,
+    /// 3) Make additional changes and take a new backup.
     /// </summary>
     public class BackupParser : IDisposable
     {
@@ -24,7 +26,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </summary>
         /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
         /// <param name="codePackagePath">Code packages of the service whose backups are provided in <paramref name="backupChainPath" />.
-        /// Pass empty string if code package is not allowed for backup parsing. e.g. when backup has only primitive types.
+        /// Pass an empty string if code package is not allowed for backup parsing. e.g. when backup has only primitive types.
         /// </param>
         public BackupParser(string backupChainPath, string codePackagePath)
         {
@@ -34,7 +36,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <summary>
         /// Events fired when a transaction is committed.
         /// This event contains the changes that were applied in this transaction.
-        /// With in this event, we have a consistent view of the backup at this point in time.
+        /// During this event, user has a consistent view of the backup at this point in time.
         /// We can use StateManager to read (not write) complete Reliable Collections at this time.
         /// </summary>
         public event EventHandler<NotifyTransactionAppliedEventArgs> TransactionApplied
@@ -51,7 +53,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         /// <summary>
         /// Parses a backup.
-        /// Before parsing, register for <see cref="TransactionApplied" />. These events are fired when a transaction is committed.
+        /// Before parsing, register for <see cref="TransactionApplied" /> events. These events are fired when a transaction is committed.
         /// After parsing has finished, we can write to the Reliable Collections using <see cref="StateManager" />.
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>

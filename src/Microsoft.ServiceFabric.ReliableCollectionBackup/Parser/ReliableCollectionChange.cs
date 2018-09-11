@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     /// <summary>
-    /// ReliableCollectionChange stores the changes in a ReliableCollection during a transaction.
+    /// ReliableCollectionChange stores the changes in a List during a transaction.
     /// </summary>
     public class ReliableCollectionChange
     {

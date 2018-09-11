@@ -88,6 +88,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                                 .Invoke(this, new object[] { operation.ReliableState });
                             break;
                         }
+
                     case ReliableStateKind.ReliableQueue:
                     case ReliableStateKind.ReliableConcurrentQueue:
                     default:
