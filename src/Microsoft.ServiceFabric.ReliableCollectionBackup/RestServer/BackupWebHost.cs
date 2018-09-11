@@ -29,7 +29,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 
         async Task<IWebHostBuilder> CreateWebHostBuilder()
         {
-            var backupParser = await BringupBackupParser();
+            var backupParserWrapper = this.BringupBackupParser();
             var appBasePath = string.Format("/{0}/{1}", this.backupChainInfo.AppName, this.backupChainInfo.ServiceName);
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string> { {"AppBasePath", appBasePath} })
@@ -39,13 +39,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                 .UseConfiguration(config)
                 .ConfigureServices(
                     services => services
-                                .AddSingleton<StatefulServiceContext>(backupParser.GetStatefulServiceContext())
-                                .AddSingleton<IReliableStateManager>(backupParser.StateManager)
-                                .AddSingleton<BackupParser>(backupParser))
+                                .AddSingleton<StatefulServiceContext>(backupParserWrapper.BackupParser.GetStatefulServiceContext())
+                                .AddSingleton<IReliableStateManager>(backupParserWrapper.BackupParser.StateManager)
+                                .AddSingleton<BackupParser>(backupParserWrapper.BackupParser)  // remove this
+                                .AddSingleton<BackupParserWrapper>(backupParserWrapper))
                 .UseStartup<Startup>();
         }
 
-        async Task<BackupParser> BringupBackupParser()
+        BackupParserWrapper BringupBackupParser()
         {
             var backupParser = new BackupParser(this.backupChainInfo.BackupChainPath, this.backupChainInfo.CodePackagePath);
             var stateManager = backupParser.StateManager;
@@ -65,8 +66,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                     .Invoke(stateManager, new object[] { serializerObject });
             }
 
-            await backupParser.ParseAsync(CancellationToken.None); // todo: take in configuration
-            return backupParser;
+            var backupParserWrapper = new BackupParserWrapper(backupParser);
+            backupParserWrapper.StartParsing();
+            return backupParserWrapper;
         }
 
         private BackupChainInfo backupChainInfo;

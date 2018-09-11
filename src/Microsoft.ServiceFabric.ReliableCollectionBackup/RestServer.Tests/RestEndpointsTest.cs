@@ -140,8 +140,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
         [TestMethod]
         public async Task RestEndpoint_BackupRequiredFields()
         {
-            var backupDirectory = @"c:\abc";
             var twoMinuteInSecs = TimeSpan.FromMinutes(2).TotalSeconds;
+            var backupDirectory = @"c:\abc";
             var bodyParams = new Dictionary<string, string> {
                 { "CancellationTokenInSecs", $"{twoMinuteInSecs}" },
                 { "TimeoutInSecs", $"{twoMinuteInSecs}" },
@@ -163,6 +163,80 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
                     $"{postUrl} post request {jsonContent} success " +
                     $"even without required param : {bodyParam} : response {response} content {resContent}");
             }
+        }
+
+        [TestMethod]
+        public async Task RestEndpoint_TransactionSimple()
+        {
+            var transactionUrl = Url + "/api/transactions/next";
+            var response = await client.GetAsync(transactionUrl);
+            var resContent = await response.Content.ReadAsStringAsync();
+            Assert.IsTrue(response.IsSuccessStatusCode, "Getting next transtion failed");
+            Console.WriteLine($"response content : {resContent}");
+            this.VerifyTransactions(resContent, 1);
+        }
+
+        [TestMethod]
+        public async Task RestEndpoint_TransactionsCount()
+        {
+            var transactionUrl = Url + "/api/transactions/next?count=3";
+            var response = await client.GetAsync(transactionUrl);
+            var resContent = await response.Content.ReadAsStringAsync();
+            Assert.IsTrue(response.IsSuccessStatusCode, "Getting next transtion failed");
+            this.VerifyTransactions(resContent, 3);
+            Console.WriteLine($"response content : {resContent}");
+        }
+
+        [TestMethod]
+        public async Task RestEndpoint_TransactionsInLoop()
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                var transactionUrl = Url + "/api/transactions/next?count=2";
+                var response = await client.GetAsync(transactionUrl);
+                var resContent = await response.Content.ReadAsStringAsync();
+                Assert.IsTrue(response.IsSuccessStatusCode, "Getting next transtion failed");
+                this.VerifyTransactions(resContent, 2);
+                Console.WriteLine($"response content : {resContent}");
+            }
+        }
+
+        void VerifyTransactions(string jsonContent, int expectedChanges)
+        {
+            var config = JObject.Parse(jsonContent);
+            JToken changes = null;
+
+            Assert.IsTrue(config.TryGetValue("changes", System.StringComparison.OrdinalIgnoreCase, out changes), "Expected 'changes' in reponse");
+            Assert.AreEqual(expectedChanges, changes.Count(), "Number of expected changes is not same");
+
+            var lastSeenKey = -1;
+            foreach (var change in changes)
+            {
+                lastSeenKey = this.VerifyTransaction(change, lastSeenKey);
+            }
+        }
+
+        int VerifyTransaction(JToken change, int lastSeenKey)
+        {
+            var rcName = change.Value<string>("name");
+            if ("urn:testDictionary" == rcName)
+            {
+                var dictChanges = change.Value<JArray>("changes");
+                Assert.AreEqual(8, dictChanges.Count(), "Not all dictionary changes are send");
+                foreach (var dictChange in dictChanges)
+                {
+                    var keyChanged = dictChange.Value<int>("key");
+                    // since all transactions added keys in increasing order.
+                    Assert.IsTrue(lastSeenKey < keyChanged, "Transactions does not have changes in expected order.");
+                    lastSeenKey = keyChanged;
+                }
+            }
+            else
+            {
+                Assert.Fail($"{rcName} case is not handled.");
+            }
+
+            return lastSeenKey;
         }
 
         async Task VerifyBackup(string backupDirectory, Data.BackupOption backupOption)
