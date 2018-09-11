@@ -137,6 +137,34 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             Directory.Delete(backupDirectory, true);
         }
 
+        [TestMethod]
+        public async Task RestEndpoint_BackupRequiredFields()
+        {
+            var backupDirectory = @"c:\abc";
+            var twoMinuteInSecs = TimeSpan.FromMinutes(2).TotalSeconds;
+            var bodyParams = new Dictionary<string, string> {
+                { "CancellationTokenInSecs", $"{twoMinuteInSecs}" },
+                { "TimeoutInSecs", $"{twoMinuteInSecs}" },
+                { "BackupLocation", $"'{JsonConvert.SerializeObject(backupDirectory)}'" }
+            };
+
+            foreach (var bodyParam in bodyParams)
+            {
+                // send all bodyParams except bodyParam
+                var sendBodyParams = bodyParams.Where(param => param.Key != bodyParam.Key);
+                var sendBodyParamsJson = sendBodyParams.Select(param => $"'{param.Key}' : {param.Value}");
+                var jsonContent = $"{{ {String.Join(",", sendBodyParamsJson)} }}";
+
+                var postUrl = Url + "/api/backup/full";
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(postUrl, content);
+                var resContent = await response.Content.ReadAsStringAsync();
+                Assert.IsFalse(response.IsSuccessStatusCode,
+                    $"{postUrl} post request {jsonContent} success " +
+                    $"even without required param : {bodyParam} : response {response} content {resContent}");
+            }
+        }
+
         async Task VerifyBackup(string backupDirectory, Data.BackupOption backupOption)
         {
             var backupName = backupOption == Data.BackupOption.Full ? "full" : "incremental";
