@@ -19,6 +19,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         {
             this.Parse(configStream);
         }
+
         public Configuration GetConfigration()
         {
             return this.configuration;

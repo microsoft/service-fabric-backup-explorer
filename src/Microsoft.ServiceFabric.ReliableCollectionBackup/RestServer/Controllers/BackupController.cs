@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 
@@ -57,7 +56,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
             return new JsonResult(new Dictionary<string, string>()
             {
                 { "status", "Success" },
-                { "fullBackPath", this.BackupPath },
+                { "backPath", this.BackupPath },
             });
         }
 
@@ -66,7 +65,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
             var error = new ModelStateDictionary();
             if (backupRequest.CancellationTokenInSecs == 0)
             {
-                error.AddModelError("CancellationTokensInSecs", new MissingFieldException("CancellationTokensInSecs is a required argument"));
+                error.AddModelError("CancellationTokenInSecs", new MissingFieldException("CancellationTokenInSecs is a required argument"));
             }
 
             if (backupRequest.TimeoutInSecs == 0)
