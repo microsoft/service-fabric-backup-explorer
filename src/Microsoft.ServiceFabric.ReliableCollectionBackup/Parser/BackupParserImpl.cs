@@ -17,7 +17,7 @@ using Microsoft.ServiceFabric.Replicator;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     /// <summary>
-    /// Actual implementation of BackupParserImpl.
+    /// Actual implementation of BackupParser.
     /// </summary>
     internal class BackupParserImpl : IDisposable
     {
@@ -49,7 +49,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         }
 
         /// <summary>
-        /// Events that notifies about the committed transactions.
+        /// Event that notifies about the committed transactions.
         /// </summary>
         public event EventHandler<NotifyTransactionAppliedEventArgs> TransactionApplied;
 
@@ -67,7 +67,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 var transactionalReplicatorSettings = TransactionalReplicatorSettingsHelper.Create(
                     this.workFolder,
                     "Ktl",
-                    checkpointThresholdMB: 200, // keep these settings configurable for the user to play for performance.
+                    checkpointThresholdMB: 200, // TODO: keep these settings configurable for the user to play for performance.
                     useDefaultSharedLogId: true,
                     LogManagerLoggerType : System.Fabric.Data.Log.LogManager.LoggerType.Inproc);
 
