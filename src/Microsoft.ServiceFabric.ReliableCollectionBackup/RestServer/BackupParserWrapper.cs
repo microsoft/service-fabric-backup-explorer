@@ -34,9 +34,20 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             return parsingTask;
         }
 
-        public NotifyTransactionAppliedEventArgs GetNextTransaction()
+        public List<NotifyTransactionAppliedEventArgs> TryGetTransactions(int count)
         {
-            return transactionsQueue.Take();
+            lock(queueLock)
+            {
+                var toTake = Math.Min(transactionsQueue.Count, count);
+                var transactions = new List<NotifyTransactionAppliedEventArgs>();
+
+                for (int i = 0; i < toTake; ++i)
+                {
+                    transactions.Add(transactionsQueue.Take());
+                }
+
+                return transactions;
+            }
         }
 
         public bool HasNextTransaction()
@@ -59,5 +70,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         private Task parsingTask;
         private BlockingCollection<NotifyTransactionAppliedEventArgs> transactionsQueue;
         private const int NumMaxTransactionsInMemory = 1000;
+        // use for taking N items from transactionsQueue across concurrent requests.
+        private static Object queueLock = new Object();
     }
 }

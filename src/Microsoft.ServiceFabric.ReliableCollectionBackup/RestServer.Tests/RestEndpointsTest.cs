@@ -168,6 +168,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
         [TestMethod]
         public async Task RestEndpoint_TransactionSimple()
         {
+            await IgnoreFirstTransaction();
             var transactionUrl = Url + "/api/transactions/next";
             var response = await client.GetAsync(transactionUrl);
             var resContent = await response.Content.ReadAsStringAsync();
@@ -183,8 +184,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             var response = await client.GetAsync(transactionUrl);
             var resContent = await response.Content.ReadAsStringAsync();
             Assert.IsTrue(response.IsSuccessStatusCode, "Getting next transtion failed");
-            this.VerifyTransactions(resContent, 3);
             Console.WriteLine($"response content : {resContent}");
+            this.VerifyTransactions(resContent, 3);
         }
 
         [TestMethod]
@@ -192,48 +193,66 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
         {
             for (int i = 0; i < 4; ++i)
             {
-                var transactionUrl = Url + "/api/transactions/next?count=2";
+                var transactionUrl = Url + "/api/transactions/next";
                 var response = await client.GetAsync(transactionUrl);
                 var resContent = await response.Content.ReadAsStringAsync();
                 Assert.IsTrue(response.IsSuccessStatusCode, "Getting next transtion failed");
-                this.VerifyTransactions(resContent, 2);
                 Console.WriteLine($"response content : {resContent}");
+                this.VerifyTransactions(resContent, 1);
             }
+        }
+
+        // Ignore first transaction as it is not user transaction.
+        async Task IgnoreFirstTransaction()
+        {
+            var transactionUrl = Url + "/api/transactions/next";
+            var response = await client.GetAsync(transactionUrl);
+            var resContent = await response.Content.ReadAsStringAsync();
+            Assert.IsTrue(response.IsSuccessStatusCode, "Getting next transtion failed");
         }
 
         void VerifyTransactions(string jsonContent, int expectedChanges)
         {
             var config = JObject.Parse(jsonContent);
-            JToken changes = null;
+            var reqStatus = config.Value<string>("status");
+            Assert.AreEqual("success", reqStatus, $"{reqStatus} means that we made api calls before server even add processed any transaction.");
 
-            Assert.IsTrue(config.TryGetValue("changes", System.StringComparison.OrdinalIgnoreCase, out changes), "Expected 'changes' in reponse");
-            Assert.AreEqual(expectedChanges, changes.Count(), "Number of expected changes is not same");
+            JToken transactions = null;
+            Assert.IsTrue(config.TryGetValue("transactions", StringComparison.OrdinalIgnoreCase, out transactions),
+                "Expected 'transactions' in response.");
+            Assert.AreEqual(expectedChanges, transactions.Count(), "Number of expected changes is not same");
 
             var lastSeenKey = -1;
-            foreach (var change in changes)
+            foreach (var transaction in transactions)
             {
-                lastSeenKey = this.VerifyTransaction(change, lastSeenKey);
+                lastSeenKey = this.VerifyTransaction(transaction, lastSeenKey);
             }
         }
 
-        int VerifyTransaction(JToken change, int lastSeenKey)
+        int VerifyTransaction(JToken transaction, int lastSeenKey)
         {
-            var rcName = change.Value<string>("name");
-            if ("urn:testDictionary" == rcName)
+            var changes = transaction.Value<JArray>("changes");
+            Assert.IsTrue(changes.Count() > 0, "No changes in transactions.");
+
+            foreach (var change in changes)
             {
-                var dictChanges = change.Value<JArray>("changes");
-                Assert.AreEqual(8, dictChanges.Count(), "Not all dictionary changes are send");
-                foreach (var dictChange in dictChanges)
+                var rcName = change.Value<string>("name");
+                if ("urn:testDictionary" == rcName)
                 {
-                    var keyChanged = dictChange.Value<int>("key");
-                    // since all transactions added keys in increasing order.
-                    Assert.IsTrue(lastSeenKey < keyChanged, "Transactions does not have changes in expected order.");
-                    lastSeenKey = keyChanged;
+                    var dictChanges = change.Value<JArray>("changes");
+                    Assert.AreEqual(8, dictChanges.Count(), "Not all dictionary changes are send");
+                    foreach (var dictChange in dictChanges)
+                    {
+                        var keyChanged = dictChange.Value<int>("key");
+                        // since all transactions added keys in increasing order.
+                        Assert.IsTrue(lastSeenKey < keyChanged, "Transactions does not have changes in expected order.");
+                        lastSeenKey = keyChanged;
+                    }
                 }
-            }
-            else
-            {
-                Assert.Fail($"{rcName} case is not handled.");
+                else
+                {
+                    Assert.Fail($"{rcName} case is not handled.");
+                }
             }
 
             return lastSeenKey;

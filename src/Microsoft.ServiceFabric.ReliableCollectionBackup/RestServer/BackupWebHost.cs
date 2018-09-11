@@ -23,11 +23,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 
         async public Task Run()
         {
-            var webHost = await this.CreateWebHostBuilder();
-            webHost.Build().Run();
+            await Task.Run(() =>
+            {
+                var webHost = this.CreateWebHostBuilder();
+                webHost.Build().Run();
+            });
         }
 
-        async Task<IWebHostBuilder> CreateWebHostBuilder()
+        IWebHostBuilder CreateWebHostBuilder()
         {
             var backupParserWrapper = this.BringupBackupParser();
             var appBasePath = string.Format("/{0}/{1}", this.backupChainInfo.AppName, this.backupChainInfo.ServiceName);

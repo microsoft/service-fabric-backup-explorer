@@ -46,7 +46,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </summary>
         public void TransactionCompleted()
         {
-            this.reliableCollectionsChanges.Clear();
+            this.reliableCollectionsChanges = new Dictionary<Uri, ReliableCollectionChange>();
         }
 
         /// <summary>

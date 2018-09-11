@@ -20,6 +20,7 @@
     <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\BackupRequestBody.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
+    <Compile Include="Controllers\TransactionsResponse.cs" />
     <Compile Include="Controllers\Utilities.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SerializerInfo.cs" />

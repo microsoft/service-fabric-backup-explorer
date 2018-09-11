@@ -25,9 +25,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
         [HttpGet("/api/transactions/next", Name = "GetNextTransaction")]
         public IActionResult GetNextTransaction(int? count)
         {
-            if (count == null)
+            int queryCount = 1;
+            if (count != null)
             {
-                count = 1;
+                queryCount = count.Value;
             }
 
             // cases : 
@@ -39,47 +40,34 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
             if (this.backupParserWrapper.HasParsingFinished() && 
                 !this.backupParserWrapper.HasNextTransaction())
             {
-                return new JsonResult(new Dictionary<string, string>()
-                {
-                    { "status", "finished" },
-                    { "reason", "No more transaction in backup" },
-                    { "numTransactions", "0" }
-                });
+                var finishResponse = new TransactionsResponse("finished",
+                    "No more transaction in backup",
+                    null);
+
+                return new JsonResult(finishResponse);
             }
 
             // case 2.
             if (!this.backupParserWrapper.HasParsingFinished() &&
                 !this.backupParserWrapper.HasNextTransaction())
             {
-                return new JsonResult(new Dictionary<string, string>()
-                {
-                    { "status", "inprogress"},
-                    { "reason", "No transaction seen till now since last time." },
-                    { "numTransactions", "0" }
-                });
+                var inProgressResponse = new TransactionsResponse("inprogress",
+                    "No transaction seen till now since last time.",
+                    null);
+
+                return new JsonResult(inProgressResponse);
             }
 
             // case 3.
-            var transactions = new List<NotifyTransactionAppliedEventArgs>(count.Value);
-            for (int i = 0; i < count; ++i)
+            var transactions = this.backupParserWrapper.TryGetTransactions(queryCount);
+            var reason = "";
+            if (transactions.Count < queryCount)
             {
-                if (this.backupParserWrapper.HasNextTransaction())
-                {
-                    transactions.Add(this.backupParserWrapper.GetNextTransaction());
-                }
-                else
-                {
-                    break;
-                }
+                reason = $"Only ${transactions.Count} transactions in queue are present at this time.";
             }
 
-            return new JsonResult(new Dictionary<string, string>()
-            {
-                { "status", "inprogress"},
-                { "reason", "No transaction seen till now." },
-                { "numTransactions", $"{transactions.Count}" },
-                { "transactions", $"{JsonConvert.SerializeObject(transactions)}" }
-            });
+            var response = new TransactionsResponse("success", reason, transactions);
+            return new JsonResult(response);
         }
 
         private BackupParserWrapper backupParserWrapper;
