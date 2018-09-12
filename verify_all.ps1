@@ -1,3 +1,6 @@
+# Include comman commands.
+. "./common.ps1"
+
 # Keep all changes
 git add -A .
 # Clean up
