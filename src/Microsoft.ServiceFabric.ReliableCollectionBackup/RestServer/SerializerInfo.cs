@@ -3,14 +3,23 @@ using System.IO;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 {
+    /// <summary>
+    /// Information about serializers in <see cref="Configuration"/>
+    /// </summary>
     internal class SerializerInfo
     {
-        public SerializerInfo(string stateFullyQualifiedName)
-        {
-            this.StateFullyQualifiedTypeName = stateFullyQualifiedName;
-        }
-
+        /// <summary>
+        /// Fully qualified name of state.
+        /// E.g. in Api : TryAddStateSerializer<User>(new UserSerializer());
+        /// Fully qualified name of `User` class is StateFullyQualifiedTypeName.
+        /// </summary>
         public string StateFullyQualifiedTypeName { get; set; }
+
+        /// <summary>
+        /// Fully qualified name of serializer to register with <see cref="StateFullyQualifiedTypeName"/>.
+        /// E.g. in Api : TryAddStateSerializer<User>(new UserSerializer());
+        /// Fully qualified name of `UserSerializer` class is SerializerFullyQualifiedTypeName.
+        /// </summary>
         public string SerializerFullyQualifiedTypeName { get; set; }
 
         internal void Validate()

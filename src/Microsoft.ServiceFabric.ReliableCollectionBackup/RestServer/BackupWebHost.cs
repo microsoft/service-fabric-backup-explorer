@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Fabric;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore;
@@ -14,13 +13,24 @@ using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 {
+    /// <summary>
+    /// Http webhost wrapper class for a BackupChain rest server
+    /// </summary>
     internal class BackupWebHost
     {
+        /// <summary>
+        /// Constructor of BackupWebHost
+        /// </summary>
+        /// <param name="backupChainInfo">BackupChainInfo for which to run web host</param>
         public BackupWebHost(BackupChainInfo backupChainInfo)
         {
             this.backupChainInfo = backupChainInfo;
         }
 
+        /// <summary>
+        /// Starts web host.
+        /// </summary>
+        /// <returns>Task representing asynchronous web host run operation.</returns>
         async public Task Run()
         {
             await Task.Run(() =>
@@ -30,26 +40,24 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             });
         }
 
-        IWebHostBuilder CreateWebHostBuilder()
+        private IWebHostBuilder CreateWebHostBuilder()
         {
-            var backupParserWrapper = this.BringupBackupParser();
+            var backupParserManager = this.SetupBackupParserManagerAndStartParsing();
             var appBasePath = string.Format("/{0}/{1}", this.backupChainInfo.AppName, this.backupChainInfo.ServiceName);
-            var config = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string> { {"AppBasePath", appBasePath} })
-                .Build();
+            var config = this.BuildConfig(appBasePath);
 
             return WebHost.CreateDefaultBuilder()
                 .UseConfiguration(config)
                 .ConfigureServices(
                     services => services
-                                .AddSingleton<StatefulServiceContext>(backupParserWrapper.BackupParser.GetStatefulServiceContext())
-                                .AddSingleton<IReliableStateManager>(backupParserWrapper.BackupParser.StateManager)
-                                .AddSingleton<BackupParser>(backupParserWrapper.BackupParser)  // remove this
-                                .AddSingleton<BackupParserWrapper>(backupParserWrapper))
+                                // Need StatefulServiceContext and IReliableStateManager for queryable middleware.
+                                .AddSingleton<StatefulServiceContext>(backupParserManager.BackupParser.GetStatefulServiceContext())
+                                .AddSingleton<IReliableStateManager>(backupParserManager.BackupParser.StateManager)
+                                .AddSingleton<BackupParserManager>(backupParserManager))
                 .UseStartup<Startup>();
         }
 
-        BackupParserWrapper BringupBackupParser()
+        private BackupParserManager SetupBackupParserManagerAndStartParsing()
         {
             var backupParser = new BackupParser(this.backupChainInfo.BackupChainPath, this.backupChainInfo.CodePackagePath);
             var stateManager = backupParser.StateManager;
@@ -69,9 +77,16 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                     .Invoke(stateManager, new object[] { serializerObject });
             }
 
-            var backupParserWrapper = new BackupParserWrapper(backupParser);
-            backupParserWrapper.StartParsing();
-            return backupParserWrapper;
+            var backupParserManager = new BackupParserManager(backupParser);
+            backupParserManager.StartParsing();
+            return backupParserManager;
+        }
+
+        private IConfiguration BuildConfig(string appBasePath)
+        {
+            return new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string> { { "AppBasePath", appBasePath } })
+                .Build();
         }
 
         private BackupChainInfo backupChainInfo;

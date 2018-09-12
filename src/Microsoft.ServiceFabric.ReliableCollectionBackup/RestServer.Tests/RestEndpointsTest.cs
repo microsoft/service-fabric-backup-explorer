@@ -52,7 +52,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
         {
             var response = await client.GetAsync(Url + "/$query/testDictionary?$top=2");
             var resContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine("Response : {0}", resContent);
+            Assert.IsTrue(response.IsSuccessStatusCode, $"Getting next transtion failed: {response} : content : {resContent}");
             this.VerifySortedResponse(resContent, 2, 0);
         }
 
@@ -111,7 +111,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(postUrl, content);
             var resContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"Post Response: {response} : Content {resContent}");
             Assert.IsTrue(response.IsSuccessStatusCode, $"Failed to update data to dictionary : response : {response} : content {resContent}");
 
             // Validate the update.
@@ -172,8 +171,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             var transactionUrl = Url + "/api/transactions/next";
             var response = await client.GetAsync(transactionUrl);
             var resContent = await response.Content.ReadAsStringAsync();
-            Assert.IsTrue(response.IsSuccessStatusCode, "Getting next transtion failed");
-            Console.WriteLine($"response content : {resContent}");
+            Assert.IsTrue(response.IsSuccessStatusCode, $"Getting next transtion failed: {response} : content : {resContent}");
             this.VerifyTransactions(resContent, 1);
         }
 
@@ -183,8 +181,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             var transactionUrl = Url + "/api/transactions/next?count=3";
             var response = await client.GetAsync(transactionUrl);
             var resContent = await response.Content.ReadAsStringAsync();
-            Assert.IsTrue(response.IsSuccessStatusCode, "Getting next transtion failed");
-            Console.WriteLine($"response content : {resContent}");
+            Assert.IsTrue(response.IsSuccessStatusCode, $"Getting next transtion failed: {response} : content : {resContent}");
             this.VerifyTransactions(resContent, 3);
         }
 
@@ -196,8 +193,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
                 var transactionUrl = Url + "/api/transactions/next";
                 var response = await client.GetAsync(transactionUrl);
                 var resContent = await response.Content.ReadAsStringAsync();
-                Assert.IsTrue(response.IsSuccessStatusCode, "Getting next transtion failed");
-                Console.WriteLine($"response content : {resContent}");
+                Assert.IsTrue(response.IsSuccessStatusCode, $"Getting next transtion failed: {response} : content : {resContent}");
                 this.VerifyTransactions(resContent, 1);
             }
         }

@@ -4,6 +4,9 @@ using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controllers
 {
+    /// <summary>
+    /// Response class for Api : /api/transactions/next
+    /// </summary>
     internal class TransactionsResponse
     {
         public TransactionsResponse(string status, string reason, List<NotifyTransactionAppliedEventArgs> transactions)

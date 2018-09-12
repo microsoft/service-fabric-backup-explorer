@@ -9,9 +9,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.ModelBinding;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Data;
-using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controllers
 {
@@ -21,9 +21,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
     [ApiController]
     public class BackupController : ControllerBase
     {
-        public BackupController(BackupParser backupParser)
+        public BackupController(BackupParserManager backupParserManager)
         {
-            this.backupParser = backupParser;
+            this.backupParserManager = backupParserManager;
         }
 
         [HttpPost("/api/backup/full", Name = "PostFullBackup")]
@@ -46,16 +46,28 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
                 return BadRequest(error);
             }
 
+            if (!this.backupParserManager.HasParsingFinished())
+            {
+                Response.StatusCode = 423; // resource locked at this time.
+                return new JsonResult(new Dictionary<string, string>()
+                {
+                    { "status", "inprogress" },
+                    { "reason", "Backup parsing is still going on. " +
+                                "Either consume all transactions via transaction api /api/transactions/next?count=N OR" +
+                                "don't block on transactions by adding '<TBD>' flag in config file." }
+                });
+            }
+
             var timeout = TimeSpan.FromSeconds(backupRequest.TimeoutInSecs);
             var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(backupRequest.TimeoutInSecs));
             var cancellationToken = cancellationTokenSource.Token;
             this.UserBackupLocation = String.IsNullOrWhiteSpace(backupRequest.BackupLocation) ?
                 Directory.GetCurrentDirectory() : backupRequest.BackupLocation;
 
-            await backupParser.BackupAsync(backupOption, timeout, cancellationToken, this.OnBackupCompletionAsync);
+            await this.backupParserManager.BackupParser.BackupAsync(backupOption, timeout, cancellationToken, this.OnBackupCompletionAsync);
             return new JsonResult(new Dictionary<string, string>()
             {
-                { "status", "Success" },
+                { "status", "success" },
                 { "backPath", this.BackupPath },
             });
         }
@@ -84,9 +96,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
         }
 
         /// <summary>
-        /// BackupParser on which to invoke backup apis.
+        /// BackupParserManager on which to invoke backup apis.
         /// </summary>
-        private BackupParser backupParser;
+        private BackupParserManager backupParserManager;
 
         /// <summary>
         /// Backup folder location under <see cref="UserBackupLocation" />

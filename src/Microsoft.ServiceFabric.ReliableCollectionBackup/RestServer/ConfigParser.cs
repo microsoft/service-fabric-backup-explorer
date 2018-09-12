@@ -5,8 +5,32 @@ using Newtonsoft.Json.Linq;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 {
+    /// <summary>
+    /// Parser for RestServer configuration file.
+    /// <see cref="Configuration"/> class for parsed Configuration object.
+    /// Format of file :
+    /// {
+    ///     "BackupChainInfos" : [
+    ///         {
+    ///             "AppName" : "MyAppName",
+    ///             "ServiceName" : "MyServiceName",
+    ///             "BackupChainPath" : "../Parser.Tests/UserFullBackup/",
+    ///                 "CodePackagePath" : "../Parser.Tests/UserType/bin/",
+    ///                 "Serializers" : [ {
+    ///                     "StateFullyQualifiedTypeName": "Microsoft.ServiceFabric.ReliableCollectionBackup.UserType.User, Microsoft.ServiceFabric.ReliableCollectionBackup.UserType, Version=1.0.0.0, Culture=neutral, PublicKeyToken=365143bb27e7ac8b",
+    ///                     "SerializerFullyQualifiedTypeName": "Microsoft.ServiceFabric.ReliableCollectionBackup.UserType.UserSerializer, Microsoft.ServiceFabric.ReliableCollectionBackup.UserType, Version=1.0.0.0, Culture=neutral, PublicKeyToken=365143bb27e7ac8b"
+    ///                     } ]
+    ///         },
+    ///         ...
+    ///     ]
+    /// }
+    /// </summary>
     internal class ConfigParser
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="configPath">Path of json config file</param>
         public ConfigParser(string configPath)
         {
             using (var stream = File.OpenRead(configPath))
@@ -15,17 +39,25 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="configStream">Json stream of configuration file.</param>
         public ConfigParser(Stream configStream)
         {
             this.Parse(configStream);
         }
 
+        /// <summary>
+        /// Gives Configration after parsing from configuration file.
+        /// </summary>
+        /// <returns>Configration after parsing json config</returns>
         public Configuration GetConfigration()
         {
             return this.configuration;
         }
 
-        void Parse(Stream jsonStream)
+        private void Parse(Stream jsonStream)
         {
             StreamReader reader = new StreamReader(jsonStream);
             string jsonContent = reader.ReadToEnd();
@@ -46,7 +78,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             this.configuration = new Configuration(backupChainInfos);
         }
 
-        void Validate(IList<BackupChainInfo> backupChainInfos)
+        private void Validate(IList<BackupChainInfo> backupChainInfos)
         {
             if (backupChainInfos.Count == 0)
             {
@@ -59,7 +91,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             }
         }
 
-        Configuration configuration;
-        const string BackupChainInfosKey = "BackupChainInfos";
+        private Configuration configuration;
+        private const string BackupChainInfosKey = "BackupChainInfos";
     }
 }
