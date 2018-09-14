@@ -16,13 +16,13 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 # Building code
 ```
-powershell .\build_all.ps1 -build
+powershell .\build_all.ps1
 ```
 
 # Generating nupkg
 From Visual Studio command prompt which has msbuild defined
 ```
-powershell .\build_all.ps1 -build -generateNupkg
+powershell .\build_all.ps1 -GenerateNuget
 ```
 
 # Running Rest Server

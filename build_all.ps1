@@ -5,43 +5,45 @@
 param
 (
     # show versions of all tools used
-    [switch]$showVersion,
-
-    # build code
-    [switch]$build,
+    [switch]$ToolVersion,
 
     # generate nupkg
-    [switch]$generateNupkg
+    [switch]$GenerateNuget,
+
+    # nuget source
+    [string]$NugetSource = "https://api.nuget.org/v3/index.json"
 );
 
 # Include comman commands.
 . "./common.ps1"
 
-if ($showVersion) {
-    Write-Host "Version of all tools:"
-    dotnet --info
-    msbuild /version
-    nuget
+if ($ToolVersion) {
+	Write-Host "Version of all tools:"
+	dotnet --info
+	msbuild /version
+	exit
 }
 
-if ($build) {
-    # build all projects
-    Write-Host "Building code and tests:"
-    Exec { dotnet build --packages .\packages service-fabric-backup-explorer.sln }
+#restore the packages needed at .\packages
+Write-Host "Restoring packages" -ForegroundColor Cyan
+Exec { dotnet restore --packages .\packages service-fabric-backup-explorer.sln -s $NugetSource }
 
-    # publish for nupkg generation
-    Exec { dotnet publish --no-build }
+# build all projects
+Write-Host "Building code and tests:" -ForegroundColor Cyan
+Exec { dotnet build --packages .\packages service-fabric-backup-explorer.sln }
 
-    # Rest Server: copy our dlls in publish folder
-    Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
-}
+# publish for nupkg generation
+Exec { dotnet publish --no-build }
 
-if ($generateNupkg) {
-    Write-Host "Generating nupkg:"
+# Rest Server: copy our dlls in publish folder
+Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
+
+if ($GenerateNuget) {
+    Write-Host "Generating nuget:" -ForegroundColor Cyan
 
     pushd nuprojs
     # nuget restore
-    Exec { nuget.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages }
+    Exec { K:\rdnext\service-fabric-backup-explorer\packages\system.linq.dynamic\1.0.7\NuGet.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages }
     # generate nupkg
     Exec { msbuild Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=$PSScriptRoot\bin\nupkg }
     popd
