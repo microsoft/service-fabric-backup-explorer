@@ -31,8 +31,8 @@ if ($build) {
 
     # publish for nupkg generation
     pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser\
-    Exec { dotnet publish --no-build --framework netstandard2.0 }
-    Exec { dotnet publish --no-build --framework net461 }
+    Exec { dotnet publish --no-build --framework netstandard2.0 -c "x64\Debug" }
+    Exec { dotnet publish --no-build --framework net461 -c "x64\Debug" }
     popd
 
     pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
