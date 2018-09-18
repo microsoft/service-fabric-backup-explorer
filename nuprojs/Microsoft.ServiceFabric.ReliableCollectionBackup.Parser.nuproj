@@ -12,46 +12,46 @@
   <Import Project="$(NuProjPath)\NuProj.props" />
   <ItemGroup>
     <!-- Find out why Library tag is not working -->
-    <File Include="$(BinaryDropFolder)\$(Id)\$(Id).dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\$(Id).dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\$(Id).xml">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\$(Id).xml">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\$(Id).pdb">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\$(Id).pdb">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\Microsoft.ServiceFabric.Data.dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\Microsoft.ServiceFabric.Data.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\Microsoft.ServiceFabric.Data.Impl.dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\Microsoft.ServiceFabric.Data.Impl.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\Microsoft.ServiceFabric.Data.Interfaces.dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\Microsoft.ServiceFabric.Data.Interfaces.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\Microsoft.ServiceFabric.Internal.dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\Microsoft.ServiceFabric.Internal.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\Microsoft.ServiceFabric.Internal.Strings.dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\Microsoft.ServiceFabric.Internal.Strings.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\Microsoft.ServiceFabric.Tools.ReliabilitySimulator.dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\Microsoft.ServiceFabric.Tools.ReliabilitySimulator.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\System.Fabric.dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\System.Fabric.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\System.Fabric.Management.ServiceModel.dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\System.Fabric.Management.ServiceModel.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\$(Id)\system.fabric.strings.dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\system.fabric.strings.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
     <!-- Native windows dll -->
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\$(Id)\runtimes\win\native\FabricCommon.dll" />
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\$(Id)\runtimes\win\native\FabricResources.dll" />
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\$(Id)\runtimes\win\native\KPhysicalLogDll.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\runtimes\win\native\FabricCommon.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\runtimes\win\native\FabricResources.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\runtimes\win\native\KPhysicalLogDll.dll" />
     <File Include="@(NativeLibraryDependency)">
       <TargetPath>runtimes\win\native</TargetPath>
     </File>
