@@ -30,7 +30,7 @@ powershell .\build_all.ps1 -build -generateNupkg
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
 dotnet build
 xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll bin\Debug\net471\
-dotnet run --no-build configs\sampleconfig.json
+dotnet run --no-build --config configs\sampleconfig.json
 
 # test rest apis
 curl -v http://localhost:5000/$query/testDictionary?$top=2

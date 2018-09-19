@@ -20,6 +20,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                 Environment.Exit(1);
             }
 
+            if (args.Length > 2 && args[2].ToLower() == "-d")
+            {
+                Debugger.Launch();
+            }
+
             var process = Process.GetCurrentProcess();
             Console.WriteLine("Process Name/Id of RestServer : {0}/{1}", process.ProcessName, process.Id);
 
