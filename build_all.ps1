@@ -30,7 +30,14 @@ if ($build) {
     Exec { dotnet build --packages .\packages service-fabric-backup-explorer.sln }
 
     # publish for nupkg generation
-    Exec { dotnet publish --no-build }
+    pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser\
+    Exec { dotnet publish --no-build --framework netstandard2.0 -c "x64\Debug" }
+    Exec { dotnet publish --no-build --framework net461 -c "x64\Debug" }
+    popd
+
+    pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
+    Exec { dotnet publish }
+    popd
 
     # Rest Server: copy our dlls in publish folder
     Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
