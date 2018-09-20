@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +27,12 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             // todo : take boolean flag to block on transactions or not.
             this.BackupParser.TransactionApplied += (sender, args) =>
             {
-                transactionsQueue.Add(args);
+                if (transactionsQueue.Count < NumMaxTransactionsInMemory)
+                {
+                    transactionsQueue.Add(args);
+                    // Leaving below statement for ignite demo
+                    Console.WriteLine("{0} : TransactionId {1} , CommitSequenceNumber {2}, Changes {3}", transactionsQueue.Count, args.TransactionId, args.CommitSequenceNumber, args.Changes.Count());
+                }
             };
         }
 
@@ -41,6 +47,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                 // todo : take cancellation timeout from config.
                 this.parsingTask = this.BackupParser.ParseAsync(CancellationToken.None);
             }
+
             return parsingTask;
         }
 
@@ -100,6 +107,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         private BlockingCollection<NotifyTransactionAppliedEventArgs> transactionsQueue;
         // lock is used for taking N items from transactionsQueue atomically across concurrent requests.
         private static Object queueLock = new Object();
-        private const int NumMaxTransactionsInMemory = 1000;
+        private const int NumMaxTransactionsInMemory = 1000000;
+        bool blockOnQueueFull = false;
     }
 }
