@@ -1,4 +1,4 @@
-// ------------------------------------------------------------
+﻿// ------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License (MIT). See License.txt in the repo root for license information.
 // ------------------------------------------------------------
@@ -8,27 +8,26 @@ using System.Runtime.Serialization;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
 {
     /// <summary>
-    /// User type used in creating and validating backups in tests and rest server.
+    /// Address type
     /// </summary>
-    [DataContract(Name = "User", Namespace = "http://www.rcbackupparser.com")]
-    public class User : IExtensibleDataObject
+    [DataContract(Name = "Address", Namespace = "http://www.rcbackupparser.com")]
+    public class Address : IExtensibleDataObject
     {
         /// <summary>
-        /// Name
+        /// Street
         /// </summary>
         [DataMember]
-        public string Name { get; internal set ; }
-
+        public string Street { get; internal set; }
         /// <summary>
-        /// Age
+        /// Country
         /// </summary>
         [DataMember]
-        public uint Age { get; internal set; }
+        public string Country { get; internal set; }
         /// <summary>
-        /// Address
+        /// PinCode
         /// </summary>
         [DataMember]
-        public Address Address { get; internal set; }
+        public uint PinCode { get; internal set; }
 
         /// <summary>
         /// ExtensionData
@@ -38,33 +37,33 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.UserType
         /// <summary>
         /// Constructor
         /// </summary>
-        public User()
+        public Address()
         {
-            this.Name = "Pandit Gangadhar Vidyadhar Mayadhar Omkarnath Shastri";
-            this.Age = 31;
-            this.Address = new Address();
+            this.Street = "Apollo Bandar";
+            this.Country = "India";
+            this.PinCode = 400011;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="age">Age</param>
-        /// <param name="address">Address</param>
-        public User(string name, uint age, Address address)
+        /// <param name="street">Street</param>
+        /// <param name="country">Country</param>
+        /// <param name="pincode">PinCode</param>
+        public Address(string street, string country, uint pincode)
         {
-            this.Name = name;
-            this.Age = age;
-            this.Address = address;
+            this.Street = street;
+            this.Country = country;
+            this.PinCode = pincode;
         }
 
         /// <summary>
-        /// ToString override for User
+        /// ToString override for Address
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return $"Name: {this.Name}, Age: {this.Age}, Address: {this.Address}";
+            return $"Street: {this.Street}, Country: {this.Country}, PinCode: {this.PinCode}";
         }
 
         private ExtensionDataObject extensionData_Value;

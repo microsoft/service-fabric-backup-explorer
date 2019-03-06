@@ -64,51 +64,55 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             }
         }
 
-        // [TestMethod]
-        // public async Task BackupParser_StateManagerFailsToWriteDuringParse()
-        // {
-        //     using (var backupParser = new BackupParser(BackupFolderPath, ""))
-        //     {
-        //         long countValuesInDictionary = 0;
+        [TestMethod]
+        public async Task BackupParser_StateManagerFailsToWriteDuringParse()
+        {
+            using (var backupParser = new BackupParser(BackupFolderPath, ""))
+            {
+                long countValuesInDictionary = 0;
 
-        //         backupParser.TransactionApplied += async (sender, args) =>
-        //         {
-        //             var stateManager = backupParser.StateManager;
-        //             var result = await stateManager.TryGetAsync<IReliableDictionary<long, long>>(DictionaryName);
-        //             Assert.IsTrue(result.HasValue, "Not able to find IReliableDictionary<long, long> dictionary");
+                backupParser.TransactionApplied += async (sender, args) =>
+                {
+                    var stateManager = backupParser.StateManager;
+                    var result = await stateManager.TryGetAsync<IReliableDictionary<long, long>>(DictionaryName);
+                    Assert.IsTrue(result.HasValue, "Not able to find IReliableDictionary<long, long> dictionary");
 
-        //             var dictionary = result.Value;
+                    var dictionary = result.Value;
 
-        //             try
-        //             {
-        //                 using (var tx = stateManager.CreateTransaction())
-        //                 {
-        //                     countValuesInDictionary = await dictionary.GetCountAsync(tx);
+                    try
+                    {
+                        using (var tx = stateManager.CreateTransaction())
+                        {
+                            countValuesInDictionary = await dictionary.GetCountAsync(tx);
 
-        //                     for (int i = 0; i < countValuesInDictionary; ++i)
-        //                     {
-        //                         var valueResult = await dictionary.TryGetValueAsync(tx, i);
-        //                         Assert.IsTrue(valueResult.HasValue, "Value not present in dictionary");
-        //                         Assert.AreEqual(i, valueResult.Value, "Not able to get expected value");
+                            for (int i = 0; i < countValuesInDictionary; ++i)
+                            {
+                                var valueResult = await dictionary.TryGetValueAsync(tx, i);
+                                Assert.IsTrue(valueResult.HasValue, "Value not present in dictionary");
+                                Assert.AreEqual(i, valueResult.Value, "Not able to get expected value");
 
-        //                         await dictionary.AddOrUpdateAsync(tx, i, i + 1, (k, v) => v + 1);
-        //                     }
+                                await dictionary.AddOrUpdateAsync(tx, i, i + 1, (k, v) => v + 1);
+                            }
 
-        //                     await tx.CommitAsync();
-        //                 }
+                            await tx.CommitAsync();
+                        }
 
-        //                 Assert.Fail("This transaction should not have committed.");
-        //             }
-        //             catch (InvalidOperationException)
-        //             { }
-        //             catch (FabricNotPrimaryException)
-        //             { }
-        //         };
+                        if (countValuesInDictionary > 0)
+                        {
+                            // If we called AddOrUpdateAsync, commit should fail.
+                            Assert.Fail("This transaction should not have committed.");
+                        }
+                    }
+                    catch (InvalidOperationException)
+                    { }
+                    catch (FabricNotPrimaryException)
+                    { }
+                };
 
-        //         await backupParser.ParseAsync(CancellationToken.None);
-        //         Assert.IsTrue(countValuesInDictionary > 0, "No data read in dictionary.");
-        //     }
-        // }
+                await backupParser.ParseAsync(CancellationToken.None);
+                Assert.IsTrue(countValuesInDictionary > 0, "No data read in dictionary.");
+            }
+        }
 
         [TestMethod]
         public async Task BackupParser_StateManagerAbleToWriteAfterParseFinish()
@@ -153,7 +157,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
                     Assert.IsTrue(countKeysInDict > 0, "No data seen in dictionary");
                 }
 
-                // Verify
+                // Verify writes
                 {
                     var result = await stateManager.TryGetAsync<IReliableDictionary<long, long>>(DictionaryName);
                     Assert.IsTrue(result.HasValue, "Not able to find IReliableDictionary<long, long> dictionary");
@@ -177,6 +181,42 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 
                     Assert.IsTrue(countKeysInDict > 0, "No data seen in dictionary");
                 }
+            }
+        }
+
+        [TestMethod]
+        public async Task BackupParser_StateManagerAbleToReadQueuesInTransactionApplied()
+        {
+            using (var backupParser = new BackupParser(BackupFolderPath, ""))
+            {
+                long countValuesInQueue = 0;
+
+                backupParser.TransactionApplied += async (sender, args) =>
+                {
+                    var stateManager = backupParser.StateManager;
+                    // verify ReliableQueue
+                    var result = await stateManager.TryGetAsync<IReliableQueue<long>>(QueueName);
+                    Assert.IsTrue(result.HasValue, "Not able to find IReliableQueue<long> queue");
+
+                    var queue = result.Value;
+                    using (var tx = stateManager.CreateTransaction())
+                    {
+                        countValuesInQueue = await queue.GetCountAsync(tx);
+                        if (countValuesInQueue > 0)
+                        {
+                            var valueResult = await queue.TryPeekAsync(tx);
+                            Assert.IsTrue(valueResult.HasValue, "Value not present in queue");
+                            Assert.AreEqual(0, valueResult.Value, "Queue head should be always first element 0");
+                        }
+                        await tx.CommitAsync();
+                    }
+                    // Don't verify ConcurrentQueue
+                    // There is no read only api in ConcurrentQueue : only enque/deque.
+                    // Reading Count on queue does not work because it checks for TransactionalReplicator's IsReadable which is not true.
+                };
+
+                await backupParser.ParseAsync(CancellationToken.None);
+                Assert.AreEqual(TotalQueueTransactions * NumOperationsPerTransaction, countValuesInQueue, "No data read in queue.");
             }
         }
     }

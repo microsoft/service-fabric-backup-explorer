@@ -8,9 +8,10 @@
     <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser Library</AssemblyDescription>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
     <ErrorReport>prompt</ErrorReport>
-    <NoStdLib>true</NoStdLib>
     <DebugType>portable</DebugType>
-    <PublishDir>$(BinaryDropFolder)\$(AssemblyName)</PublishDir>
+    <PublishDir>$(BinaryDropFolder)\$(TargetFramework)\$(AssemblyName)</PublishDir>
+    <TargetFramework></TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -30,6 +31,7 @@
     <Compile Include="GenericUtils.cs" />
     <Compile Include="NotifyTransactionAppliedEventArgs.cs" />
     <Compile Include="ReliableCollectionChange.cs" />
+    <Compile Include="ReliableStateKind.cs" />
     <Compile Include="TransactionChangeManager.cs" />
     <Compile Include="_friends.cs" />
     <Compile Include="CodePackageInfo.cs" />

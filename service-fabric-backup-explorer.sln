@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackupGenerator", "src\Micr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserType", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests\UserType\UserType.csproj", "{2E09E042-C9E5-4D1C-BA54-43281C1DCC35}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestServer.Tests", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer.Tests\RestServer.Tests.csproj", "{DA547004-61E5-49D1-A246-097E87DE627C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -39,6 +41,10 @@ Global
 		{2E09E042-C9E5-4D1C-BA54-43281C1DCC35}.Debug|x64.Build.0 = Debug|x64
 		{2E09E042-C9E5-4D1C-BA54-43281C1DCC35}.Release|x64.ActiveCfg = Release|x64
 		{2E09E042-C9E5-4D1C-BA54-43281C1DCC35}.Release|x64.Build.0 = Release|x64
+		{DA547004-61E5-49D1-A246-097E87DE627C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DA547004-61E5-49D1-A246-097E87DE627C}.Debug|x64.Build.0 = Debug|Any CPU
+		{DA547004-61E5-49D1-A246-097E87DE627C}.Release|x64.ActiveCfg = Release|Any CPU
+		{DA547004-61E5-49D1-A246-097E87DE627C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

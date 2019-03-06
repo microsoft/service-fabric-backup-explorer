@@ -5,6 +5,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+
+using Microsoft.ServiceFabric.Data;
+using Microsoft.ServiceFabric.Data.Collections;
+using Microsoft.ServiceFabric.Data.Notifications;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
@@ -41,7 +46,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </summary>
         public void TransactionCompleted()
         {
-            this.reliableCollectionsChanges.Clear();
+            this.reliableCollectionsChanges = new Dictionary<Uri, ReliableCollectionChange>();
         }
 
         /// <summary>
@@ -51,6 +56,65 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         public IEnumerable<ReliableCollectionChange> GetAllChanges()
         {
             return this.reliableCollectionsChanges.Values;
+        }
+
+        /// <summary>
+        /// Listens for StateManager change events to hook into ReliableStates for any change events.
+        /// These change events are then collected to show when the Transaction is committed.
+        /// </summary>
+        /// <param name="sender">Sender of event.</param>
+        /// <param name="e">StateManager change event arguments.</param>
+        internal void OnStateManagerChanged(object sender, NotifyStateManagerChangedEventArgs e)
+        {
+            var operation = e as NotifyStateManagerSingleEntityChangedEventArgs;
+            if (null == operation)
+            {
+                return;
+            }
+
+            if (operation.Action == NotifyStateManagerChangedAction.Add)
+            {
+                var reliableStateType = operation.ReliableState.GetType();
+                switch (ReliableStateKindUtils.KindOfReliableState(operation.ReliableState))
+                {
+                    case ReliableStateKind.ReliableDictionary:
+                        {
+                            var keyType = reliableStateType.GetGenericArguments()[0];
+                            var valueType = reliableStateType.GetGenericArguments()[1];
+
+                            // use reflection to call my own method because key/value types are known at runtime.
+                            this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
+                                .MakeGenericMethod(keyType, valueType)
+                                .Invoke(this, new object[] { operation.ReliableState });
+                            break;
+                        }
+
+                    case ReliableStateKind.ReliableQueue:
+                    case ReliableStateKind.ReliableConcurrentQueue:
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void AddDictionaryChangedHandler<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
+            where TKey : IComparable<TKey>, IEquatable<TKey>
+        {
+            dictionary.DictionaryChanged += this.OnDictionaryChanged;
+        }
+
+        internal void OnDictionaryChanged<TKey, TValue>(object sender, NotifyDictionaryChangedEventArgs<TKey, TValue> e)
+        {
+            var keyAddArgs = e as NotifyDictionaryItemAddedEventArgs<TKey, TValue>;
+            var reliableState = sender as IReliableState;
+
+            if (null == keyAddArgs || null == reliableState)
+            {
+                // log here.
+                return;
+            }
+
+            this.CollectChanges(reliableState.Name, e);
         }
 
         private Dictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;

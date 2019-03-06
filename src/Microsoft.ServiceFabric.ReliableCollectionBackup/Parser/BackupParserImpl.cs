@@ -6,12 +6,10 @@
 using System;
 using System.Fabric;
 using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.ServiceFabric.Data;
-using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Notifications;
 using Microsoft.ServiceFabric.Tools.ReliabilitySimulator;
 using Microsoft.ServiceFabric.Replicator;
@@ -19,7 +17,7 @@ using Microsoft.ServiceFabric.Replicator;
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
     /// <summary>
-    /// Actual implementation of BackupParserImpl.
+    /// Actual implementation of BackupParser.
     /// </summary>
     internal class BackupParserImpl : IDisposable
     {
@@ -51,7 +49,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         }
 
         /// <summary>
-        /// Events that notifies about the committed transactions.
+        /// Event that notifies about the committed transactions.
         /// </summary>
         public event EventHandler<NotifyTransactionAppliedEventArgs> TransactionApplied;
 
@@ -69,7 +67,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 var transactionalReplicatorSettings = TransactionalReplicatorSettingsHelper.Create(
                     this.workFolder,
                     "Ktl",
-                    checkpointThresholdMB: 200, // keep these settings configurable for the user to play for performance.
+                    checkpointThresholdMB: 200, // TODO: keep these settings configurable for the user to play for performance.
                     useDefaultSharedLogId: true,
                     LogManagerLoggerType : System.Fabric.Data.Log.LogManager.LoggerType.Inproc);
 
@@ -77,9 +75,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 await this.reliabilitySimulator.PromoteReplicaAsync(false).ConfigureAwait(false);
                 await this.reliabilitySimulator.PrepareForDataLossAsync().ConfigureAwait(false);
 
-                // Optimization : Hook in only if we have registered any handler.
                 this.Replicator.TransactionChanged += this.OnTransactionChanged;
-                this.Replicator.StateManager.StateManagerChanged += this.OnStateManagerChanged;
+                this.Replicator.StateManager.StateManagerChanged += this.transactionChangeManager.OnStateManagerChanged;
+                this.stateManager.ReAddStateSerializers();
 
                 await this.reliabilitySimulator.OnDataLossAsync(cancellationToken).ConfigureAwait(false);
             });
@@ -107,63 +105,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             await this.Replicator.BackupAsync(backupCallback, backupOption, timeout, cancellationToken);
         }
 
-        /// <summary>
-        /// Listens for StateManager change events to hook into ReliableStates for any change events.
-        /// These change events are then collected to add to show when the Transaction is committed.
-        /// </summary>
-        /// <param name="sender">Sender of event.</param>
-        /// <param name="e">StateManager change event arguments.</param>
-        private void OnStateManagerChanged(object sender, NotifyStateManagerChangedEventArgs e)
-        {
-            var operation = e as NotifyStateManagerSingleEntityChangedEventArgs;
-            if (null == operation)
-            {
-                return;
-            }
-
-            if (operation.Action == NotifyStateManagerChangedAction.Add)
-            {
-                var reliableStateType = operation.ReliableState.GetType();
-                bool isReliableDict = GenericUtils.IsSubClassOfGeneric(reliableStateType, typeof(IReliableDictionary<,>));
-
-                if (isReliableDict) // move to switch
-                {
-                    var keyType = reliableStateType.GetGenericArguments()[0];
-                    var valueType = reliableStateType.GetGenericArguments()[1];
-
-                    // use reflection to call my own method because key/value types are known at runtime.
-                    this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
-                        .MakeGenericMethod(keyType, valueType)
-                        .Invoke(this, new object[] { operation.ReliableState });
-                }
-            }
-        }
-
-        private void AddDictionaryChangedHandler<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
-            where TKey : IComparable<TKey>, IEquatable<TKey>
-        {
-            dictionary.DictionaryChanged += this.OnDictionaryChanged;
-        }
-
-        private void OnDictionaryChanged<TKey, TValue>(object sender, NotifyDictionaryChangedEventArgs<TKey, TValue> e)
-        {
-            var keyAddArgs = e as NotifyDictionaryItemAddedEventArgs<TKey, TValue>;
-            var reliableState = sender as IReliableState;
-
-            if (null == keyAddArgs || null == reliableState)
-            {
-                // log here.
-                return;
-            }
-
-            this.transactionChangeManager.CollectChanges(reliableState.Name, e);
-        }
-
         private void OnTransactionChanged(object sender, NotifyTransactionChangedEventArgs e)
         {
             if (e.Action == NotifyTransactionChangedAction.Commit)
             {
-                // If this is first transaction we have seen, open Replica for reads 
+                // If this is first transaction we have seen, open Replica for reads
                 // before notifying about committed transactions.
                 if (!this.seenFirstTransaction)
                 {
@@ -171,7 +117,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                     this.seenFirstTransaction = true;
                 }
 
-                // todo : Can we have multiple transactions coming here in multi threaded environment ?
                 this.OnTransactionCommitted(sender, e);
                 this.transactionChangeManager.TransactionCompleted();
             }
@@ -237,7 +182,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private TransactionalReplicator Replicator
         {
             get { return this.reliabilitySimulator.GetTransactionalReplicator(); }
-            set { throw new InvalidOperationException("BackupParserImpl.Replicator can't be changed from outside."); }
+            set { throw new InvalidOperationException("BackupParserImpl.Replicator can't be set from outside of ReliabilitySimulator."); }
         }
 
         private string backupChainPath;

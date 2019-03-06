@@ -4,17 +4,12 @@
 // ------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using ServiceFabric.Extensions.Services.Queryable;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
@@ -40,6 +35,12 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+
+            var appBasePath = this.Configuration.GetValue<string>("AppBasePath");
+            if (!String.IsNullOrWhiteSpace(appBasePath))
+            {
+                app.UsePathBase(appBasePath);
             }
 
             app.UseODataQueryable(true /* isStandaloneReplica */);

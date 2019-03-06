@@ -14,6 +14,9 @@ param
     [switch]$generateNupkg
 );
 
+# Include comman commands.
+. "./common.ps1"
+
 if ($showVersion) {
     Write-Host "Version of all tools:"
     dotnet --info
@@ -24,13 +27,20 @@ if ($showVersion) {
 if ($build) {
     # build all projects
     Write-Host "Building code and tests:"
-    dotnet build --packages .\packages service-fabric-backup-explorer.sln
+    Exec { dotnet build --packages .\packages service-fabric-backup-explorer.sln }
 
     # publish for nupkg generation
-    dotnet publish --no-build
+    pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser\
+    Exec { dotnet publish --no-build --framework netstandard2.0 -c "x64\Debug" }
+    Exec { dotnet publish --no-build --framework net461 -c "x64\Debug" }
+    popd
+
+    pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
+    Exec { dotnet publish }
+    popd
 
     # Rest Server: copy our dlls in publish folder
-    xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\
+    Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
 }
 
 if ($generateNupkg) {
@@ -38,8 +48,10 @@ if ($generateNupkg) {
 
     pushd nuprojs
     # nuget restore
-    nuget.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages
+    Exec { nuget.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages }
     # generate nupkg
-    msbuild Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=$PSScriptRoot\bin\nupkg
+    Exec { msbuild Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=$PSScriptRoot\bin\nupkg }
     popd
 }
+
+Write-Host "Done."

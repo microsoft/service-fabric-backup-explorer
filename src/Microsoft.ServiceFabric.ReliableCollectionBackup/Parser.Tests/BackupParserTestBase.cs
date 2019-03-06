@@ -110,7 +110,13 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // Clean up.
             await reliabilitySimulator.DropReplicaAsync();
 
+            NumOperationsPerTransaction = batchSize;
             TotalDictionaryInserts = batchCount * batchSize;
+            TotalDictionaryTransactions = batchCount;
+            TotalQueueTransactions = batchCount;
+            TotoalConcurrentQueueTransactions = batchCount;
+            // + 1 for backup
+            TotalTransactions = TotalDictionaryTransactions + TotalQueueTransactions + TotoalConcurrentQueueTransactions + 1;
         }
 
         internal static Task<bool> BackupCallbackAsync(Data.BackupInfo backupInfo, CancellationToken cancellationToken)
@@ -137,5 +143,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         protected static string ClassTestPath { get; set; }
         protected static string BackupFolderPath { get; set; }
         protected static int TotalDictionaryInserts { get; set; }
+        protected static int NumOperationsPerTransaction { get; set; }
+        protected static int TotalDictionaryTransactions { get; set;  }
+        protected static int TotalQueueTransactions { get; set; }
+        protected static int TotoalConcurrentQueueTransactions { get; set; }
+        protected static int TotalTransactions { get; set; }
     }
 }

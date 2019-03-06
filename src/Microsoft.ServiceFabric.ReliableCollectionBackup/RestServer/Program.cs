@@ -4,17 +4,9 @@
 // ------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Fabric;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.ServiceFabric.Data;
-using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 {
@@ -28,42 +20,36 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                 Environment.Exit(1);
             }
 
+            if (args.Length > 2 && args[2].ToLower() == "-d")
+            {
+                Debugger.Launch();
+            }
+
             var process = Process.GetCurrentProcess();
             Console.WriteLine("Process Name/Id of RestServer : {0}/{1}", process.ProcessName, process.Id);
 
-            Task.Run(async () => {
-                var webHostBuilder = await CreateWebHostBuilder(args);
-                webHostBuilder.Build().Run();
-            }).Wait();
+            var configPath = args[1];
+            var configuration = new ConfigParser(configPath).GetConfigration();
+
+            var replicaTasks = new List<Task>();
+            foreach (var backupInfo in configuration.GetBackupChainInfos())
+            {
+                replicaTasks.Add(StartBackupReplica(backupInfo));
+            }
+
+            Task.WaitAll(replicaTasks.ToArray());
         }
 
-        public static async Task<IWebHostBuilder> CreateWebHostBuilder(string[] args)
+        static async Task StartBackupReplica(BackupChainInfo backupInfo)
         {
-            var backupParser = await BringupBackupParser(args.Take(2).ToArray());
-
-            return WebHost.CreateDefaultBuilder(args.Skip(2).ToArray())
-                .ConfigureServices(
-                    services => services
-                                .AddSingleton<StatefulServiceContext>(backupParser.GetStatefulServiceContext())
-                                .AddSingleton<IReliableStateManager>(backupParser.StateManager)
-                                .AddSingleton<BackupParser>(backupParser))
-                .UseStartup<Startup>();
+            var webHost = new BackupWebHost(backupInfo);
+            await webHost.Run();
         }
 
         static void PrintUsage()
         {
-            Console.WriteLine("Start the server with 2 arguments: ");
-            Console.WriteLine("1. Location of backup folder");
-            Console.WriteLine("2. Location of code packages");
-        }
-
-        static async Task<BackupParser> BringupBackupParser(string[] args)
-        {
-            var backupDirectory = args[0];
-            var codeDirectory = args[1];
-            var backupParser = new BackupParser(backupDirectory, codeDirectory);
-            await backupParser.ParseAsync(CancellationToken.None);
-            return backupParser;
+            Console.WriteLine("Usage:");
+            Console.WriteLine("Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer --config <path-to-config-file>");
         }
     }
 }

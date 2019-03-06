@@ -4,6 +4,7 @@
 // ------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         public StateManager(ReliabilitySimulator reliabilitySimulator)
         {
             this.reliabilitySimulator = reliabilitySimulator;
+            this.stateSerializers = new Dictionary<Type, object>();
         }
 
         public ITransaction CreateTransaction()
@@ -180,7 +182,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         public bool TryAddStateSerializer<T>(IStateSerializer<T> stateSerializer)
         {
-            return this.replicator.TryAddStateSerializer<T>(stateSerializer);
+            this.stateSerializers.Add(typeof(T), stateSerializer);
+            return this.AddStateSerializer<T>(stateSerializer);
         }
 
         public event EventHandler<NotifyTransactionChangedEventArgs> TransactionChanged
@@ -195,6 +198,22 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             remove { this.replicator.StateManagerChanged -= value; }
         }
 
+        internal void ReAddStateSerializers()
+        {
+            foreach (var serializer in stateSerializers)
+            {
+                this.GetType()
+                    .GetMethod("AddStateSerializer", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .MakeGenericMethod(serializer.Key)
+                    .Invoke(this, new object[] { serializer.Value });
+            }
+        }
+
+        private bool AddStateSerializer<T>(IStateSerializer<T> stateSerializer)
+        {
+            return this.replicator.TryAddStateSerializer<T>(stateSerializer);
+        }
+
         private TransactionalReplicator replicator
         {
             get { return this.reliabilitySimulator.GetTransactionalReplicator(); }
@@ -203,5 +222,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private ReliabilitySimulator reliabilitySimulator;
         private readonly StateManagerTypeCache _typeCache = new StateManagerTypeCache();
         private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(4);
+        private Dictionary<Type, Object> stateSerializers;
     }
 }

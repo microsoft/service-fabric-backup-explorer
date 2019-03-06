@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  title: Service Fabric Reliable Collection Backup Explorer OpenApi
+  description: OpenApi spec of [service-fabric-backup-explorer](http://github.com/Microsoft/service-fabric-backup-explorer).
+  version: 0.0.5
+
+servers:
+  - url: http://localhost:5000
+    description: Local development running server.
+
+paths:
+  /$query/$metadata:
+    get:
+      summary: Returns metadata of Reliable Collections.
+      description: Returns schema of all reliable collections present in the backup.
+      responses:
+        '200':
+          description: A JSON array of user names
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  type: string
+  /$query/{dictionaryName}:
+    get:
+      summary: Returns metadata of Reliable Collections.
+      description: Returns schema of all reliable collections present in the backup.
+      parameters:
+        - name: dictionaryName
+          in: path
+          required: true
+          description: Parameter description in CommonMark or HTML.
+          schema:
+            type : string
+            maximum: 1
+      responses:
+        '200':
+          description: A JSON object of all key values in dictionary
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  type: string

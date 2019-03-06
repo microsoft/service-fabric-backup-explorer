@@ -30,5 +30,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Parser\Parser.csproj" />
+    <ProjectReference Include="UserType\UserType.csproj" />
   </ItemGroup>
 </Project>
