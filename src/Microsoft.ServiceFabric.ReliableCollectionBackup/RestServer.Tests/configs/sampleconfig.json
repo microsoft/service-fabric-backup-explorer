@@ -1,0 +1,14 @@
+{
+    "BackupChainInfos" : [
+        {
+            "AppName" : "MyAppName",
+            "ServiceName" : "MyServiceName",
+            "BackupChainPath" : "../../../../Parser.Tests/UserFullBackup/",
+            "CodePackagePath" : "../../../../Parser.Tests/UserType/bin/",
+            "Serializers" : [ {
+                "StateFullyQualifiedTypeName": "Microsoft.ServiceFabric.ReliableCollectionBackup.UserType.User, Microsoft.ServiceFabric.ReliableCollectionBackup.UserType, Version=1.0.0.0, Culture=neutral, PublicKeyToken=365143bb27e7ac8b",
+                "SerializerFullyQualifiedTypeName": "Microsoft.ServiceFabric.ReliableCollectionBackup.UserType.UserSerializer, Microsoft.ServiceFabric.ReliableCollectionBackup.UserType, Version=1.0.0.0, Culture=neutral, PublicKeyToken=365143bb27e7ac8b"
+              } ]
+        }
+    ]
+}
