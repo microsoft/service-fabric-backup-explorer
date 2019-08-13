@@ -52,25 +52,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         }
 
         /// <summary>
-        /// Try to give <paramref name="count" /> number of transactions.
-        /// If less than <paramref name="count"/> number of transactions are currently collected,
-        /// then return only that many.
+        /// Try to give all transactions.
         /// </summary>
-        /// <param name="count">Number of transactions to give.</param>
-        /// <returns>Returns list of <paramref name="count"/> or less number of transactions</returns>
-        public List<NotifyTransactionAppliedEventArgs> TryGetTransactions(int count)
+        /// <returns>Returns list of transactions</returns>
+        public List<NotifyTransactionAppliedEventArgs> TryGetTransactions()
         {
             lock(queueLock)
             {
-                var toTake = Math.Min(transactionsQueue.Count, count);
-                var transactions = new List<NotifyTransactionAppliedEventArgs>();
-
-                for (int i = 0; i < toTake; ++i)
-                {
-                    transactions.Add(transactionsQueue.Take());
-                }
-
-                return transactions;
+                return transactionsQueue.AsEnumerable<NotifyTransactionAppliedEventArgs>().ToList<NotifyTransactionAppliedEventArgs>();
             }
         }
 

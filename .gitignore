@@ -35,3 +35,9 @@ packages
 
 # Ignore test logs
 *test*.log
+
+#pyc files for bkpctl 
+*pyc
+
+$egg file generated out of pip packages
+*egg*

@@ -40,6 +40,6 @@
     <Compile Include="StateManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.4.187-beta" />
+    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.5.659-beta" />
   </ItemGroup>
 </Project>

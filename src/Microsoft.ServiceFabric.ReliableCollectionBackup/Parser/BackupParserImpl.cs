@@ -35,10 +35,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             Console.WriteLine("Work Folder : {0}", this.workFolder);
 
             Directory.CreateDirectory(this.workFolder);
-
             this.reliabilitySimulator = new ReliabilitySimulator(
                 this.workFolder,
                 new Uri("fabric:/rcbackupapp/rcbackupservice"),
+                DateTime.UtcNow.ToFileTimeUtc(),
+                DateTime.UtcNow.ToFileTimeUtc(),
                 this.OnDataLossCallback,
                 this.CreateStateProvider);
             this.reliabilitySimulator.CreateReplica(true, false);
