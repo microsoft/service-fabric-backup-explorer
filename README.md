@@ -36,7 +36,7 @@ The Service Fabric Backup Explorer can be consumed in any of the following ways 
 2. HTTP/Rest   -    HTTP based  Rest hosting to view and alter the reliable collections.
 3. bkpctl -         Service fabric backup controller CLI (command line interface) to view and alter the reliable collections. 
 
-# Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj 
+# Microsoft.ServiceFabric.ReliableCollectionBackup.Parser 
 The binary dll created to be consumed in application to view, enumerate and alter the reliable collection.
 Details [ Binary Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj ](docs/Microsoft.ServiceFabric.ReliableCollectionBackup.Parser)
 
@@ -44,7 +44,7 @@ Details [ Binary Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj 
 The OWIN based rest API to view, enumerate and alter the state of reliable collection.
 Details [ HTTP Rest ](docs/rest)
 
-# bkpctl(docs/bkpctl)
+# bkpctl
 The cli based interface to view, enumerate and alter the state of reliable collection.
 Details [ bkpctl ](docs/bkpctl)
 
