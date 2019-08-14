@@ -1,28 +1,28 @@
 openapi: 3.0.0
 info:
   title: Service Fabric Reliable Collection Backup Explorer OpenApi
-  description: OpenApi spec of [service-fabric-backup-explorer](http://github.com/Microsoft/service-fabric-backup-explorer).
+  description: >-
+    OpenApi spec of
+    [service-fabric-backup-explorer](http://github.com/Microsoft/service-fabric-backup-explorer).
   version: 0.0.5
-
 servers:
-  - url: http://localhost:5000
+  - url: 'http://localhost:5000'
     description: Local development running server.
-
 paths:
-  /$query/$metadata:
+  '/$query/$metadata':
     get:
       summary: Returns metadata of Reliable Collections.
       description: Returns schema of all reliable collections present in the backup.
       responses:
         '200':
-          description: A JSON array of user names
+          description: Details of reliable collection
           content:
             application/xml:
               schema:
                 type: array
                 items:
                   type: string
-  /$query/{dictionaryName}:
+  '/$query/{dictionaryName}':
     get:
       summary: Returns metadata of Reliable Collections.
       description: Returns schema of all reliable collections present in the backup.
@@ -32,7 +32,7 @@ paths:
           required: true
           description: Parameter description in CommonMark or HTML.
           schema:
-            type : string
+            type: string
             maximum: 1
       responses:
         '200':
@@ -40,6 +40,143 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  type: string
+                type: string
+  '/api/transactions':
+    get:
+      summary: Returns all the transactional changes .
+      description: Returns schema of all reliable collections present in the backup.
+      responses:
+        '200':
+          description: A JSON object of all Transaction Details
+          content:
+            application/json:
+              schema:
+                type: string
+  '/$query':
+    post:
+      summary: 'Make changes by adding, updating and deleting values in reliable collection'
+      description: 'Addition of transaction to add, update and delete values in reliable collection'
+      requestBody:
+        description: Update the reliable collection items
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTransactionRequest'
+      responses:
+        '200':
+          description: A JSON object of all Transaction Details
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                   $ref: "#/components/schemas/AddTransactionResponse"
+  '/api/backup/full':
+    post:
+      summary: 'Triggers a full backup of the current state of reliable collection'
+      description: 'Create a full backup of the current state of reliable collection after making necessary updates'
+      requestBody:
+        description: Details to trigger the full Backup
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BackupRequest'
+      responses:
+        '200':
+          description: A JSON object of status of full backup 
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                   $ref: "#/components/schemas/BackupResponse"
+                   
+  '/api/backup/incremental':
+    post:
+      summary: 'Triggers a incremental backup of the current state of reliable collection'
+      description: 'Create a incremental backup of the current state of reliable collection after making necessary updates'
+      requestBody:
+        description: Details to trigger the incremental Backup
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BackupRequest'
+      responses:
+        '200':
+          description: A JSON object of status of full backup
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                   $ref: "#/components/schemas/BackupResponse"
+                   
+components:
+  schemas:
+    AddTransactionRequest:
+      type: "object"
+      properties:
+        Operation:
+          type: "string"
+          description: "Operation of the perfomred transaction"
+        Collection:
+          type: "string"
+          description: "Changed dictionary name"
+        PartitionId:
+          type: "string"
+          description: "Partition id "
+        Key:
+          type: "object"
+          description: "Key of the dictionary"
+        Value:
+          type: "object"
+          description: "value of the update"
+        Etag:
+          type: "string"
+          description: "Details of the request"
+    AddTransactionResponse:
+      type: "object"
+      properties:
+        Collection:
+          type: "string"
+          description: "Changed dictionary name"
+        Operation:
+          type: "string"
+          enum: ["Add", "Update", "Delete"]
+        PartitionId:
+          type: "string"
+          description: "Partition id "
+        Key:
+          type: "object"
+          description: "Key of the dictionary"
+        Status:
+          type: "string"
+          description: "200 for successfull update"
+        Description:
+          type: "string"
+          description: "Details of the request"
+    BackupRequest:
+      type: "object"
+      properties:
+        BackupLocation:
+          type: "string"
+          description: "Path of the location to save backup"
+        TimeoutInSecs:
+          type: "integer"
+          description: "Timeout for backup in seconds"
+        CancellationTokenInSecs:
+          type: "integer"
+          description: "Setting of cancellation token in secs for taking backup"
+    BackupResponse:
+      type: "object"
+      properties:
+        Status:
+          type: "string"
+          description: "State the status of the backup request"
+        BackupPath:
+          type: "string"
+          description: "Path where backup is created"
+          

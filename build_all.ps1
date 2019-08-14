@@ -11,20 +11,30 @@ param
     [switch]$build,
 
     # generate nupkg
-    [switch]$generateNupkg
+    [switch]$generateNupkg,
+
+    # generate nupkg
+    [switch]$buildAll,
+    
+    # generate nupkg
+    [switch]$buildCli
 );
 
 # Include comman commands.
 . "./common.ps1"
 
+$DisplayHelp = $true;
+
 if ($showVersion) {
+    $DisplayHelp = $false;
     Write-Host "Version of all tools:"
     dotnet --info
     msbuild /version
     nuget
 }
 
-if ($build) {
+if ($build -Or $buildAll) {
+    $DisplayHelp = $false;
     # build all projects
     Write-Host "Building code and tests:"
     Exec { dotnet build --packages .\packages service-fabric-backup-explorer.sln }
@@ -36,14 +46,15 @@ if ($build) {
     popd
 
     pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
-    Exec { dotnet publish }
+    Exec { dotnet publish --output=$PSScriptRoot\bin\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
     popd
 
     # Rest Server: copy our dlls in publish folder
-    Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
+    Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
 }
 
-if ($generateNupkg) {
+if ($generateNupkg -Or $buildAll) {
+    $DisplayHelp = $false;
     Write-Host "Generating nupkg:"
 
     pushd nuprojs
@@ -54,4 +65,20 @@ if ($generateNupkg) {
     popd
 }
 
-Write-Host "Done."
+if ($buildCli -Or $buildAll) {
+    $DisplayHelp = $false;
+    Write-Host "Building Service Fabric Backup Explorer CLI bkpctl:"
+
+    pushd src 
+    #  Build bkpctl package
+    Exec { pip install -e backup-explorer-cli }
+    popd
+}
+
+if ($DisplayHelp) {
+    Write-Host "Following options are available :"
+    Write-Host "1. -build Builds the Code"
+    Write-Host "2. -buildAll Builds the Code and generate Nuget package"
+    Write-Host "3. -generateNupkg Generate the nuget package"
+    Write-Host "4. -showVersion Displays versions of all tools"
+}
