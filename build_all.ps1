@@ -41,12 +41,12 @@ if ($build -Or $buildAll) {
 
     # publish for nupkg generation
     pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser\
-    Exec { dotnet publish --no-build --framework netstandard2.0 -c "x64\Debug" }
-    Exec { dotnet publish --no-build --framework net461 -c "x64\Debug" }
+    Exec { dotnet publish --no-build --framework netstandard2.0 -c "Debug" }
+    Exec { dotnet publish --no-build --framework net461 -c "Debug" }
     popd
 
     pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
-    Exec { dotnet publish --output=$PSScriptRoot\bin\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
+    Exec { dotnet publish --no-build -c "Debug" }
     popd
 
     # Rest Server: copy our dlls in publish folder
@@ -61,7 +61,7 @@ if ($generateNupkg -Or $buildAll) {
     # nuget restore
     Exec { nuget.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages }
     # generate nupkg
-    Exec { msbuild Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=$PSScriptRoot\bin\nupkg }
+    Exec { msbuild Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=..\bin\nupkg }
     popd
 }
 

@@ -22,7 +22,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
         [HttpGet("/api/transactions", Name = "GetAllTransaction")]
         public IActionResult GetAllTransactions()
         {
-            var transactions = this.backupParserManager.TryGetTransactions();
+            var transactions = this.backupParserManager.GetTransactions();
             JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings();
             jsonSerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             JsonResult response =  new JsonResult(transactions, jsonSerializerSettings);

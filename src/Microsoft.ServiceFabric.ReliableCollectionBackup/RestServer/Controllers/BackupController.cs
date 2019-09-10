@@ -52,9 +52,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
                 return new JsonResult(new Dictionary<string, string>()
                 {
                     { "status", "inprogress" },
-                    { "reason", "Backup parsing is still going on. " +
-                                "Either consume all transactions via transaction api /api/transactions/next?count=N OR" +
-                                "don't block on transactions by adding '<TBD>' flag in config file." }
+                    { "reason", "Backup parsing is still going on. " }
                 });
             }
 

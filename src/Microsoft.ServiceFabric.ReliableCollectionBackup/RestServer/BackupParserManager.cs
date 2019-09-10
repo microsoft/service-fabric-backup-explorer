@@ -24,13 +24,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             this.BackupParser = backupParser;
             // todo : take NumMaxTransactionsInMemory from config.
             this.transactionsQueue = new BlockingCollection<NotifyTransactionAppliedEventArgs>(NumMaxTransactionsInMemory);
-            // todo : take boolean flag to block on transactions or not.
             this.BackupParser.TransactionApplied += (sender, args) =>
             {
                 if (transactionsQueue.Count < NumMaxTransactionsInMemory)
                 {
                     transactionsQueue.Add(args);
-                    // Leaving below statement for ignite demo
                     Console.WriteLine("{0} : TransactionId {1} , CommitSequenceNumber {2}, Changes {3}", transactionsQueue.Count, args.TransactionId, args.CommitSequenceNumber, args.Changes.Count());
                 }
             };
@@ -55,7 +53,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         /// Try to give all transactions.
         /// </summary>
         /// <returns>Returns list of transactions</returns>
-        public List<NotifyTransactionAppliedEventArgs> TryGetTransactions()
+        public List<NotifyTransactionAppliedEventArgs> GetTransactions()
         {
             lock(queueLock)
             {
@@ -63,14 +61,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
             }
         }
 
-        /// <summary>
-        /// Checks if it has any unconsumed transactions.
-        /// </summary>
-        /// <returns>True if we have more transactions otherwise false.</returns>
-        public bool HasNextTransaction()
-        {
-            return this.transactionsQueue.Count > 0;
-        }
+        ///// <summary>
+        ///// Checks if it has any unconsumed transactions.
+        ///// </summary>
+        ///// <returns>True if we have more transactions otherwise false.</returns>
+        //public bool HasNextTransaction()
+        //{
+        //    return this.transactionsQueue.Count > 0;
+        //}
 
         /// <summary>
         /// Checks if parsing operation has finished.
@@ -97,6 +95,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         // lock is used for taking N items from transactionsQueue atomically across concurrent requests.
         private static Object queueLock = new Object();
         private const int NumMaxTransactionsInMemory = 1000000;
-        bool blockOnQueueFull = false;
+        //bool blockOnQueueFull = false;
     }
 }
