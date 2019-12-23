@@ -15,14 +15,14 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 # Service Fabric Backup Explorer ( Review and update utility for Service Fabric Reliable Collections)
 
-The project empowers the Service Fabric Cluster users to audit and review the transactions performed on reliable collections and edit the current state of reliable collection to consistent view.
-It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the current Service Fabric Cluster which has the same implementation of Reliable Collections .
+The project empowers the Service Fabric Reliable Statefule Application users to audit and review the transactions performed on reliable collections and edit the current state of reliable collection to consistent view.
+It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the current Service Fabric Cluster which has the same implementation of Reliable Collections, and runnning the same implementation/version of the Reliable Stateful Application.
 
-The changes made to current state will be restore along with the other transactions to current running service fabric cluster, hence enabling a consistent view of the collection.
+The changes made to current state will be restored along with the other transactions to current running Service Fabric Cluster, hence enabling a consistent view of the collection.
 
-Service Fabric Backup Explorer helps in data correction in case of data corruption. Current state of the data can be corrupted because of any bug introduced in application or any wrong entries made in the live clusters.
+Service Fabric Backup Explorer helps in data correction in case of data corruption. The current state of data can be corrupted because of any bug introduced in application or any wrong entries made in the live clusters.
 
-With the help of  Backup Explorer following tasks can be performed :
+With the help of Backup Explorer following tasks can be performed :
  
 * Querying of metadata for the collection.  
 * Current state and its entries in the collection of the backup loaded.
@@ -47,7 +47,6 @@ Details [ HTTP Rest ](docs/rest)
 # bkpctl
 The cli based interface to view, enumerate and alter the state of Reliable Collections.
 Details [ bkpctl ](docs/bkpctl)
-
 
 
 # Requirements
