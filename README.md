@@ -59,15 +59,15 @@ Details [ bkpctl ](docs/bkpctl)
 6. Service Fabric Runtime
 
 
-# Build all packages including Tests and Backup Command Line Tool
-From Repository root folder , run in Powershell:
-```
- .\build_all.ps1 -buildAll
-```
-
 # Building RestServer and Parser Code 
 ```
  .\build_all.ps1 -build
+```
+
+# Build all packages including Tests and Backup Command Line Tool
+From Repository root folder , run in Powershell(after adding MSBuild to the Path of Command Line):
+```
+ .\build_all.ps1 -buildAll
 ```
 
 # Generating nupkg
@@ -114,4 +114,6 @@ From Repository root folder , run in Powershell:
 ```
  .\build_all.ps1 -buildCli
 ```
+In order to use bkpctl, the REST Server must be up and running, so that CLI can fetch the required backup, and present it on the command line . 
+
 
