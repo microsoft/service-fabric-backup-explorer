@@ -13,16 +13,16 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-# Service Fabric Backup Explorer ( Review and update utility for Service Fabric Reliable Collection)
+# Service Fabric Backup Explorer ( Review and update utility for Service Fabric Reliable Collections)
 
-The project empowers the user of Service Fabric Cluster users to audit and review the transactions performed on reliable collection and edit the current state of reliable collection to consistent view.
-It also create the backup of the current snapshot of the reliable collections which can be loaded in any of the current Service Fabric Cluster.
+The project empowers the Service Fabric Cluster users to audit and review the transactions performed on reliable collections and edit the current state of reliable collection to consistent view.
+It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the current Service Fabric Cluster which has the same implementation of Reliable Collections .
 
 The changes made to current state will be restore along with the other transactions to current running service fabric cluster, hence enabling a consistent view of the collection.
 
-Backup Explorer helps in data correction in case of data corruption. Any of the current state of data can be corrupted because of any bug introduced in application or any wrong entries made in the live clusters.
+Service Fabric Backup Explorer helps in data correction in case of data corruption. Current state of the data can be corrupted because of any bug introduced in application or any wrong entries made in the live clusters.
 
-With the Backup Explorer following task can be performed :
+With the help of  Backup Explorer following tasks can be performed :
  
 * Querying of metadata for the collection.  
 * Current state and its entries in the collection of the backup loaded.
@@ -45,7 +45,7 @@ The OWIN based rest API to view, enumerate and alter the state of reliable colle
 Details [ HTTP Rest ](docs/rest)
 
 # bkpctl
-The cli based interface to view, enumerate and alter the state of reliable collection.
+The cli based interface to view, enumerate and alter the state of Reliable Collections.
 Details [ bkpctl ](docs/bkpctl)
 
 
@@ -55,40 +55,42 @@ Details [ bkpctl ](docs/bkpctl)
 2. msbuild
 3. nuget
 4. python
-5. pip 
-6. service fabric runtime
+5. python-pip
+6. Service Fabric Runtime
 
 
-# Build all packages
+# Build all packages including Tests and Backup Command Line Tool
+From Repository root folder , run in Powershell:
 ```
-powershell .\build_all.ps1 -buildAll
+ .\build_all.ps1 -buildAll
 ```
 
-# Building code
+# Building RestServer and Parser Code 
 ```
-powershell .\build_all.ps1 -build
+ .\build_all.ps1 -build
 ```
 
 # Generating nupkg
-From Visual Studio command prompt which has msbuild defined
+From Visual Studio Command Prompt which has msbuild defined:
 ```
-powershell .\build_all.ps1 -build -generateNupkg
+.\build_all.ps1 -build -generateNupkg
 ```
 
 # Running Rest Server
+From the Repository root folder, perform the following steps :
 ```
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
 dotnet build
-xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll bin\Debug\net471\
+xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll bin\Debug\net471\
 dotnet run --no-build --config configs\sampleconfig.json
 
-# test rest apis
+# Testing REST API's
 curl -v http://localhost:5000/$query/testDictionary?$top=2
 
 popd
 ```
 
-# Running tests
+# Running Tests
 ```
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests
 dotnet build
@@ -103,12 +105,13 @@ Running RestServer tests:
 ```
 cd service-fabric-backup-explorer\src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer.Tests
 dotnet build && \
-xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll bin\Debug\net471\ && \
+xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll bin\Debug\net471\ && \
 dotnet test --no-build --diag test_results.log --verbosity normal --logger "console;verbosity=detailed"
 ```
 
-# Build and consuming bkpctl
+# Build and Consume bkpctl
+From Repository root folder , run in Powershell:
 ```
-powershell .\build_all.ps1 -buildCli
+ .\build_all.ps1 -buildCli
 ```
 
