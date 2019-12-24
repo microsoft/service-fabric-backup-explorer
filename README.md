@@ -15,10 +15,10 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 # Service Fabric Backup Explorer ( Review and update utility for Service Fabric Reliable Collections)
 
-The project empowers the Service Fabric Reliable Statefule Application users to audit and review the transactions performed on reliable collections and edit the current state of reliable collection to consistent view.
-It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the current Service Fabric Cluster which has the same implementation of Reliable Collections, and runnning the same implementation/version of the Reliable Stateful Application.
+The project empowers the Service Fabric Reliable Stateful application users to audit and review the transactions performed on Reliable Collections and edit the current state of Reliable Collection to a consistent view.
+It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the exisitng Service Fabric cluster which is running the same implementation/version of the Reliable Stateful application.
 
-The changes made to current state will be restored along with the other transactions to current running Service Fabric Cluster, hence enabling a consistent view of the collection.
+The changes made to current state will be restored along with the other transactions to current running Service Fabric cluster, hence enabling a consistent view of the collection.
 
 Service Fabric Backup Explorer helps in data correction in case of data corruption. The current state of data can be corrupted because of any bug introduced in application or any wrong entries made in the live clusters.
 
@@ -62,6 +62,14 @@ Details [ bkpctl ](docs/bkpctl)
 ```
  .\build_all.ps1 -build
 ```
+
+# Build and Consume bkpctl
+From Repository root folder , run in Powershell:
+```
+ .\build_all.ps1 -buildCli
+```
+In order to use bkpctl, the REST Server must be up and running, so that CLI can fetch the required backup, and present it on the command line . 
+
 
 # Build all packages including Tests and Backup Command Line Tool
 From Repository root folder , run in Powershell(after adding MSBuild to the Path of Command Line):
@@ -107,12 +115,3 @@ dotnet build && \
 xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll bin\Debug\net471\ && \
 dotnet test --no-build --diag test_results.log --verbosity normal --logger "console;verbosity=detailed"
 ```
-
-# Build and Consume bkpctl
-From Repository root folder , run in Powershell:
-```
- .\build_all.ps1 -buildCli
-```
-In order to use bkpctl, the REST Server must be up and running, so that CLI can fetch the required backup, and present it on the command line . 
-
-
