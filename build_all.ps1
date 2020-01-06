@@ -22,7 +22,6 @@ param
     [switch]$buildAll,
     
     # Build the bkpctl Cli
-<<<<<<< HEAD
     [switch]$buildCli,
 
     # Path to MSBuild if VS2017 is installed in non-conventional Location
@@ -31,9 +30,6 @@ param
     # Version of VS Installed
     [ValidateSet('2017','2019')]
     [string]$vsversion ="2017"
-=======
-    [switch]$buildCli
->>>>>>> Corrected Build Script
 );
 
 # Include comman commands.
