@@ -49,9 +49,9 @@
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
     <!-- Native windows dll -->
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\runtimes\win\native\FabricCommon.dll" />
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\runtimes\win\native\FabricResources.dll" />
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\runtimes\win\native\KPhysicalLogDll.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\FabricCommon.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\\FabricResources.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\KPhysicalLogDll.dll" />
     <File Include="@(NativeLibraryDependency)">
       <TargetPath>runtimes\win\native</TargetPath>
     </File>
