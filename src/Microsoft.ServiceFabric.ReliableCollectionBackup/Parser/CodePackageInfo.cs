@@ -27,7 +27,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private Assembly CodePackageAssemblyResolveHandler(object sender, ResolveEventArgs args)
         {
             var assemblyName = new AssemblyName(args.Name);
-            var assemblyToLoad = assemblyName.Name + ".dll";
+            var assemblyToLoad = assemblyName.Name + ".exe";
 
             try
             {

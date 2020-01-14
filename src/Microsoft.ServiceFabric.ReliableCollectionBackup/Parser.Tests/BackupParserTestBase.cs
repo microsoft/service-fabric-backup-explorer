@@ -64,6 +64,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             var reliabilitySimulator = new ReliabilitySimulator(
                 logFolder,
                 new Uri("fabric:/unittest/service"),
+                DateTime.UtcNow.ToFileTimeUtc(),
+                DateTime.UtcNow.ToFileTimeUtc(),
                 OnDataLossCallback,
                 CreateStateProvider);
 
