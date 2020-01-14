@@ -27,13 +27,31 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private Assembly CodePackageAssemblyResolveHandler(object sender, ResolveEventArgs args)
         {
             var assemblyName = new AssemblyName(args.Name);
-            var assemblyToLoad = assemblyName.Name + ".exe";
+            var assemblyToLoadDll = assemblyName.Name + ".dll";
 
             try
             {
                 // Looks through all fils in code package path for required assembly.
-                var assemblyPaths = Directory.EnumerateFiles(this.packagePath, assemblyToLoad, SearchOption.AllDirectories);
+                var assemblyPaths = Directory.EnumerateFiles(this.packagePath, assemblyToLoadDll, SearchOption.AllDirectories);
                 
+                // assemblyPaths is a lazy list, so instead of looking at Count which forces the completition of EnumerateFiles
+                // just use enumeration to get first file.
+                foreach (var assemblyPath in assemblyPaths)
+                {
+                    return Assembly.LoadFrom(assemblyPath);
+                }
+            }
+            catch (Exception)
+            {
+                // log here.
+            }
+
+            var assemblyToLoadExe = assemblyName.Name + ".exe";
+            try
+            {
+                // Looks through all fils in code package path for required assembly.
+                var assemblyPaths = Directory.EnumerateFiles(this.packagePath, assemblyToLoadExe, SearchOption.AllDirectories);
+
                 // assemblyPaths is a lazy list, so instead of looking at Count which forces the completition of EnumerateFiles
                 // just use enumeration to get first file.
                 foreach (var assemblyPath in assemblyPaths)
