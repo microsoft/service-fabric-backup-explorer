@@ -39,9 +39,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 
         public static void ClassCleanup()
         {
-            if (FabricDirectory.Exists(ClassTestPath))
+            if (Directory.Exists(ClassTestPath))
             {
-                FabricDirectory.Delete(ClassTestPath, true);
+                Directory.Delete(ClassTestPath, true);
             }
         }
 
@@ -54,16 +54,18 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             const int NumberOfStateProviders = 6;
 
-            if (FabricDirectory.Exists(logFolder))
+            if (Directory.Exists(logFolder))
             {
-                FabricDirectory.Delete(logFolder, true);
+                Directory.Delete(logFolder, true);
             }
 
-            FabricDirectory.CreateDirectory(logFolder);
+            Directory.CreateDirectory(logFolder);
 
             var reliabilitySimulator = new ReliabilitySimulator(
                 logFolder,
                 new Uri("fabric:/unittest/service"),
+                DateTime.UtcNow.ToFileTimeUtc(),
+                DateTime.UtcNow.ToFileTimeUtc(),
                 OnDataLossCallback,
                 CreateStateProvider);
 

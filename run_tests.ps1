@@ -13,6 +13,6 @@ popd
 
 # run rest server tests
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer.Tests
-Exec { xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.4.187-beta\lib\netstandard2.0\*.dll bin\Debug\net471\ }
+Exec { xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll bin\Debug\net471\ }
 Exec { dotnet test --no-build --diag test_results.log --verbosity normal --logger "console;verbosity=detailed" }
 popd

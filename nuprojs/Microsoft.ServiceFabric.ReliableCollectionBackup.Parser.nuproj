@@ -47,14 +47,7 @@
     </File>
     <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\system.fabric.strings.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
-    </File>
-    <!-- Native windows dll -->
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\runtimes\win\native\FabricCommon.dll" />
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\runtimes\win\native\FabricResources.dll" />
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\runtimes\win\native\KPhysicalLogDll.dll" />
-    <File Include="@(NativeLibraryDependency)">
-      <TargetPath>runtimes\win\native</TargetPath>
-    </File>
+    </File>     
   </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
 </Project>
