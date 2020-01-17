@@ -74,12 +74,17 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 
                 var stateType = Type.GetType(stateTypeName, true);
                 var serializerType = Type.GetType(serializerTypeName, true);
-                var serializerObject = Activator.CreateInstance(serializerType);
+                var serializerObject = new object();
+                if (serializerType.Name  != "DataContractSerializer")                
+                {
+                    serializerObject = Activator.CreateInstance(serializerType);
 
-                stateManager.GetType()
+                    stateManager.GetType()
                     .GetMethod("TryAddStateSerializer", BindingFlags.Instance | BindingFlags.Public)
                     .MakeGenericMethod(stateType)
                     .Invoke(stateManager, new object[] { serializerObject });
+                }
+                
             }
 
             var backupParserManager = new BackupParserManager(backupParser);

@@ -36,7 +36,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 
             if (String.IsNullOrWhiteSpace(this.SerializerFullyQualifiedTypeName))
             {
-                throw new InvalidDataException("SerializerFullyQualifiedTypeName can not be null or empty.");
+                // Making Data ContractSerializer the default Serializer for Backups
+                this.SerializerFullyQualifiedTypeName = "System.Runtime.Serialization.DataContractSerializer, System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
             }
         }
     }
