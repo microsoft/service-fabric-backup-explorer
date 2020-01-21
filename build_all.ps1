@@ -57,7 +57,7 @@ if ($MSBuildFullPath -eq "") {
     $versionno=''
     foreach ($version in $versions) {
         if ($vsversion -eq "2019") {
-            $versionno = '16.0'
+            $versionno = '\Current'
         }
         else {
             $versionno = '15.0'

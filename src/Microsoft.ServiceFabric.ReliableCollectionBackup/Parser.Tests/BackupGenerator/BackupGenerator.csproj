@@ -17,6 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UserType\UserType.csproj" />
-    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.4.187-beta" />
+    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.5.659-beta" />
   </ItemGroup>
 </Project>

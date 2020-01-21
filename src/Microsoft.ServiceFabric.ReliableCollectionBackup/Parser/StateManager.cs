@@ -184,7 +184,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         {
             this.stateSerializers.Add(typeof(T), stateSerializer);
             return this.AddStateSerializer<T>(stateSerializer);
-        }
+        }        
 
         public event EventHandler<NotifyTransactionChangedEventArgs> TransactionChanged
         {
