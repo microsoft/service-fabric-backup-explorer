@@ -169,49 +169,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
             }
         }
 
-        [TestMethod]
-        public async Task RestEndpoint_TransactionSimple()
-        {
-            await IgnoreFirstTransaction();
-            var transactionUrl = Url + "/api/transactions/next";
-            var response = await client.GetAsync(transactionUrl);
-            var resContent = await response.Content.ReadAsStringAsync();
-            Assert.IsTrue(response.IsSuccessStatusCode, $"Getting next transtion failed: {response} : content : {resContent}");
-            this.VerifyTransactions(resContent, 1);
-        }
-
-        [TestMethod]
-        public async Task RestEndpoint_TransactionsCount()
-        {
-            var transactionUrl = Url + "/api/transactions/next?count=3";
-            var response = await client.GetAsync(transactionUrl);
-            var resContent = await response.Content.ReadAsStringAsync();
-            Assert.IsTrue(response.IsSuccessStatusCode, $"Getting next transtion failed: {response} : content : {resContent}");
-            this.VerifyTransactions(resContent, 3);
-        }
-
-        [TestMethod]
-        public async Task RestEndpoint_TransactionsInLoop()
-        {
-            for (int i = 0; i < 4; ++i)
-            {
-                var transactionUrl = Url + "/api/transactions/next";
-                var response = await client.GetAsync(transactionUrl);
-                var resContent = await response.Content.ReadAsStringAsync();
-                Assert.IsTrue(response.IsSuccessStatusCode, $"Getting next transtion failed: {response} : content : {resContent}");
-                this.VerifyTransactions(resContent, 1);
-            }
-        }
-
-        // Ignore first transaction as it is not user transaction.
-        async Task IgnoreFirstTransaction()
-        {
-            var transactionUrl = Url + "/api/transactions/next";
-            var response = await client.GetAsync(transactionUrl);
-            var resContent = await response.Content.ReadAsStringAsync();
-            Assert.IsTrue(response.IsSuccessStatusCode, "Getting next transtion failed");
-        }
-
         void VerifyTransactions(string jsonContent, int expectedChanges)
         {
             var config = JObject.Parse(jsonContent);
