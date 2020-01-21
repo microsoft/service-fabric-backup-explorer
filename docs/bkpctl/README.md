@@ -189,11 +189,11 @@ bkpctl get transactions
 
 Update the values of the current reliable collection with operation perfomed in requests.
 
-## Command 
+#### Command 
 ```console
 bkpctl update collection --collectiontype Dictionary --operation Add --collection myDictionary --partitionId ed70fb1c-6972-452a-b183-6114b336e9a1 --key 32 --value 64
 ```
-### Output
+#### Output
 
 
 ```json
@@ -211,13 +211,13 @@ bkpctl update collection --collectiontype Dictionary --operation Add --collectio
 
 Updates the reliable collection with addition of the new value
 
-### Update existing value
+### Update Existing Value in a Collection
 
-## Command 
+#### Command 
 ```console
 bkpctl update collection --collectiontype Dictionary --operation Update --collection myDictionary --partitionId ed70fb1c-6972-452a-b183-6114b336e9a1 --key 32 --value 96 --etag 5597826295554902436
 ```
-### Output
+#### Output
 
 ```json
 [
@@ -235,12 +235,12 @@ bkpctl update collection --collectiontype Dictionary --operation Update --collec
 Updates the reliable collection with update of the value
 
 
-## Examples - Delete value
-## Command 
+### Examples - Delete value
+#### Command 
 ```console
 bkpctl update collection --collectiontype Dictionary --operation Delete --collection myDictionary --partitionId 5131d35d-2623-4d0b-bc11-ad65f365f801  --key 32 --value 96 --etag 3579969540437049356
 ```
-### Output
+#### Output
 
 ```json
 [
@@ -258,17 +258,17 @@ bkpctl update collection --collectiontype Dictionary --operation Delete --collec
 Updates the reliable collection with deletion value.
 
 
-# Backup the current state
+### Backup the current state
 
 Update the values of the current reliable collection with operation perfomed in requests.
 
-## Examples - Take full backup
+### Examples - Take full backup
 
-## Command 
+#### Command 
 ```console
 bkpctl backup partition --type Full --path E:\Newbackup
 ```
-### Output
+##### Output
 
 ```json
 {
@@ -277,15 +277,12 @@ bkpctl backup partition --type Full --path E:\Newbackup
 }
 ```
 
-Full Backup is taken successfully.
-
-
-## Examples - Take incremental backup
-## Command 
+### Examples - Take incremental backup
+#### Command 
 ```console
 bkpctl backup partition --type Full --path E:\Newbackup
 ```
-### Output
+#### Output
 
 
 ```json
@@ -295,7 +292,6 @@ bkpctl backup partition --type Full --path E:\Newbackup
 }
 ```
 
-Incremental Backup is taken successfully.
 
 
 

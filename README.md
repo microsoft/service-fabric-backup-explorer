@@ -13,7 +13,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-# Service Fabric Backup Explorer ( Review and update utility for Service Fabric Reliable Collections)
+# Service Fabric Backup Explorer ( Review and Update Utility for Service Fabric Reliable Collections)
 
 The project empowers the Service Fabric Reliable Stateful application users to audit and review the transactions performed on Reliable Collections and edit the current state of Reliable Collection to a consistent view.
 It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the exisitng Service Fabric cluster which is running the same implementation/version of the Reliable Stateful application.
@@ -72,12 +72,13 @@ In order to use bkpctl, the REST Server must be up and running, so that CLI can 
 
 
 # Build all packages including Tests and Backup Command Line Tool
-From Repository root folder , run in Powershell(after adding MSBuild to the Path of Command Line):
+From Repository root folder , run in Powershell:
 ```
  .\build_all.ps1 -buildAll
 ```
+User can choose to specify the path of MSBuild or the Visual Studio Version installed in the system. Default Version for VS is 2017.
 
-# Generating nupkg
+# Generating Nuget Packages
 From Visual Studio Command Prompt which has msbuild defined:
 ```
 .\build_all.ps1 -build -generateNupkg
@@ -112,6 +113,6 @@ Running RestServer tests:
 ```
 cd service-fabric-backup-explorer\src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer.Tests
 dotnet build && \
-xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll bin\Debug\net471\ && \
+xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll bin\Debug\net471\
 dotnet test --no-build --diag test_results.log --verbosity normal --logger "console;verbosity=detailed"
 ```
