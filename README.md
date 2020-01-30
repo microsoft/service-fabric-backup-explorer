@@ -5,7 +5,9 @@ author: ashishnegi, saketharsh, aagup
 ---
 
 
-## Service Fabric Backup Explorer ( Review and Update Utility for Service Fabric Reliable Collections)
+## Service Fabric Backup Explorer 
+
+#### Review and Update Utility for Service Fabric Reliable Collections
 
 The project empowers the Service Fabric Reliable Stateful application users to audit and review the transactions performed on Reliable Collections and edit the current state of Reliable Collection to a consistent view.
 It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the exisitng Service Fabric cluster which is running the same implementation/version of the Reliable Stateful application.
