@@ -19,7 +19,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
             this.backupParserManager = backupParserManager;
         }
 
-        [HttpGet("/api/transactions", Name = "GetAllTransaction")]
+        [HttpGet("/transactions", Name = "GetAllTransaction")]
         public IActionResult GetAllTransactions()
         {
             var transactions = this.backupParserManager.GetTransactions();
