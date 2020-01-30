@@ -28,7 +28,12 @@ setuptools.setup(
     install_requires=[
         'knack==0.1.1',
         'xmljson',
-        'jsbeautifier'
+        'jsbeautifier',
+        'urllib3',
+        'certifi',
+        'requests',
+        'xmltodict',
+        'pandas'
     ],
     extras_require={
         'test': [
