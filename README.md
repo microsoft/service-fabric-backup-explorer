@@ -1,13 +1,13 @@
 ---
 services: service-fabric
 platforms: .NET, windows
-author: ashishnegi, saketharsh, aagup
+owner: saketharsh, raunakpandya
 ---
 
 
-## Service Fabric Backup Explorer 
+# Service Fabric Backup Explorer 
 
-#### Review and Update Utility for Service Fabric Reliable Collections
+### Review and Update Utility for Service Fabric Reliable Collections
 
 The project empowers the Service Fabric Reliable Stateful application users to audit and review the transactions performed on Reliable Collections and edit the current state of Reliable Collection to a consistent view.
 It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the exisitng Service Fabric cluster which is running the same implementation/version of the Reliable Stateful application.
@@ -34,25 +34,25 @@ The Service Fabric Backup Explorer can be consumed in any of the following ways 
 The binary dll created to be consumed in application to view, enumerate and alter the reliable collection.
 Details [ Binary Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj ](docs/Microsoft.ServiceFabric.ReliableCollectionBackup.Parser)
 
-## HTTP Rest 
-The OWIN based rest API to view, enumerate and alter the state of reliable collection.
-Details [ HTTP Rest ](docs/rest)
+## HTTP Rest Server
+An OWIN based REST API to view, enumerate and alter the state of Reliable Collections.
+Details [ HTTP Rest API ](docs/rest)
 
 ## bkpctl
-The cli based interface to view, enumerate and alter the state of Reliable Collections.
+A Command Line  Interface to view, enumerate and alter the state of Reliable Collections.
 Details [ bkpctl ](docs/bkpctl)
 
 
 ## Requirements
 1. dotnet
-2. msbuild
-3. nuget
-4. python
+2. MSBuild
+3. Nuget
+4. Python 3
 5. python-pip
-6. Service Fabric Runtime
 
 
-## Building RestServer and Parser Code 
+## Building Rest Server and Parser Code 
+From Repository root folder, run in Powershell:
 ```
  .\build_all.ps1 -build
 ```
@@ -73,7 +73,7 @@ From Repository root folder , run in Powershell:
 User can choose to specify the path of MSBuild or the Visual Studio Version installed in the system. Default Version for VS is 2017.
 
 ## Generating Nuget Packages
-From Visual Studio Command Prompt which has msbuild defined:
+From Visual Studio Command Prompt which has MSBuild defined:
 ```
 .\build_all.ps1 -build -generateNupkg
 ```
@@ -91,7 +91,7 @@ curl -v http://localhost:5000/$query/testDictionary?$top=2
 
 popd
 ```
-## Configuring the Rest Server for Backup 
+## Configuring the Rest Server of Backup Viewer 
 The Rest Server takes in as input, path to config json file, where user can specify the necessary configuratins for the Backup Viewer to Read the Backups. 
 
 Sample Config file can be seen at [ sampleconfig.json](src/Microsoft.ServiceFabric.ReliableCollectionBackup/RestServer/configs/sampleconfig.json)
@@ -120,8 +120,6 @@ dotnet build && \
 xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll bin\Debug\net471\
 dotnet test --no-build --diag test_results.log --verbosity normal --logger "console;verbosity=detailed"
 ```
-
-
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
