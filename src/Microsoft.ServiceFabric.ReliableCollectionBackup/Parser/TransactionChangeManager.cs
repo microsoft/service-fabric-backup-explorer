@@ -39,6 +39,12 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             }
 
             this.reliableCollectionsChanges[reliableCollectionName].Changes.Add(changes);
+            Console.WriteLine(reliableCollectionsChanges.Values);
+        }
+
+        public void RemoveChanges(Uri reliableCollectionName, EventArgs changes)
+        {
+            this.reliableCollectionsChanges[reliableCollectionName].Changes.Add(changes);
         }
 
         /// <summary>
@@ -66,16 +72,41 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <param name="e">StateManager change event arguments.</param>
         internal void OnStateManagerChanged(object sender, NotifyStateManagerChangedEventArgs e)
         {
-            var operation = e as NotifyStateManagerSingleEntityChangedEventArgs;
-            if (null == operation)
+            var rebuildEvent = e as NotifyStateManagerRebuildEventArgs;
+            if (rebuildEvent != null)
             {
+                var reliableStates = rebuildEvent.ReliableStates.ToEnumerable();
+                foreach (var reliableState in reliableStates)
+                {
+                    Console.WriteLine("Inside Rebuild Event");
+                    var reliableStateType1 = reliableState.GetType();
+                    switch (ReliableStateKindUtils.KindOfReliableState(reliableState))
+                    {
+                        case ReliableStateKind.ReliableDictionary:
+                            {
+                                var keyType = reliableStateType1.GetGenericArguments()[0];
+                                var valueType = reliableStateType1.GetGenericArguments()[1];
+                                Console.WriteLine("Trying to Add DictionaryChangeHandler here");
+                                // use reflection to call my own method because key/value types are known at runtime.
+                                this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
+                                    .MakeGenericMethod(keyType, valueType)
+                                    .Invoke(this, new object[] { reliableState });
+                                break;
+                            }
+
+                        case ReliableStateKind.ReliableQueue:
+                        case ReliableStateKind.ReliableConcurrentQueue:
+                        default:
+                            break;
+                    }
+
+                }
                 return;
             }
 
-            if (operation.Action == NotifyStateManagerChangedAction.Add)
-            {
-                var reliableStateType = operation.ReliableState.GetType();
-                switch (ReliableStateKindUtils.KindOfReliableState(operation.ReliableState))
+                var addoperation = e as NotifyStateManagerSingleEntityChangedEventArgs;
+                var reliableStateType = addoperation.ReliableState.GetType();
+                switch (ReliableStateKindUtils.KindOfReliableState(addoperation.ReliableState))
                 {
                     case ReliableStateKind.ReliableDictionary:
                         {
@@ -85,7 +116,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                             // use reflection to call my own method because key/value types are known at runtime.
                             this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
                                 .MakeGenericMethod(keyType, valueType)
-                                .Invoke(this, new object[] { operation.ReliableState });
+                                .Invoke(this, new object[] { addoperation.ReliableState });
                             break;
                         }
 
@@ -94,7 +125,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                     default:
                         break;
                 }
-            }
+
+            
+            
         }
 
         private void AddDictionaryChangedHandler<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
@@ -105,16 +138,32 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         internal void OnDictionaryChanged<TKey, TValue>(object sender, NotifyDictionaryChangedEventArgs<TKey, TValue> e)
         {
-            var keyAddArgs = e as NotifyDictionaryItemAddedEventArgs<TKey, TValue>;
             var reliableState = sender as IReliableState;
-
-            if (null == keyAddArgs || null == reliableState)
-            {
-                // log here.
-                return;
-            }
-
             this.CollectChanges(reliableState.Name, e);
+           var keyAddArgs = e as NotifyDictionaryItemAddedEventArgs<TKey, TValue>;
+            if (keyAddArgs != null)
+            {
+                
+
+                if (null == keyAddArgs || null == reliableState)
+                {
+                    // log here.
+                    return;
+                }
+
+                //this.CollectChanges(reliableState.Name, e);
+            }
+            var updatekeyAddArgs = e as NotifyDictionaryRebuildEventArgs<TKey, TValue>;
+            if (updatekeyAddArgs !=null)
+            {
+                // do something for update
+            }
+            var removekeyAddArgs = e as NotifyDictionaryItemRemovedEventArgs<TKey, TValue>;
+            if (removekeyAddArgs!= null)
+            {
+                //this.RemoveChanges(reliableState.Name, e);
+            }
+            
         }
 
         private Dictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;
