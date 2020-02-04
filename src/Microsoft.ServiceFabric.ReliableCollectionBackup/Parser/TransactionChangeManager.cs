@@ -39,7 +39,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             }
 
             this.reliableCollectionsChanges[reliableCollectionName].Changes.Add(changes);
-            Console.WriteLine(reliableCollectionsChanges.Values);
         }
 
         public void RemoveChanges(Uri reliableCollectionName, EventArgs changes)
@@ -75,10 +74,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             var rebuildEvent = e as NotifyStateManagerRebuildEventArgs;
             if (rebuildEvent != null)
             {
-                var reliableStates = rebuildEvent.ReliableStates.ToEnumerable();
-                foreach (var reliableState in reliableStates)
+                foreach (var reliableState in rebuildEvent.ReliableStates.ToEnumerable())
                 {
-                    Console.WriteLine("Inside Rebuild Event");
                     var reliableStateType1 = reliableState.GetType();
                     switch (ReliableStateKindUtils.KindOfReliableState(reliableState))
                     {
@@ -86,7 +83,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                             {
                                 var keyType = reliableStateType1.GetGenericArguments()[0];
                                 var valueType = reliableStateType1.GetGenericArguments()[1];
-                                Console.WriteLine("Trying to Add DictionaryChangeHandler here");
                                 // use reflection to call my own method because key/value types are known at runtime.
                                 this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
                                     .MakeGenericMethod(keyType, valueType)
@@ -136,34 +132,36 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             dictionary.DictionaryChanged += this.OnDictionaryChanged;
         }
 
+        
         internal void OnDictionaryChanged<TKey, TValue>(object sender, NotifyDictionaryChangedEventArgs<TKey, TValue> e)
         {
             var reliableState = sender as IReliableState;
-            this.CollectChanges(reliableState.Name, e);
-           var keyAddArgs = e as NotifyDictionaryItemAddedEventArgs<TKey, TValue>;
+            var keyAddArgs = e as NotifyDictionaryItemAddedEventArgs<TKey, TValue>;
             if (keyAddArgs != null)
             {
-                
-
-                if (null == keyAddArgs || null == reliableState)
-                {
-                    // log here.
-                    return;
-                }
-
-                //this.CollectChanges(reliableState.Name, e);
+                this.CollectChanges(reliableState.Name, e);
             }
-            var updatekeyAddArgs = e as NotifyDictionaryRebuildEventArgs<TKey, TValue>;
-            if (updatekeyAddArgs !=null)
+            var rebuildkeyAddArgs = e as NotifyDictionaryRebuildEventArgs<TKey, TValue>;
+            if (rebuildkeyAddArgs !=null || null ==reliableState)
             {
-                // do something for update
+                this.CollectChanges(reliableState.Name, e);
             }
             var removekeyAddArgs = e as NotifyDictionaryItemRemovedEventArgs<TKey, TValue>;
             if (removekeyAddArgs!= null)
             {
-                //this.RemoveChanges(reliableState.Name, e);
+                this.CollectChanges(reliableState.Name, e);
             }
-            
+
+            var updatekeyArgs = e as NotifyDictionaryItemUpdatedEventArgs<TKey, TValue>;
+            if (updatekeyArgs != null)
+            {
+                this.CollectChanges(reliableState.Name, e);
+            }
+            var clearkeyArgs = e as NotifyDictionaryClearEventArgs<TKey, TValue>;
+            if (clearkeyArgs != null)
+            {
+                this.CollectChanges(reliableState.Name, e);
+            }            
         }
 
         private Dictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;

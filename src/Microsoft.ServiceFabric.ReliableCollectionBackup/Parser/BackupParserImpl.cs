@@ -139,7 +139,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
                 transactionApplied.Invoke(this, transactionAppliedEventArgs);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // log the exception..
             }
