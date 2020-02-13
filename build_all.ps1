@@ -37,11 +37,11 @@ param
 
 
 # msbuild path not provided, find msbuild for VS2017
-if ($MSBuildFullPath -eq "") {
-    if (${env:VisualStudioVersion} -eq "15.0" -and ${env:VSINSTALLDIR} -ne "") {
-        $MSBuildFullPath = join-path ${env:VSINSTALLDIR} "MSBuild\15.0\Bin\MSBuild.exe"
-    }
-}
+#if ($MSBuildFullPath -eq "") {
+#    if (${env:VisualStudioVersion} -eq "15.0" -and ${env:VSINSTALLDIR} -ne "") {
+#        $MSBuildFullPath = join-path ${env:VSINSTALLDIR} "MSBuild\15.0\Bin\MSBuild.exe"
+#    }
+#}
 
 if ($MSBuildFullPath -eq "") {
     if (Test-Path "env:\ProgramFiles(x86)") {

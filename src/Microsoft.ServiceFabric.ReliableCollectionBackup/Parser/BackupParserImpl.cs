@@ -46,7 +46,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
             this.stateManager = new StateManager(reliabilitySimulator);
             this.seenFirstTransaction = false;
-            this.transactionChangeManager = new TransactionChangeManager();
+            this.transactionChangeManager = new TransactionChangeManager(this.reliabilitySimulator);
         }
 
         /// <summary>
