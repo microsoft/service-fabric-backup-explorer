@@ -41,11 +41,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             this.reliableCollectionsChanges[reliableCollectionName].Changes.Add(changes);
         }
 
-        public void RemoveChanges(Uri reliableCollectionName, EventArgs changes)
-        {
-            this.reliableCollectionsChanges[reliableCollectionName].Changes.Add(changes);
-        }
-
         /// <summary>
         /// Clears the changes in the transaction to get prepared for next transaction.
         /// </summary>
@@ -136,30 +131,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         internal void OnDictionaryChanged<TKey, TValue>(object sender, NotifyDictionaryChangedEventArgs<TKey, TValue> e)
         {
             var reliableState = sender as IReliableState;
-            this.CollectChanges(reliableState.Name, e);
-            var keyAddArgs = e as NotifyDictionaryItemAddedEventArgs<TKey, TValue>;
-            if (keyAddArgs != null)
-            {
-
-
-                if (null == keyAddArgs || null == reliableState)
-                {
-                    // log here.
-                    return;
-                }
-
-                //this.CollectChanges(reliableState.Name, e);
-            }
-            var updatekeyAddArgs = e as NotifyDictionaryRebuildEventArgs<TKey, TValue>;
-            if (updatekeyAddArgs != null)
-            {
-                // do something for update
-            }
-            var removekeyAddArgs = e as NotifyDictionaryItemRemovedEventArgs<TKey, TValue>;
-            if (removekeyAddArgs != null)
-            {
-                //this.RemoveChanges(reliableState.Name, e);
-            }
+            this.CollectChanges(reliableState.Name, e);           
 
         }
 
