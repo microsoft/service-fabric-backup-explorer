@@ -7,5 +7,5 @@ git add -A .
 git clean -xdf
 
 # build and run tests
-./build_all.ps1 -build
+./build_all.ps1 -buildAll
 ./run_tests.ps1

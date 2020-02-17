@@ -134,4 +134,6 @@ if ($DisplayHelp) {
     Write-Host "3. -generateNupkg Generate the nuget package"
     Write-Host "4. -showVersion Displays versions of all tools"
     Write-Host "5. -buildCli Builds the bkpctl CLI tool for viewing and editing Backups"
+    Write-Host "6. -vsversion  User can specify the version of Visual Studio to use , VS 2017 by default."
+    Write-Host "7. -MSBuildFullPath User can specify where to look for MSBuild in case VS is installed in unusual Location"
 }

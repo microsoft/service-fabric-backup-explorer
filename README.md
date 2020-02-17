@@ -1,19 +1,13 @@
+---
+services: service-fabric
+platforms: .NET, windows
+owner: saketharsh, raunakpandya
+---
 
-# Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.microsoft.com.
+# Service Fabric Backup Explorer 
 
-When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
-# Service Fabric Backup Explorer ( Review and update utility for Service Fabric Reliable Collections)
+### Review and Update Utility for Service Fabric Reliable Collections
 
 The project empowers the Service Fabric Reliable Stateful application users to audit and review the transactions performed on Reliable Collections and edit the current state of Reliable Collection to a consistent view.
 It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the exisitng Service Fabric cluster which is running the same implementation/version of the Reliable Stateful application.
@@ -36,34 +30,34 @@ The Service Fabric Backup Explorer can be consumed in any of the following ways 
 2. HTTP/Rest   -    HTTP based  Rest hosting to view and alter the reliable collections.
 3. bkpctl -         Service fabric backup controller CLI (command line interface) to view and alter the reliable collections. 
 
-# Microsoft.ServiceFabric.ReliableCollectionBackup.Parser 
+## Microsoft.ServiceFabric.ReliableCollectionBackup.Parser 
 The binary dll created to be consumed in application to view, enumerate and alter the reliable collection.
 Details [ Binary Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj ](docs/Microsoft.ServiceFabric.ReliableCollectionBackup.Parser)
 
-# HTTP Rest 
-The OWIN based rest API to view, enumerate and alter the state of reliable collection.
-Details [ HTTP Rest ](docs/rest)
+## HTTP Rest Server
+An OWIN based REST API to view, enumerate and alter the state of Reliable Collections.
+Details [ HTTP Rest API ](docs/rest)
 
-# bkpctl
-The cli based interface to view, enumerate and alter the state of Reliable Collections.
+## bkpctl
+A Command Line  Interface to view, enumerate and alter the state of Reliable Collections.
 Details [ bkpctl ](docs/bkpctl)
 
 
-# Requirements
+## Requirements
 1. dotnet
-2. msbuild
-3. nuget
-4. python
+2. MSBuild
+3. Nuget
+4. Python 3
 5. python-pip
-6. Service Fabric Runtime
 
 
-# Building RestServer and Parser Code 
+## Building Rest Server and Parser Code 
+From Repository root folder, run in Powershell:
 ```
  .\build_all.ps1 -build
 ```
 
-# Build and Consume bkpctl
+## Build and Consume bkpctl
 From Repository root folder , run in Powershell:
 ```
  .\build_all.ps1 -buildCli
@@ -71,19 +65,20 @@ From Repository root folder , run in Powershell:
 In order to use bkpctl, the REST Server must be up and running, so that CLI can fetch the required backup, and present it on the command line . 
 
 
-# Build all packages including Tests and Backup Command Line Tool
-From Repository root folder , run in Powershell(after adding MSBuild to the Path of Command Line):
+## Build all packages including Tests and Backup Command Line Tool
+From Repository root folder , run in Powershell:
 ```
  .\build_all.ps1 -buildAll
 ```
+User can choose to specify the path of MSBuild or the Visual Studio Version installed in the system. Default Version for VS is 2017.
 
-# Generating nupkg
-From Visual Studio Command Prompt which has msbuild defined:
+## Generating Nuget Packages
+From Visual Studio Command Prompt which has MSBuild defined:
 ```
 .\build_all.ps1 -build -generateNupkg
 ```
 
-# Running Rest Server
+## Running Rest Server
 From the Repository root folder, perform the following steps :
 ```
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
@@ -96,8 +91,18 @@ curl -v http://localhost:5000/$query/testDictionary?$top=2
 
 popd
 ```
+## Configuring the Rest Server of Backup Viewer 
+The Rest Server takes in as input, path to config json file, where user can specify the necessary configuratins for the Backup Viewer to Read the Backups. 
 
-# Running Tests
+Sample Config file can be seen at [ sampleconfig.json](src/Microsoft.ServiceFabric.ReliableCollectionBackup/RestServer/configs/sampleconfig.json)
+
+In the config file, user can define the following : 
+1. App Name and Service Name 
+2. BackupChainPath  - Location to where the Backups are located in the System 
+3. CodePackagePath - Location to where binaries for Serializers and objects are located in the System. 
+4. Serializers - It's an array, where user needs to specify all the Classes, and their Serializers that are required for the Backup Viewer to read the Backups 
+
+## Running Tests
 ```
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests
 dotnet build
@@ -112,6 +117,19 @@ Running RestServer tests:
 ```
 cd service-fabric-backup-explorer\src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer.Tests
 dotnet build && \
-xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll bin\Debug\net471\ && \
+xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll bin\Debug\net471\
 dotnet test --no-build --diag test_results.log --verbosity normal --logger "console;verbosity=detailed"
 ```
+# Contributing
+
+This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
+the rights to use your contribution. For details, visit https://cla.microsoft.com.
+
+When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
+a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
+provided by the bot. You will only need to do this once across all repos using our CLA.
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
+contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.

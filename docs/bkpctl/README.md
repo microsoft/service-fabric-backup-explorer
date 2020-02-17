@@ -1,14 +1,20 @@
-# Query Meta Data 
+## Overview 
+```bkpctl``` is a command line tool written in Python to help view Service Fabric Reliable Collections(currently Realiable Dictionaries) which have been backed up using Backup Restore Service, and to also make changes into the Backups as and when required in order to maintain consistency. 
 
-Return the meta data of the reliable collection in the backup loaded.
+It fetches data from the REST Server running on the localhost, and presents in on the command line. It provides multiple options, such as taking backup(once we have edited them) looking into backups from particular partitions etc. 
 
-## Examples
+## Usage 
 
-## Command 
+### Query Metadata 
+
+Returns the metadata of the Reliable Dictionary that is currently loaded in the REST Server.
+
+
+#### Command 
 ```console
-    bkpctl query metadata
+    bkpctl query metadata 
 ```
-### Output
+#### Output
 
 ```json
 
@@ -35,17 +41,16 @@ Backup contains reliable collection named `myDictionary` with entity type  `Serv
 
 The entity type `ServiceFabric.Extensions.Services.Queryable.Entity_2OfString_Int64` is defined with `key` as `Edm.String` and `value` as `Int64`
 
-# Get Reliable Collection values by Name
+### Get Reliable Collection values by Name
 
-Return the values of the reliable collection loaded in the backup.
+Returns the values stored in the Backup of the Reliable Dictionary currently loaded.
 
-## Examples
 
-## Command 
+#### Command 
 ```console
-bkpctl query collection --name myDictionary
+bkpctl query collection --name dictionaryName
 ```
-### Output
+#### Output
 ```json
 {
     "odata.metadata": "",
@@ -88,20 +93,15 @@ bkpctl query collection --name myDictionary
 }
 ```
 
-Contains the entries of Reliable collections, with Partition Id, Etag and Key, Value pair.
+### Get all transaction performed 
 
+Returns the list of all transactions performed on the Dictionary since the last Backup checkpoint was taken. This helps us view the transaction in which any error creeped into the data . 
 
-# Get all transaction performed 
-
-Return the list of all tranaction performed in the backup.
-
-## Examples
-
-## Command 
+#### Command 
 ```console
 bkpctl get transactions
 ```
-### Output
+#### Output
 ```json
 
 [{
@@ -185,20 +185,15 @@ bkpctl get transactions
 
 ```
 
-Returns the list of all the transaction .
-
-
-# Update Reliable Collection
+### Update Reliable Collection
 
 Update the values of the current reliable collection with operation perfomed in requests.
 
-## Examples - Add new value
-
-## Command 
+#### Command 
 ```console
 bkpctl update collection --collectiontype Dictionary --operation Add --collection myDictionary --partitionId ed70fb1c-6972-452a-b183-6114b336e9a1 --key 32 --value 64
 ```
-### Output
+#### Output
 
 
 ```json
@@ -216,13 +211,13 @@ bkpctl update collection --collectiontype Dictionary --operation Add --collectio
 
 Updates the reliable collection with addition of the new value
 
-## Examples - Update existing value
+### Update Existing Value in a Collection
 
-## Command 
+#### Command 
 ```console
 bkpctl update collection --collectiontype Dictionary --operation Update --collection myDictionary --partitionId ed70fb1c-6972-452a-b183-6114b336e9a1 --key 32 --value 96 --etag 5597826295554902436
 ```
-### Output
+#### Output
 
 ```json
 [
@@ -240,12 +235,12 @@ bkpctl update collection --collectiontype Dictionary --operation Update --collec
 Updates the reliable collection with update of the value
 
 
-## Examples - Delete value
-## Command 
+### Examples - Delete value
+#### Command 
 ```console
 bkpctl update collection --collectiontype Dictionary --operation Delete --collection myDictionary --partitionId 5131d35d-2623-4d0b-bc11-ad65f365f801  --key 32 --value 96 --etag 3579969540437049356
 ```
-### Output
+#### Output
 
 ```json
 [
@@ -263,17 +258,17 @@ bkpctl update collection --collectiontype Dictionary --operation Delete --collec
 Updates the reliable collection with deletion value.
 
 
-# Backup the current state
+### Backup the current state
 
 Update the values of the current reliable collection with operation perfomed in requests.
 
-## Examples - Take full backup
+### Examples - Take full backup
 
-## Command 
+#### Command 
 ```console
 bkpctl backup partition --type Full --path E:\Newbackup
 ```
-### Output
+##### Output
 
 ```json
 {
@@ -282,15 +277,12 @@ bkpctl backup partition --type Full --path E:\Newbackup
 }
 ```
 
-Full Backup is taken successfully.
-
-
-## Examples - Take incremental backup
-## Command 
+### Examples - Take incremental backup
+#### Command 
 ```console
 bkpctl backup partition --type Full --path E:\Newbackup
 ```
-### Output
+#### Output
 
 
 ```json
@@ -300,7 +292,6 @@ bkpctl backup partition --type Full --path E:\Newbackup
 }
 ```
 
-Incremental Backup is taken successfully.
 
 
 
