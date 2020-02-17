@@ -1,13 +1,13 @@
 ## Overview 
-```bkpctl``` is a command line tool written in Python  to help view Service Fabric Reliable Collections(currently Realiable Dictionaries) which have been backed up using Backup Restore Service , and to also make changes into the Backups as and when required in order to maintain consistency . 
+```bkpctl``` is a command line tool written in Python to help view Service Fabric Reliable Collections(currently Realiable Dictionaries) which have been backed up using Backup Restore Service, and to also make changes into the Backups as and when required in order to maintain consistency. 
 
-It fetches data from the REST Server running on the LocalHost, and presents in on the Commnad Line. It provides multiple options, such as taking backup(once we have edited them) looking into backups from particular partitions etc. 
+It fetches data from the REST Server running on the localhost, and presents in on the command line. It provides multiple options, such as taking backup(once we have edited them) looking into backups from particular partitions etc. 
 
 ## Usage 
 
-### Query Meta Data 
+### Query Metadata 
 
-Returns the Metadata of the Reliable Dictionary that is currently loaded in the REST Server.
+Returns the metadata of the Reliable Dictionary that is currently loaded in the REST Server.
 
 
 #### Command 
@@ -95,7 +95,7 @@ bkpctl query collection --name dictionaryName
 
 ### Get all transaction performed 
 
-Returns the list of all transactions performed on the Reliable Dictionary.
+Returns the list of all transactions performed on the Dictionary since the last Backup checkpoint was taken. This helps us view the transaction in which any error creeped into the data . 
 
 #### Command 
 ```console
