@@ -113,6 +113,12 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                     }
 
                 case ReliableStateKind.ReliableQueue:
+                    {
+                        Console.WriteLine("Backup Contains Relaible  Queues . Cannot handle them at this moment");
+                        System.Environment.Exit(0);
+                        break;
+
+                    }
                 case ReliableStateKind.ReliableConcurrentQueue:
                 default:
                     break;
