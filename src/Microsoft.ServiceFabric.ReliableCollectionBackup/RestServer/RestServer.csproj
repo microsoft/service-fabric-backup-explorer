@@ -28,9 +28,9 @@
     <Compile Include="_friends.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.2" />
-    <PackageReference Include="ServiceFabric.Extensions.Services.Queryable" Version="3.1.301" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="ServiceFabric.Extensions.Services.Queryable" Version="3.1.658" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
