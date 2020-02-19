@@ -66,35 +66,66 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <param name="e">StateManager change event arguments.</param>
         internal void OnStateManagerChanged(object sender, NotifyStateManagerChangedEventArgs e)
         {
-            var operation = e as NotifyStateManagerSingleEntityChangedEventArgs;
-            if (null == operation)
+            var rebuildEvent = e as NotifyStateManagerRebuildEventArgs;
+            if (rebuildEvent != null)
             {
+                var reliableStates = rebuildEvent.ReliableStates.ToEnumerable();
+                foreach (var reliableState in reliableStates)
+                {
+                    var reliableStateType1 = reliableState.GetType();
+                    switch (ReliableStateKindUtils.KindOfReliableState(reliableState))
+                    {
+                        case ReliableStateKind.ReliableDictionary:
+                            {
+                                var keyType = reliableStateType1.GetGenericArguments()[0];
+                                var valueType = reliableStateType1.GetGenericArguments()[1];
+                                // use reflection to call my own method because key/value types are known at runtime.
+                                this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
+                                    .MakeGenericMethod(keyType, valueType)
+                                    .Invoke(this, new object[] { reliableState });
+                                break;
+                            }
+
+                        case ReliableStateKind.ReliableQueue:
+                        case ReliableStateKind.ReliableConcurrentQueue:
+                        default:
+                            break;
+                    }
+
+                }
                 return;
             }
 
-            if (operation.Action == NotifyStateManagerChangedAction.Add)
+            var addoperation = e as NotifyStateManagerSingleEntityChangedEventArgs;
+            var reliableStateType = addoperation.ReliableState.GetType();
+            switch (ReliableStateKindUtils.KindOfReliableState(addoperation.ReliableState))
             {
-                var reliableStateType = operation.ReliableState.GetType();
-                switch (ReliableStateKindUtils.KindOfReliableState(operation.ReliableState))
-                {
-                    case ReliableStateKind.ReliableDictionary:
-                        {
-                            var keyType = reliableStateType.GetGenericArguments()[0];
-                            var valueType = reliableStateType.GetGenericArguments()[1];
+                case ReliableStateKind.ReliableDictionary:
+                    {
+                        var keyType = reliableStateType.GetGenericArguments()[0];
+                        var valueType = reliableStateType.GetGenericArguments()[1];
 
-                            // use reflection to call my own method because key/value types are known at runtime.
-                            this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
-                                .MakeGenericMethod(keyType, valueType)
-                                .Invoke(this, new object[] { operation.ReliableState });
-                            break;
-                        }
-
-                    case ReliableStateKind.ReliableQueue:
-                    case ReliableStateKind.ReliableConcurrentQueue:
-                    default:
+                        // use reflection to call my own method because key/value types are known at runtime.
+                        this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .MakeGenericMethod(keyType, valueType)
+                            .Invoke(this, new object[] { addoperation.ReliableState });
                         break;
-                }
+                    }
+
+                case ReliableStateKind.ReliableQueue:
+                    {
+                        Console.WriteLine("Backup Contains Relaible  Queues . Cannot handle them at this moment");
+                        System.Environment.Exit(0);
+                        break;
+
+                    }
+                case ReliableStateKind.ReliableConcurrentQueue:
+                default:
+                    break;
             }
+
+
+
         }
 
         private void AddDictionaryChangedHandler<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
@@ -105,16 +136,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         internal void OnDictionaryChanged<TKey, TValue>(object sender, NotifyDictionaryChangedEventArgs<TKey, TValue> e)
         {
-            var keyAddArgs = e as NotifyDictionaryItemAddedEventArgs<TKey, TValue>;
             var reliableState = sender as IReliableState;
+            this.CollectChanges(reliableState.Name, e);           
 
-            if (null == keyAddArgs || null == reliableState)
-            {
-                // log here.
-                return;
-            }
-
-            this.CollectChanges(reliableState.Name, e);
         }
 
         private Dictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;

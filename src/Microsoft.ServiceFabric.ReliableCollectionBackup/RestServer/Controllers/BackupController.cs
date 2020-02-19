@@ -26,13 +26,13 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
             this.backupParserManager = backupParserManager;
         }
 
-        [HttpPost("/api/backup/full", Name = "PostFullBackup")]
+        [HttpPost("/backup/full", Name = "PostFullBackup")]
         public async Task<IActionResult> PostFullBackup([FromBody] BackupRequestBody backupRequest)
         {
             return await TakeBackup(backupRequest, BackupOption.Full);
         }
 
-        [HttpPost("/api/backup/incremental", Name = "PostIncrementalBackup")]
+        [HttpPost("/backup/incremental", Name = "PostIncrementalBackup")]
         public async Task<IActionResult> PostIncrementalBackup([FromBody] BackupRequestBody backupRequest)
         {
             return await TakeBackup(backupRequest, BackupOption.Incremental);

@@ -25,6 +25,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
     {
         public static async Task ClassInitialize(TestContext testContext)
         {
+           
             lock(ClassInitializationTaskWaitObject)
             {
                 if (ClassInitializationTask == null)
@@ -32,8 +33,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
                     ClassTestPath = Path.Combine(Environment.CurrentDirectory, BaseTestFolderName);
                     ClassInitializationTask = GenerateBackup(Path.Combine(ClassTestPath, Guid.NewGuid().ToString("N")));
                 }
+                
             }
-
             await ClassInitializationTask;
         }
 
