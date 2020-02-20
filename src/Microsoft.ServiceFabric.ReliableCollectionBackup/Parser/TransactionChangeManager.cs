@@ -18,6 +18,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     internal class TransactionChangeManager
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// Constructor of TransactionChangeManager.
         /// </summary>
@@ -66,6 +67,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <param name="e">StateManager change event arguments.</param>
         internal void OnStateManagerChanged(object sender, NotifyStateManagerChangedEventArgs e)
         {
+            log.Info("Coming here with info");
             var rebuildEvent = e as NotifyStateManagerRebuildEventArgs;
             if (rebuildEvent != null)
             {

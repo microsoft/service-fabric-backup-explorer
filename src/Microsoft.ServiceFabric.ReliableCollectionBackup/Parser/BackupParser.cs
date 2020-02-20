@@ -5,9 +5,11 @@
 
 using System;
 using System.Fabric;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-
+using log4net.Config;
 using Microsoft.ServiceFabric.Data;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
@@ -21,6 +23,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     public class BackupParser : IDisposable
     {
+       
+        
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// Constructor for BackupParser.
         /// </summary>
@@ -30,6 +35,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </param>
         public BackupParser(string backupChainPath, string codePackagePath)
         {
+
+            log.Info("This is ti");
+            
             this.backupParserImpl = new BackupParserImpl(backupChainPath, codePackagePath);
         }
 
@@ -73,6 +81,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <returns>Task that represents the asynchronous backup operation.</returns>
         public async Task BackupAsync(BackupOption backupOption, TimeSpan timeout, CancellationToken cancellationToken, Func<BackupInfo, CancellationToken, Task<bool>> backupCallback)
         {
+            log.Info("This is log");
             await this.backupParserImpl.BackupAsync(backupCallback, backupOption, timeout, cancellationToken);
         }
 

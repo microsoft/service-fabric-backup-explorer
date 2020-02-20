@@ -6,7 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
+using log4net;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 {
