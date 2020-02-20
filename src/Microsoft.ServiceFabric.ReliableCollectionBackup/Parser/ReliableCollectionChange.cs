@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using log4net;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
@@ -13,6 +14,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     public class ReliableCollectionChange
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// Constructor of ReliableCollectionChange
         /// </summary>

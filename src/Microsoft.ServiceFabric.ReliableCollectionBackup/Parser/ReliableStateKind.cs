@@ -4,7 +4,7 @@
 // ------------------------------------------------------------
 
 using System;
-
+using log4net;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
 
@@ -22,6 +22,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
     internal static class ReliableStateKindUtils
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         internal static ReliableStateKind KindOfReliableState(IReliableState reliableState)
         {
             var reliableStateType = reliableState.GetType();
