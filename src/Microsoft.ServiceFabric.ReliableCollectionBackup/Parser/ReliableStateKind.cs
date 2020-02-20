@@ -7,6 +7,7 @@ using System;
 using log4net;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
+using System.Reflection;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {

@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
+using System.Reflection;
 
 using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
 
@@ -19,6 +21,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
     /// </summary>
     public class BackupParserManager : IDisposable
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public BackupParserManager(BackupParser backupParser)
         {
             this.BackupParser = backupParser;
