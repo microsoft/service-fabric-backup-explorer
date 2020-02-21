@@ -36,13 +36,6 @@ param
 . "./common.ps1"
 
 
-# msbuild path not provided, find msbuild for VS2017
-if ($MSBuildFullPath -eq "") {
-    if (${env:VisualStudioVersion} -eq "15.0" -and ${env:VSINSTALLDIR} -ne "") {
-        $MSBuildFullPath = join-path ${env:VSINSTALLDIR} "MSBuild\15.0\Bin\MSBuild.exe"
-    }
-}
-
 if ($MSBuildFullPath -eq "") {
     if (Test-Path "env:\ProgramFiles(x86)") {
         $progFilesPath = ${env:ProgramFiles(x86)}
@@ -101,9 +94,6 @@ if ($build -Or $buildAll) {
     Exec { dotnet publish --no-build -c "Debug" }
     popd
 
-    # Rest Server: copy our dlls in publish folder
-    #Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
-    #Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll .\src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\bin\Debug\net471\ }
 }
 
 if ($generateNupkg -Or $buildAll) {
