@@ -14,7 +14,7 @@ popd
 
 # run rest server tests
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer
-Exec { dotnet run --no-build --config configs\sampleconfig.json  & }
+Exec { dotnet run --no-build --config configs\sampleconfig.json   }
 popd
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer.Tests
 Exec { xcopy.exe /EIYS ..\..\..\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll bin\Debug\net471\ }
