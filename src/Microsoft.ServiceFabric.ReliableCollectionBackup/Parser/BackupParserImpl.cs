@@ -144,7 +144,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             }
             catch (Exception ex)
             {
-                // log the exception..
+                log.Info(ex);
+                Console.WriteLine($"Exception in Transaction {e.Transaction.TransactionId} \n {ex} ");
             }
         }
 

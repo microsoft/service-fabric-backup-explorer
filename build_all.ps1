@@ -102,8 +102,8 @@ if ($build -Or $buildAll) {
     popd
 
     # Rest Server: copy our dlls in publish folder
-    Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
-    Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll .\src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\bin\Debug\net471\ }
+    #Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll .\bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\ }
+    #Exec { xcopy.exe /EIYS .\packages\microsoft.servicefabric.tools.reliabilitysimulator\6.5.659-beta\lib\netstandard2.0\*.dll .\src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\bin\Debug\net471\ }
 }
 
 if ($generateNupkg -Or $buildAll) {
