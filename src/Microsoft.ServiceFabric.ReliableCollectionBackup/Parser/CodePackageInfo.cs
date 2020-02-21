@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using log4net;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
@@ -14,6 +15,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     internal class CodePackageInfo : IDisposable
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public CodePackageInfo(string packagePath)
         {
             this.packagePath = packagePath;

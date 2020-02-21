@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-
+using log4net;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Notifications;
@@ -18,6 +18,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     internal class TransactionChangeManager
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// Constructor of TransactionChangeManager.
         /// </summary>
@@ -66,6 +67,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <param name="e">StateManager change event arguments.</param>
         internal void OnStateManagerChanged(object sender, NotifyStateManagerChangedEventArgs e)
         {
+            log.Info($" StateManagerChanged with event Action:- {e.Action}");
             var rebuildEvent = e as NotifyStateManagerRebuildEventArgs;
             if (rebuildEvent != null)
             {
@@ -131,12 +133,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private void AddDictionaryChangedHandler<TKey, TValue>(IReliableDictionary<TKey, TValue> dictionary)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
+            log.Info($"AddDictionaryChangeHandler for Reliable Dictionary: {dictionary.Name}");
             dictionary.DictionaryChanged += this.OnDictionaryChanged;
         }
 
         internal void OnDictionaryChanged<TKey, TValue>(object sender, NotifyDictionaryChangedEventArgs<TKey, TValue> e)
         {
             var reliableState = sender as IReliableState;
+            log.Info($"DictionaryChange Event for {reliableState.Name} with Event :- {e.Action}");
             this.CollectChanges(reliableState.Name, e);           
 
         }

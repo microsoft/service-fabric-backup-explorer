@@ -42,4 +42,15 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="6.5.659-beta" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
 </Project>

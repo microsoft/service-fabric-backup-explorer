@@ -8,7 +8,8 @@ using System.Fabric;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-
+using log4net;
+using System.Reflection;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Notifications;
 using Microsoft.ServiceFabric.Tools.ReliabilitySimulator;
@@ -21,6 +22,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     internal class BackupParserImpl : IDisposable
     {
+        private static readonly ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// Constructor for BackupParserImpl.
         /// </summary>
@@ -108,6 +110,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         private void OnTransactionChanged(object sender, NotifyTransactionChangedEventArgs e)
         {
+            log.Info($"Transaction Changed Event Called for Id: {e.Transaction.TransactionId}");
             if (e.Action == NotifyTransactionChangedAction.Commit)
             {
                 // If this is first transaction we have seen, open Replica for reads
@@ -141,7 +144,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             }
             catch (Exception ex)
             {
-                // log the exception..
+                log.Info(ex);
+                Console.WriteLine($"Exception in Transaction {e.Transaction.TransactionId} \n {ex} ");
             }
         }
 

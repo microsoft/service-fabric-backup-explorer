@@ -5,9 +5,10 @@
 
 using System;
 using System.Fabric;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-
+using log4net;
 using Microsoft.ServiceFabric.Data;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
@@ -20,7 +21,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// 3) Make additional changes and take a new backup.
     /// </summary>
     public class BackupParser : IDisposable
-    {
+    {        
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// Constructor for BackupParser.
         /// </summary>
@@ -60,6 +62,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <returns>Task that represents the asynchronous parse operation.</returns>
         public async Task ParseAsync(CancellationToken cancellationToken)
         {
+            log.Info("Parser ParseAsync Call");
             await this.backupParserImpl.ParseAsync(cancellationToken);
         }
 
@@ -73,6 +76,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <returns>Task that represents the asynchronous backup operation.</returns>
         public async Task BackupAsync(BackupOption backupOption, TimeSpan timeout, CancellationToken cancellationToken, Func<BackupInfo, CancellationToken, Task<bool>> backupCallback)
         {
+            log.Info("Parser BackupAsync Call");
             await this.backupParserImpl.BackupAsync(backupCallback, backupOption, timeout, cancellationToken);
         }
 
@@ -81,6 +85,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </summary>
         public void Dispose()
         {
+            log.Info("Rest Server Dispose Event called.");
             this.backupParserImpl.Dispose();
         }
 
