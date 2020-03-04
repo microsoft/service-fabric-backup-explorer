@@ -29,7 +29,10 @@ param
 
     # Version of VS Installed
     [ValidateSet('2017','2019')]
-    [string]$vsversion ="2017"
+    [string]$vsversion ="2017",
+
+    [ValidateSet('Debug', 'Release')]
+    [string]$Configuration = 'Release'
 );
 
 # Include comman commands.
@@ -82,17 +85,19 @@ if ($build -Or $buildAll) {
     $DisplayHelp = $false;
     # build all projects
     Write-Host "Building Backup Explorer Code and Tests:"
-    Exec { dotnet build --packages .\packages service-fabric-backup-explorer.sln }
+    Exec { dotnet build --packages .\packages service-fabric-backup-explorer.sln -c $Configuration }
 
     # publish for nupkg generation
     pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser\
-    Exec { dotnet publish --no-build --framework netstandard2.0 -c "Debug" }
-    Exec { dotnet publish --no-build --framework net461 -c "Debug" }
+    Exec { dotnet publish --no-build --framework netstandard2.0 -c $Configuration }
+    Exec { dotnet publish --no-build --framework net461 -c $Configuration }
     popd
 
     pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
-    Exec { dotnet publish --no-build -c "Debug" }
+    Exec { dotnet publish --no-build -c $Configuration }
     popd
+    
+    Copy-Item .\src\backup-explorer-cli\ -Destination .\bin -recurse 
 
 }
 
@@ -104,7 +109,7 @@ if ($generateNupkg -Or $buildAll) {
     # nuget restore
     Exec { nuget.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages }
     # generate nupkg
-    Exec { & $MSBuildFullPath Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=..\bin\nupkg }
+    Exec { & $MSBuildFullPath Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=..\bin\nupkg  /p:Configuration=$Configuration}
     popd
 } 
 
@@ -127,4 +132,5 @@ if ($DisplayHelp) {
     Write-Host "5. -buildCli Builds the bkpctl CLI tool for viewing and editing Backups"
     Write-Host "6. -vsversion  User can specify the version of Visual Studio to use , VS 2017 by default."
     Write-Host "7. -MSBuildFullPath User can specify where to look for MSBuild in case VS is installed in unusual Location"
+    Write-Host "8. -Configuration User can specify either to build in Debug or Release "
 }
