@@ -21,7 +21,7 @@
     <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\$(Id).pdb">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
-    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\Microsoft.ServiceFabric.Data.dll">
+    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\*">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>
     <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\Microsoft.ServiceFabric.Data.Impl.dll">
@@ -47,7 +47,14 @@
     </File>
     <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\system.fabric.strings.dll">
       <TargetPath>lib\netstandard2.0</TargetPath>
-    </File>     
+    </File>    
+    <!-- Native windows dll -->
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\FabricCommon.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\FabricResources.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\KPhysicalLogDll.dll" />
+    <File Include="@(NativeLibraryDependency)">
+      <TargetPath>runtimes\win\native</TargetPath>
+    </File>
   </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
 </Project>
