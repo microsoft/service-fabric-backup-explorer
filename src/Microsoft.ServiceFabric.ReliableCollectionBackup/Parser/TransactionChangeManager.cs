@@ -10,6 +10,7 @@ using log4net;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Data.Notifications;
+using Microsoft.ServiceFabric.Tools.ReliabilitySimulator;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
@@ -22,8 +23,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <summary>
         /// Constructor of TransactionChangeManager.
         /// </summary>
-        public TransactionChangeManager()
+        public TransactionChangeManager( ReliabilitySimulator reliabilitySimulator)
         {
+            this.reliabilitySimulator = reliabilitySimulator;
             this.reliableCollectionsChanges = new Dictionary<Uri, ReliableCollectionChange>();
         }
 
@@ -95,6 +97,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                     }
 
                 }
+                this.reliabilitySimulator.GrantReadAccess();
                 return;
             }
 
@@ -116,12 +119,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
                 case ReliableStateKind.ReliableQueue:
                     {
-                        Console.WriteLine("Backup Contains Relaible  Queues . Cannot handle them at this moment");
-                        System.Environment.Exit(0);
+                        log.Info("Queue  is present in the Backup. Backup Viewer cannot handle these events");
                         break;
-
                     }
                 case ReliableStateKind.ReliableConcurrentQueue:
+                    {
+                        log.Info("Concurrent Queue is present in the backup. Backup Viewer cannot handle these events.");
+                        break;
+                    }
                 default:
                     break;
             }
@@ -146,5 +151,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         }
 
         private Dictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;
+        private ReliabilitySimulator reliabilitySimulator;
     }
 }
