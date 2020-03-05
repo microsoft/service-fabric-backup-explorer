@@ -307,6 +307,5 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
         static string KeyName = "Key";
         static HttpClient client = new HttpClient();
         static Process process;
-        static Stream outStream;
     }
 }
