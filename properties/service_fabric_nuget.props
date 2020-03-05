@@ -3,7 +3,7 @@
   <Import Project="service_fabric_common.props" />
   <!-- Set Versions. These are used for generating Nuget packages. -->
   <PropertyGroup>
-    <NuGetPackageVersion>$(MajorVersion).$(MinorVersion).$(BuildVersion)</NuGetPackageVersion>
+    <NuGetPackageVersion>$(MajorVersion).$(MinorVersion).$(BuildVersion)-beta</NuGetPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>

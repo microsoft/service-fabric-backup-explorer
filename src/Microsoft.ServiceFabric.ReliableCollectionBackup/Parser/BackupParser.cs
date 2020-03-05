@@ -23,6 +23,17 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     public class BackupParser : IDisposable
     {        
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
+        /// Constructor for BackupParser.
+        /// </summary>
+        /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
+        /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.        
+        public BackupParser(string backupChainPath)
+        {
+            this.backupParserImpl = new BackupParserImpl(backupChainPath, String.Empty);
+        }
+
         /// <summary>
         /// Constructor for BackupParser.
         /// </summary>
@@ -55,8 +66,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         /// <summary>
         /// Parses a backup.
-        /// Before parsing, register for <see cref="TransactionApplied" /> events. These events are fired when a transaction is committed.
-        /// After parsing has finished, we can write to the Reliable Collections using <see cref="StateManager" />.
+        /// Before parsing, one could register for <see cref="TransactionApplied" /> transaction events during parsing. These events are fired when a committed transaction is being parsed.
+        /// After parsing has finished, one can write to the Reliable Collections using <see cref="StateManager" />
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>Task that represents the asynchronous parse operation.</returns>
@@ -101,7 +112,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         /// <summary>
         /// Gets the stateful service context of the Replica.
-        /// This is needed in RestServer.
         /// </summary>
         /// <returns>StatefulServiceContext associated with Replica of this Parser</returns>
         internal StatefulServiceContext GetStatefulServiceContext()
