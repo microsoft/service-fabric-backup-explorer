@@ -9,7 +9,7 @@ owner: saketharsh, raunakpandya
 
 ### Review and Update Utility for Service Fabric Reliable Collections
 
-The project empowers the Service Fabric Reliable Stateful application users to audit and review the transactions performed on Reliable Collections and edit the current state of Reliable Collection to a consistent view.
+The project empowers the Service Fabric Reliable Stateful application users to audit and review the contents of the Reliable Collections and edit the current state to a consistent view.
 It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the exisitng Service Fabric cluster which is running the same implementation/version of the Reliable Stateful application.
 
 The changes made to current state will be restored along with the other transactions to current running Service Fabric cluster, hence enabling a consistent view of the collection.
@@ -20,9 +20,9 @@ With the help of Backup Explorer following tasks can be performed :
  
 * Querying of metadata for the collection.  
 * Current state and its entries in the collection of the backup loaded.
-* Enlist the transactions performed.
+* Enlist the transactions performed (since the last checkpoint).
 * Update the collection by adding, updating or deleting the entries in the collection. 
-* Backup the data post update.
+* Take a fresh backup with the udpated state.
  
 The Service Fabric Backup Explorer can be consumed in any of the following ways for view/update of reliable collections of the backup.
 
