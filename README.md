@@ -32,11 +32,11 @@ The Service Fabric Backup Explorer can be consumed in any of the following ways 
 
 ## Microsoft.ServiceFabric.ReliableCollectionBackup.Parser 
 The binary dll created to be consumed in application to view, enumerate and alter the reliable collection.
-Details [ Binary Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj ](docs/Microsoft.ServiceFabric.ReliableCollectionBackup.Parser)
+Details [ Binary Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj ](docs/Parser)
 
 ## HTTP Rest Server
 An OWIN based REST API to view, enumerate and alter the state of Reliable Collections.
-Details [ HTTP Rest API ](docs/rest)
+Details [ HTTP Rest API ](docs/Server)
 
 ## bkpctl
 A Command Line  Interface to view, enumerate and alter the state of Reliable Collections.
@@ -69,7 +69,7 @@ cd bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 
 ### Using Parser Nuget 
 Microsoft.ServiceFabric.ReliableCollectionBackup.Parser NuGet Package can be downloaded from Nuget.org official repository .
-Details of Using the Nuget provided are mentioned in the [Parser docs](docs/Microsoft.ServiceFabric.ReliableCollectionBackup.Parser)
+Details of Using the Nuget provided are mentioned in the [Parser docs](docs/Parser)
 
 ## Developer Help and & Documentation
 
@@ -105,7 +105,7 @@ From the Repository root folder, perform the following steps :
 ```
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
 dotnet build
-dotnet run --no-build --config configs\sampleconfig.json
+dotnet run --no-build --config configs\sampleconfig.json --configuration Release
 
 # Testing REST API's
 curl -v http://localhost:5000/$query/testDictionary?$top=2
@@ -127,11 +127,11 @@ In the config file, user can define the following :
 ```
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests
 dotnet build
-dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed"
+dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --configuration Release
 popd
 
 # running one test
-dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --filter "FullyQualifiedName~BackupParser_EachTransactionHasRightChangesEvenWithBlockingTransactionAppliedEvents"
+dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --filter "FullyQualifiedName~BackupParser_EachTransactionHasRightChangesEvenWithBlockingTransactionAppliedEvents" --configuration Release
 ```
 
 Running RestServer tests:
@@ -153,3 +153,15 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+## Ideas and Improvements
+
+We encourage community feedback and contribution to improve this application. To make any contribution, our contribution guidelines needs to be followed. If you have any new idea, please file an issue for that.
+
+### Contribution Guidelines:
+Please create a branch and push your changes to that and then, create a pull request for that change.
+These is the check list that would be required to complete, for pushing your change to master branch.
+
+1. Build the application with your change.
+2. The application should satisfy all the test cases written for Parser.
+3. Verify whether Rest Server is working correctly or not , using the Tests present in RestServer.Tests .
