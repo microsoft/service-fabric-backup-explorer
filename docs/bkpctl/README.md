@@ -280,7 +280,7 @@ bkpctl backup partition --type Full --path E:\Newbackup
 ### Examples - Take incremental backup
 #### Command 
 ```console
-bkpctl backup partition --type Full --path E:\Newbackup
+bkpctl backup partition --type Incremental --path E:\Newbackup
 ```
 #### Output
 
