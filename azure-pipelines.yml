@@ -1,0 +1,41 @@
+trigger:
+  - master
+
+pool:
+  name: Hosted VS2017
+  demands: msbuild
+
+steps:
+- task: DotNetCoreInstaller@0
+  displayName: 'Use .NET Core sdk 2.1.401'
+  inputs:
+    version: 2.1.401
+  enabled: false
+
+- task: PowerShell@2
+  displayName: 'Build Code'
+  inputs:
+    targetType: filePath
+    filePath: './build_all.ps1'
+    arguments: ' -build'
+
+- task: PowerShell@2
+  displayName: Tests
+  inputs:
+    targetType: filePath
+    filePath: './run_tests.ps1'
+
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore for generating nupkg'
+  inputs:
+    restoreSolution: 'nuprojs\.nuget\packages.config'
+    restoreDirectory: '..\packages'
+
+- task: MSBuild@1
+  displayName: 'Build nuproj'
+  inputs:
+    solution: 'nuprojs\Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj '
+    msbuildArchitecture: x64
+    msbuildArguments: '/p:OutputPath=$(Build.SourcesDirectory)\bin\nupkg'
+
