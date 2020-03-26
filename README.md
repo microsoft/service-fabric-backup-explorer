@@ -7,6 +7,9 @@ owner: saketharsh, raunakpandya
 
 # Service Fabric Backup Explorer (Preview)
 
+[![Build Status](https://dev.azure.com/ms/service-fabric-backup-explorer/_apis/build/status/service-fabric-backup-explorer?branchName=master)](https://dev.azure.com/ms/service-fabric-backup-explorer/_build/latest?definitionId=80&branchName=master)
+
+
 ### Review and Update Utility for Service Fabric Reliable Collections
 
 The project empowers the Service Fabric Reliable Stateful application users to audit and review the contents of the Reliable Collections and edit the current state to a consistent view.
