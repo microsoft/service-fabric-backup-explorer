@@ -7,7 +7,7 @@ owner: saketharsh, raunakpandya
 
 # Service Fabric Backup Explorer (Preview)
 
-[![Build Status](https://dev.azure.com/ms/service-fabric-backup-explorer/_apis/build/status/service-fabric-backup-explorer?branchName=master)](https://dev.azure.com/ms/service-fabric-backup-explorer/_build/latest?definitionId=80&branchName=master)
+[![Build Status](https://dev.azure.com/ms/service-fabric-backup-explorer/_apis/build/status/microsoft.service-fabric-backup-explorer?branchName=master)](https://dev.azure.com/ms/service-fabric-backup-explorer/_build/latest?definitionId=330&branchName=master)
 
 
 ### Review and Update Utility for Service Fabric Reliable Collections
