@@ -36,12 +36,12 @@ The Service Fabric Backup Explorer can be consumed in any of the following ways 
 ## Microsoft.ServiceFabric.ReliableCollectionBackup.Parser 
 The binary dll created to be consumed in application to view, enumerate and alter the reliable collection.
 
-Details- [ Parser](docs/Parser)
+Details- [ Parser Nuget](docs/Parser)
 
 ## HTTP Rest Server
 An OWIN based REST API to view, enumerate and alter the state of Reliable Collections.
 
-**Currently, only the Serializers which do not take any parameters as input are supported in Rest Server. Users with serializers having multiple params should use the Nuget in order to perfrom CRUD operations in the Backup**
+**Currently, only the Serializers which do not take any parameters as input are supported in Rest Server. Users with serializers having multiple params should use the Nuget in order to perform CRUD operations in the Backup**
 
 Details- [ RestServer ](docs/Server)
 
