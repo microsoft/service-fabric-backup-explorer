@@ -23,13 +23,13 @@
   </PropertyGroup>
   <Import Project="$(NuProjPath)\NuProj.props" />
   <ItemGroup>    
-    <File Include="$(BinaryDropFolder)\netstandard2.0\$(Id)\*">
+    <File Include="$(BinaryDropFolder)\ReliableCollectionBackupParser\netstandard2.0\*">
       <TargetPath>lib\netstandard2.0</TargetPath>
     </File>    
     <!-- Native windows dll -->
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\FabricCommon.dll" />
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\FabricResources.dll" />
-    <NativeLibraryDependency Include="$(BinaryDropFolder)\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer\KPhysicalLogDll.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\ReliableCollectionBackupRestServer\FabricCommon.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\ReliableCollectionBackupRestServer\FabricResources.dll" />
+    <NativeLibraryDependency Include="$(BinaryDropFolder)\ReliableCollectionBackupRestServer\KPhysicalLogDll.dll" />
     <File Include="@(NativeLibraryDependency)">
       <TargetPath>runtimes\win\native</TargetPath>
     </File>

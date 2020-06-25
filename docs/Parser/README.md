@@ -4,7 +4,7 @@
 --------------------------------|---------------------------------------------
 `namespace `[`Microsoft::ServiceFabric::ReliableCollectionBackup::Parser`](#namespace_microsoft_1_1_service_fabric_1_1_reliable_collection_backup_1_1_parser) | 
 
-# namespace `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser` 
+#### namespace `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser` 
 
 ## Summary
 
@@ -34,7 +34,7 @@ ReliableConcurrentQueue            |
 
 Lists different kind of ReliableState that are supported.
 
-# class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::BackupParser` 
+#### class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::BackupParser` 
 
 ```
 class Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::BackupParser
@@ -43,7 +43,7 @@ class Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::BackupParser
 
 [BackupParser](#class_microsoft_1_1_service_fabric_1_1_reliable_collection_backup_1_1_parser_1_1_backup_parser) parses the backup of Service Fabric stateful service viz. Reliable Collections. This class can be used to 1) Parse a backup chain, 2) Validate data via notifications, 3) Make additional changes and take a new backup.
 
-## Summary
+### Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
@@ -168,7 +168,7 @@ Task representing this asynchronous backup operation.
 
 #### `public inline void `[`Dispose`](#class_microsoft_1_1_service_fabric_1_1_reliable_collection_backup_1_1_parser_1_1_backup_parser_impl_1a2e9e52f02bb78eda924812e14526738f)`()` 
 
-# class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::CodePackageInfo` 
+### class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::CodePackageInfo` 
 
 ```
 class Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::CodePackageInfo
@@ -190,7 +190,7 @@ Stores code package information required for parsing backup.
 
 #### `public inline void `[`Dispose`](#class_microsoft_1_1_service_fabric_1_1_reliable_collection_backup_1_1_parser_1_1_code_package_info_1aa96a76c8dfa9afa0a0d293f4b3aca04d)`()` 
 
-# class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::ComMtaHelper` 
+### class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::ComMtaHelper` 
 
 Helper COM methods
 
@@ -201,7 +201,7 @@ Helper COM methods
 
 ## Members
 
-# class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::GenericUtils` 
+### class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::GenericUtils` 
 
 Utility functions for Generic types
 
@@ -212,7 +212,7 @@ Utility functions for Generic types
 
 ## Members
 
-# class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::NotifyTransactionAppliedEventArgs` 
+### class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::NotifyTransactionAppliedEventArgs` 
 
 ```
 class Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::NotifyTransactionAppliedEventArgs
@@ -258,7 +258,7 @@ Constructor of [NotifyTransactionAppliedEventArgs](#class_microsoft_1_1_service_
 
 * `changes` Reliable Collection changes applied in this Transaction.
 
-# class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::ReliableCollectionChange` 
+### class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::ReliableCollectionChange` 
 
 [ReliableCollectionChange](#class_microsoft_1_1_service_fabric_1_1_reliable_collection_backup_1_1_parser_1_1_reliable_collection_change) stores the changes in a List during a transaction.
 
@@ -287,7 +287,7 @@ Constructor of [ReliableCollectionChange](#class_microsoft_1_1_service_fabric_1_
 #### Parameters
 * `name` Name of Reliable Collection whose changes wer are collecting.
 
-# class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::ReliableStateKindUtils` 
+### class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::ReliableStateKindUtils` 
 
 ## Summary
 
@@ -296,7 +296,7 @@ Constructor of [ReliableCollectionChange](#class_microsoft_1_1_service_fabric_1_
 
 ## Members
 
-# class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::StateManager` 
+### class `Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::StateManager` 
 
 ```
 class Microsoft::ServiceFabric::ReliableCollectionBackup::Parser::StateManager
