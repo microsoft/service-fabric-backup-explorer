@@ -36,6 +36,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 bool transactionSeen = false;
 
                 backupParser.TransactionApplied += (sender, args) =>
@@ -54,6 +58,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 int totalDictionaryAdds = 0;
 
                 backupParser.TransactionApplied += (sender, args) =>
@@ -98,6 +106,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 
             using (var backupParser = new BackupParser(complexDataBackupFolderPath, codePackagePath))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 backupParser.StateManager.TryAddStateSerializer<User>(new UserSerializer());
 
                 int totalUsers = 0;
@@ -136,6 +148,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 int totalDictionaryAdds = 0;
                 int totalTransactionsSeenForDictionary = 0;
                 int lastKeyAdded = -1;
@@ -177,6 +193,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 int totalDictionaryAdds = 0;
                 int totalTransactionsSeenForDictionary = 0;
                 int lastKeyAdded = -1;
@@ -222,6 +242,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 int totalTransactionsSeenForQueue = 0, totalTransactionsSeenForConcQueue = 0, totalTransactionsSeen = 0;
                 var rand = new Random();
 

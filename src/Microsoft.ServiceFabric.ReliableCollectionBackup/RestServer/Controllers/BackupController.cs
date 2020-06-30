@@ -39,14 +39,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
         }
 
         [HttpGet("/backup/getserializers", Name = "GetSerializers")]
-        public async Task<IActionResult> GetSerializers()
+        public IActionResult GetSerializers()
         {
-            return ListSerializers();
+            return  ListSerializers();
         }
 
-        private IActionResult ListSerializers()
+        private  IActionResult ListSerializers()
         {
-            return new JsonResult(backupParserManager.SerializersList);
+            return  new JsonResult(backupParserManager.SerializersList);
         }
 
         private async Task<IActionResult> TakeBackup(BackupRequestBody backupRequest, Data.BackupOption backupOption)

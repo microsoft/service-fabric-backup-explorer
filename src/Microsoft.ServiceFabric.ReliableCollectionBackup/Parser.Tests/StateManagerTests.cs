@@ -33,6 +33,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 long countValuesInDictionary = 0;
 
                 backupParser.TransactionApplied += async (sender, args) =>
@@ -69,6 +73,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 long countValuesInDictionary = 0;
 
                 backupParser.TransactionApplied += async (sender, args) =>
@@ -119,6 +127,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 bool transactionSeen = false;
                 var stateManager = backupParser.StateManager;
 
@@ -189,6 +201,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 long countValuesInQueue = 0;
 
                 backupParser.TransactionApplied += async (sender, args) =>

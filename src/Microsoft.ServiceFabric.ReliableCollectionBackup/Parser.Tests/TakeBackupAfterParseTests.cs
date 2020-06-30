@@ -37,6 +37,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // read a back and then write more keys and take a full back.
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+                    
+                };
                 await backupParser.ParseAsync(CancellationToken.None);
                 var stateManager = backupParser.StateManager;
                 var result = await stateManager.TryGetAsync<IReliableDictionary<long, long>>(DictionaryName);
@@ -58,6 +62,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // Verify full backup
             using (var backupParser = new BackupParser(this.FullBackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 await backupParser.ParseAsync(CancellationToken.None);
 
                 var stateManager = backupParser.StateManager;
@@ -90,6 +98,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // read a back and then write more keys and take a full back.
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 await backupParser.ParseAsync(CancellationToken.None);
 
                 var stateManager = backupParser.StateManager;
@@ -117,6 +129,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // Verify full backup
             using (var backupParser = new BackupParser(this.FullBackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 await backupParser.ParseAsync(CancellationToken.None);
 
                 var stateManager = backupParser.StateManager;
@@ -159,6 +175,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // read a back and then write more keys and take a full back.
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 await backupParser.ParseAsync(CancellationToken.None);
 
                 var stateManager = backupParser.StateManager;
@@ -200,6 +220,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // Verify full+incremental backups
             using (var backupParser = new BackupParser(this.FullAndIncrementalBackupFolderPath, ""))
             {
+                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                {
+
+                };
                 await backupParser.ParseAsync(CancellationToken.None);
 
                 var stateManager = backupParser.StateManager;
