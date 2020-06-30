@@ -65,6 +65,21 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         }
 
         /// <summary>
+        /// Fire Events related to New DataTypes of Reliable States that Parser gets to know about
+        /// </summary>
+        public event EventHandler<String>ReliableStateTypeKnown
+        {
+            add
+            {
+                this.backupParserImpl.ReliableStateTypeKnown += value;
+            }
+            remove
+            {
+                this.backupParserImpl.ReliableStateTypeKnown -= value;
+            }
+        }
+
+        /// <summary>
         /// Parses a backup.
         /// Before parsing, one could register for <see cref="TransactionApplied" /> transaction events during parsing. These events are fired when a committed transaction is being parsed.
         /// After parsing has finished, one can write to the Reliable Collections using <see cref="StateManager" />
@@ -123,5 +138,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// Actual implementation of <see cref="BackupParser"/>
         /// </summary>
         private BackupParserImpl backupParserImpl;
+        
     }
 }

@@ -38,6 +38,17 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
             return await TakeBackup(backupRequest, BackupOption.Incremental);
         }
 
+        [HttpGet("/backup/getserializers", Name = "GetSerializers")]
+        public async Task<IActionResult> GetSerializers()
+        {
+            return ListSerializers();
+        }
+
+        private IActionResult ListSerializers()
+        {
+            return new JsonResult(backupParserManager.SerializersList);
+        }
+
         private async Task<IActionResult> TakeBackup(BackupRequestBody backupRequest, Data.BackupOption backupOption)
         {
             var error = this.ValidateRequest(backupRequest);

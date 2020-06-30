@@ -13,6 +13,7 @@ using log4net;
 using System.Reflection;
 
 using Microsoft.ServiceFabric.ReliableCollectionBackup.Parser;
+using System.Runtime.Remoting.Channels;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
 {
@@ -34,6 +35,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                     transactionsQueue.Add(args);
                     Console.WriteLine("{0} : TransactionId {1} , CommitSequenceNumber {2}, Changes {3}", transactionsQueue.Count, args.TransactionId, args.CommitSequenceNumber, args.Changes.Count());
                 }
+            };
+
+            this.BackupParser.ReliableStateTypeKnown += (sender, args) =>
+            {
+                this.SerializersList.Add(args);
             };
         }
 
@@ -98,6 +104,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         // lock is used for taking N items from transactionsQueue atomically across concurrent requests.
         private static Object queueLock = new Object();
         private const int NumMaxTransactionsInMemory = 1000000;
+        public List<string> SerializersList = new List<string>();
         //bool blockOnQueueFull = false;
     }
 }

@@ -48,13 +48,27 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
             this.stateManager = new StateManager(reliabilitySimulator);
             this.seenFirstTransaction = false;
-            this.transactionChangeManager = new TransactionChangeManager(this.reliabilitySimulator);
+            this.transactionChangeManager = new TransactionChangeManager( this.reliabilitySimulator);
         }
 
         /// <summary>
         /// Event that notifies about the committed transactions.
         /// </summary>
         public event EventHandler<NotifyTransactionAppliedEventArgs> TransactionApplied;
+
+
+        public event EventHandler<string> ReliableStateTypeKnown
+        {
+            add
+            {
+                this.transactionChangeManager.reliableStateTypeKnown += value;
+            }
+            remove
+            {
+                this.transactionChangeManager.reliableStateTypeKnown -= value;
+            }
+        }
+
 
         /// <summary>
         /// Parses the backup.
@@ -189,6 +203,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             get { return this.reliabilitySimulator.GetTransactionalReplicator(); }
             set { throw new InvalidOperationException("BackupParserImpl.Replicator can't be set from outside of ReliabilitySimulator."); }
         }
+
 
         private string backupChainPath;
         private CodePackageInfo codePackage;
