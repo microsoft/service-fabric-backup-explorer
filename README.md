@@ -71,12 +71,12 @@ pip install backup-explorer-cli
 ### Using Rest Server 
 ```
 cd %Release-Directory
-cd bin\publish\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
+cd bin\ReliableCollectionBackupRestServer
 .\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.exe --config %Your-Config-File.json%
 ```
 
 ### Using Parser Nuget 
-Microsoft.ServiceFabric.ReliableCollectionBackup.Parser NuGet Package can be downloaded from Nuget.org official repository .
+Microsoft.ServiceFabric.ReliableCollectionBackup.Parser NuGet Package can be downloaded from Nuget.org official repository.
 Details of Using the Nuget provided are mentioned in the [Parser docs](docs/Parser)
 
 ## Developer Help and & Documentation
@@ -84,13 +84,13 @@ Details of Using the Nuget provided are mentioned in the [Parser docs](docs/Pars
 ### Building Rest Server and Parser Code 
 From Repository root folder, run in Powershell:
 ```
- .\build_all.ps1 -build
+ .\build.ps1 -build
 ```
 
 ### Build and Consume bkpctl
 From Repository root folder , run in Powershell:
 ```
- .\build_all.ps1 -buildCli
+ .\build.ps1 -buildCli
 ```
 In order to use bkpctl, the REST Server must be up and running, so that CLI can fetch the required backup, and present it on the command line . 
 
@@ -98,14 +98,14 @@ In order to use bkpctl, the REST Server must be up and running, so that CLI can 
 ### Build all packages including Tests and Backup Command Line Tool
 From Repository root folder , run in Powershell:
 ```
- .\build_all.ps1 -buildAll
+ .\build.ps1 -buildAll
 ```
 User can choose to specify the path of MSBuild or the Visual Studio Version installed in the system. Default Version for VS is 2017.
 
 ### Generating Nuget Packages
 From Visual Studio Command Prompt which has MSBuild defined:
 ```
-.\build_all.ps1 -build -generateNupkg
+.\build.ps1 -build -generateNupkg
 ```
 
 ### Running Rest Server
@@ -113,7 +113,7 @@ From the Repository root folder, perform the following steps :
 ```
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
 dotnet build
-dotnet run --no-build --config configs\sampleconfig.json --configuration Release
+dotnet run --no-build --config configs\sampleconfig.json --configuration Debug
 
 # Testing REST API's
 curl -v http://localhost:5000/$query/testDictionary?$top=2
@@ -129,17 +129,17 @@ In the config file, user can define the following :
 1. App Name and Service Name 
 2. BackupChainPath  - Location to where the Backups are located in the System 
 3. CodePackagePath - Location to where binaries for Serializers and objects are located in the System. 
-4. Serializers - It's an array, where user needs to specify all the Classes, and their Serializers that are required for the Backup Viewer to read the Backups 
+4. Serializers - It's an array, where user needs to specify all the Classes, and their Serializers that are required for the Backup Viewer to read the Backups .
 
 ### Running Tests
 ```
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests
 dotnet build
-dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --configuration Release
+dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --configuration Debug
 popd
 
 # running one test
-dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --filter "FullyQualifiedName~BackupParser_EachTransactionHasRightChangesEvenWithBlockingTransactionAppliedEvents" --configuration Release
+dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --filter "FullyQualifiedName~BackupParser_EachTransactionHasRightChangesEvenWithBlockingTransactionAppliedEvents" --configuration Debug
 ```
 
 Running RestServer tests:
@@ -172,4 +172,4 @@ These is the check list that would be required to complete, for pushing your cha
 
 1. Build the application with your change.
 2. The application should satisfy all the test cases written for Parser.
-3. Verify whether Rest Server is working correctly or not , using the Tests present in RestServer.Tests .
+3. Verify whether Rest Server is working correctly or not, using the Tests present in RestServer.Tests.

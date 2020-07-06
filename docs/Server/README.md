@@ -134,13 +134,13 @@ Contains the entries of Reliable collections, with Partition Id, Etag and Key, V
 
 # Get all transaction performed 
 
-Return the list of all tranaction performed in the backup.
+Return the list of all transactions performed in the backup.
 
 ## Request 
 
 | METHOD        | Request URI   | 
 | ------------- |:-------------:| 
-|  GET          | /api/transactions | 
+|  GET          | /transactions | 
 
 
 
@@ -159,7 +159,7 @@ Return the list of all tranaction performed in the backup.
 ## Examples
 
 ```
-GET http://localhost:5000/api/transactions
+GET http://localhost:5000/transactions
 ```
 
 ### Response 200
@@ -412,7 +412,7 @@ Update the values of the current reliable collection with operation perfomed in 
 ## Examples - Take full backup
 
 ```
-POST http://localhost:5000/api/backup/full
+POST http://localhost:5000/backup/full
 ```
 ### Request Body
 ```json
@@ -440,7 +440,7 @@ Full Backup is taken successfully.
 ## Examples - Take incremental backup
 
 ```
-POST http://localhost:5000/api/backup/incremental
+POST http://localhost:5000/backup/incremental
 ```
 ### Request Body
 ```json
@@ -463,7 +463,3 @@ POST http://localhost:5000/api/backup/incremental
 ```
 
 Incremental Backup is taken successfully.
-
-
-
-
