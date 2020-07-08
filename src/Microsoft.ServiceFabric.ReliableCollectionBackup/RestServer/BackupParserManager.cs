@@ -45,6 +45,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
                     transactionsQueue.Add(args);
                     if (errorInParsing && !serializerListed)
                     {
+                        Console.WriteLine("Looks like all the the backup was not paresed correctly. Here is the list of " +
+                            "Dictionaries and their Serializers Required " +
+                            "to parse the backup.");
                         this.SerializersList.ForEach(Console.WriteLine);
                         serializerListed = true;
                     }
