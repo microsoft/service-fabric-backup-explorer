@@ -39,7 +39,6 @@ param
 # Include comman commands.
 . "./common.ps1"
 
-$presentWorkingDirectory= Get-Location
 $PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 $NugetFullPath = join-path $PSScriptRoot "nuget.exe"
 
@@ -82,7 +81,8 @@ if ($showVersion) {
     $DisplayHelp = $false;
     Write-Host "Version of all tools:"
     dotnet --info
-    msbuild /version
+    Write-Host "MSBuild Version:"
+    & $MSBuildFullPath  /version
 }
 
 if ($build -Or $buildAll) {
