@@ -31,12 +31,17 @@ param
     [ValidateSet('2017','2019')]
     [string]$vsversion ="2017",
 
+    # Build configuration - Default is Debug
     [ValidateSet('Debug', 'Release')]
-    [string]$Configuration = 'Release'
+    [string]$Configuration = 'Debug'
 );
 
 # Include comman commands.
 . "./common.ps1"
+
+$presentWorkingDirectory= Get-Location
+$PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
+$NugetFullPath = join-path $PSScriptRoot "nuget.exe"
 
 
 if ($MSBuildFullPath -eq "") {
@@ -78,7 +83,6 @@ if ($showVersion) {
     Write-Host "Version of all tools:"
     dotnet --info
     msbuild /version
-    nuget
 }
 
 if ($build -Or $buildAll) {
@@ -107,7 +111,7 @@ if ($nuget -Or $buildAll) {
 
     pushd nuprojs
     # nuget restore
-    Exec { nuget.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages }
+    Exec { & $NugetFullPath restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages }
     # generate nupkg
     Exec { & $MSBuildFullPath Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=..\bin\nupkg  /p:Configuration=$Configuration}
     popd
