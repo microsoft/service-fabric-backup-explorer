@@ -88,12 +88,12 @@ if ($build -Or $buildAll) {
     Exec { dotnet build --packages .\packages backupExplorer.sln -c $Configuration }
 
     # publish for nupkg generation
-    pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser\
+    pushd src\BackupExplorer\Parser\
     Exec { dotnet publish --no-build --framework netstandard2.0 -c $Configuration }
     Exec { dotnet publish --no-build --framework net471 -c $Configuration }
     popd
 
-    pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
+    pushd src\BackupExplorer\RestServer\
     Exec { dotnet publish --no-build -c $Configuration }
     popd
     

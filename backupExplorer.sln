@@ -3,17 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parser", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser\Parser.csproj", "{F9A204A8-4878-446B-B437-BAB888906760}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parser", "src\BackupExplorer\Parser\Parser.csproj", "{F9A204A8-4878-446B-B437-BAB888906760}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parser.Tests", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests\Parser.Tests.csproj", "{C21FA5E0-DBD5-4ECD-999E-EF4154EAD297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parser.Tests", "src\BackupExplorer\Parser.Tests\Parser.Tests.csproj", "{C21FA5E0-DBD5-4ECD-999E-EF4154EAD297}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestServer", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\RestServer.csproj", "{5BA3665D-D2A8-43F7-BDD8-817B8834A141}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestServer", "src\BackupExplorer\RestServer\RestServer.csproj", "{5BA3665D-D2A8-43F7-BDD8-817B8834A141}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestServer.Tests", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer.Tests\RestServer.Tests.csproj", "{DA547004-61E5-49D1-A246-097E87DE627C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestServer.Tests", "src\BackupExplorer\RestServer.Tests\RestServer.Tests.csproj", "{DA547004-61E5-49D1-A246-097E87DE627C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackupGenerator", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests\BackupGenerator\BackupGenerator.csproj", "{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserType", "src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests\UserType\UserType.csproj", "{2E09E042-C9E5-4D1C-BA54-43281C1DCC35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserType", "src\BackupExplorer\Parser.Tests\UserType\UserType.csproj", "{2E09E042-C9E5-4D1C-BA54-43281C1DCC35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,14 +53,6 @@ Global
 		{DA547004-61E5-49D1-A246-097E87DE627C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA547004-61E5-49D1-A246-097E87DE627C}.Release|x64.ActiveCfg = Release|Any CPU
 		{DA547004-61E5-49D1-A246-097E87DE627C}.Release|x64.Build.0 = Release|Any CPU
-		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Debug|x64.Build.0 = Debug|Any CPU
-		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Release|x64.ActiveCfg = Release|Any CPU
-		{DEAC9316-70ED-4C3E-BBA9-36CBEBE5A0FC}.Release|x64.Build.0 = Release|Any CPU
 		{2E09E042-C9E5-4D1C-BA54-43281C1DCC35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E09E042-C9E5-4D1C-BA54-43281C1DCC35}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E09E042-C9E5-4D1C-BA54-43281C1DCC35}.Debug|x64.ActiveCfg = Debug|Any CPU
