@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\properties\service_fabric_common_test.props" />
+  <Import Project="..\..\..\properties\common_test.props" />
   <PropertyGroup>
     <ProjectGuid>{C21FA5E0-DBD5-4ECD-999E-EF4154EAD297}</ProjectGuid>
     <AssemblyName>Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests</AssemblyName>

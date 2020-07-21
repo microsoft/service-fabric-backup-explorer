@@ -113,7 +113,7 @@ if ($nuget -Or $buildAll) {
     # nuget restore
     Exec { & $NugetFullPath restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages }
     # generate nupkg
-    Exec { & $MSBuildFullPath Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=..\bin\nupkg  /p:Configuration=$Configuration}
+    Exec { & $MSBuildFullPath Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=..\bin\  /p:Configuration=$Configuration}
     popd
 } 
 
