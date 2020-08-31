@@ -26,38 +26,13 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         public BackupParserManager(BackupParser backupParser)
         {
             this.BackupParser = backupParser;
-            var serializerListed = false;
+            //var serializerListed = false;
 
             // todo : take NumMaxTransactionsInMemory from config.
-            this.transactionsQueue = new BlockingCollection<NotifyTransactionAppliedEventArgs>(NumMaxTransactionsInMemory);
             this.BackupParser.TransactionApplied += (sender, args) =>
             {
-                if (transactionsQueue.Count < NumMaxTransactionsInMemory)
-                {
-                    if (args.CommitSequenceNumber == -1)
-                    {
-                        errorInParsing = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("{0} : TransactionId {1} , CommitSequenceNumber {2}, Changes {3}", transactionsQueue.Count, args.TransactionId, args.CommitSequenceNumber, args.Changes.Count());
-                    }
-                    transactionsQueue.Add(args);
-                    if (errorInParsing && !serializerListed)
-                    {
-                        Console.WriteLine("Looks like all the the backup was not paresed correctly. Here is the list of " +
-                            "Dictionaries and their Serializers Required " +
-                            "to parse the backup.");
-                        this.SerializersList.ForEach(Console.WriteLine);
-                        serializerListed = true;
-                    }
-                }
-            };
-
-            
-            this.BackupParser.ReliableStateTypeKnown += (sender, args) =>
-            {
-                this.SerializersList.Add(args);
+                transactionsQueue = args;
+                Console.WriteLine("Transaction Id {0}, CommitSequenceNumber {1}, Changes {2}", args.TransactionId, args.CommitSequenceNumber, args.Changes.Count());
             };
         }
 
@@ -80,11 +55,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         /// Try to give all transactions.
         /// </summary>
         /// <returns>Returns list of transactions</returns>
-        public List<NotifyTransactionAppliedEventArgs> GetTransactions()
+        public NotifyTransactionAppliedEventArgs GetTransactions()
         {
             lock(queueLock)
             {
-                return transactionsQueue.AsEnumerable<NotifyTransactionAppliedEventArgs>().ToList<NotifyTransactionAppliedEventArgs>();
+                return transactionsQueue;
             }
         }
 
@@ -120,16 +95,9 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         
         private Task parsingTask;
         
-        private BlockingCollection<NotifyTransactionAppliedEventArgs> transactionsQueue;
+        private NotifyTransactionAppliedEventArgs transactionsQueue;
         
         // lock is used for taking N items from transactionsQueue atomically across concurrent requests.
         private static Object queueLock = new Object();
-        
-        private const int NumMaxTransactionsInMemory = 1000000;
-        
-        // Contains Description of the Data Types required for each Reliable Dictionary added from the backup
-        public List<string> SerializersList = new List<string>();
-       
-        private bool errorInParsing = false;
     }
 }

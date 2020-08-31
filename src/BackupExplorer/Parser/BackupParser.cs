@@ -64,20 +64,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             }
         }
 
-        /// <summary>
-        /// Fire Events related to New DataTypes of Reliable States that Parser gets to know about
-        /// </summary>
-        public event EventHandler<String>ReliableStateTypeKnown
-        {
-            add
-            {
-                this.backupParserImpl.ReliableStateTypeKnown += value;
-            }
-            remove
-            {
-                this.backupParserImpl.ReliableStateTypeKnown -= value;
-            }
-        }
 
         /// <summary>
         /// Parses a backup.

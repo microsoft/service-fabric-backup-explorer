@@ -56,20 +56,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </summary>
         public event EventHandler<NotifyTransactionAppliedEventArgs> TransactionApplied;
 
-
-        public event EventHandler<string> ReliableStateTypeKnown
-        {
-            add
-            {
-                this.transactionChangeManager.reliableStateTypeKnown += value;
-            }
-            remove
-            {
-                this.transactionChangeManager.reliableStateTypeKnown -= value;
-            }
-        }
-
-
         /// <summary>
         /// Parses the backup.
         /// </summary>
@@ -136,7 +122,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 }
 
                 this.OnTransactionCommitted(sender, e);
-                this.transactionChangeManager.TransactionCompleted();
             }
         }
 
@@ -198,7 +183,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             this.reliabilitySimulator.GrantReadAccess();
         }
 
-        private TransactionalReplicator Replicator
+        public TransactionalReplicator Replicator
         {
             get { return this.reliabilitySimulator.GetTransactionalReplicator(); }
             set { throw new InvalidOperationException("BackupParserImpl.Replicator can't be set from outside of ReliabilitySimulator."); }

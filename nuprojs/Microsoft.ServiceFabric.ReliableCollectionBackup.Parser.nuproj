@@ -18,7 +18,7 @@
     <Owners>raunakp;saharsh</Owners>
     <Description>This package contains the Microsoft Service Fabric Reliable Collection Backup Parser</Description>
     <Summary>This package contains the Microsoft Service Fabric Reliable Collection Backup Parser</Summary>
-    <Tags>Microsoft ServiceFabric ReliableCollection BackupParser</Tags>
+    <Tags>Microsoft ServiceFabric ReliableCollection Backup Parser</Tags>
     <NuProjPath>packages\NuProj.0.11.30\tools\</NuProjPath>
   </PropertyGroup>
   <Import Project="$(NuProjPath)\NuProj.props" />

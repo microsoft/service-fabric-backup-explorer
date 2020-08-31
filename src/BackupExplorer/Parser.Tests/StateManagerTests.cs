@@ -33,7 +33,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                backupParser.ReliableStateTypeKnown += (sender, args) =>
                 {
 
                 };
@@ -73,7 +72,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                backupParser.ReliableStateTypeKnown += (sender, args) =>
                 {
 
                 };
@@ -127,7 +125,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                backupParser.ReliableStateTypeKnown += (sender, args) =>
                 {
 
                 };
@@ -201,7 +198,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                backupParser.ReliableStateTypeKnown += (sender, args) =>
                 {
 
                 };

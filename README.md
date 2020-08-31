@@ -9,11 +9,10 @@ owner: saketharsh, raunakpandya
 
 [![Build Status](https://dev.azure.com/ms/service-fabric-backup-explorer/_apis/build/status/microsoft.service-fabric-backup-explorer?branchName=master)](https://dev.azure.com/ms/service-fabric-backup-explorer/_build/latest?definitionId=330&branchName=master)
 
-
-### Review and Update Utility for Service Fabric Reliable Collections
+## Review and Update Utility for Service Fabric Reliable Collections
 
 The project empowers the Service Fabric Reliable Stateful application users to audit and review the contents of the Reliable Collections and edit the current state to a consistent view.
-It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the exisitng Service Fabric cluster which is running the same implementation/version of the Reliable Stateful application.
+It also creates backup of the current snapshot of the Reliable Collections which can be loaded in any of the existing Service Fabric cluster which is running the same implementation/version of the Reliable Stateful application.
 
 The changes made to current state will be restored along with the other transactions to current running Service Fabric cluster, hence enabling a consistent view of the collection.
 
@@ -33,61 +32,65 @@ The Service Fabric Backup Explorer can be consumed in any of the following ways 
 2. HTTP/Rest   -    HTTP based  Rest hosting to view and alter the reliable collections.
 3. bkpctl -         Service fabric backup controller CLI (command line interface) to view and alter the reliable collections. 
 
-## Microsoft.ServiceFabric.ReliableCollectionBackup.Parser 
-The binary dll created to be consumed in application to view, enumerate and alter the reliable collection.
+### Reliable Collections Backup Parser
 
-Details- [ Parser Nuget](docs/Parser)
+The binary dll created to be consumed in application to view, enumerate and alter the reliable collection. [Details](docs/Parser)
 
-## HTTP Rest Server
-An OWIN based REST API to view, enumerate and alter the state of Reliable Collections.
+### HTTP Rest Server
+
+An OWIN based REST API to view, enumerate and alter the state of Reliable Collections. [Details](docs/Server)
 
 **Currently, only the Serializers which do not take any parameters as input are supported in Rest Server. Users with serializers having multiple params should use the Nuget in order to perform CRUD operations in the Backup**
 
-Details- [ RestServer ](docs/Server)
+### bkpctl
 
-## bkpctl
 A Command Line  Interface to view, enumerate and alter the state of Reliable Collections.
 
-Details- [ bkpctl ](docs/bkpctl)
+Details- [bkpctl](docs/bkpctl)
 
+### Requirements
 
-## Requirements
-1. dotnet
+1. .NET Framework
 2. MSBuild
-3. Nuget
-4. Python 3
-5. python-pip
+3. Python 3
+4. python-pip
 
-## Usage 
+### Usage
+
 Download the latest release from the Repository.
 
-### Installing bkpctl CLI 
+#### Installing bkpctl CLI
+
 To install the the CLI tool for easy I/O operations on the backup :-
 ```
-cd %Release-Directory%
+cd %release/bin%
 pip install backup-explorer-cli
 ```
 
-### Using Rest Server 
+#### Using Rest Server
+
 ```
-cd %Release-Directory
-cd bin\ReliableCollectionBackupRestServer
-.\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.exe --config %Your-Config-File.json%
+cd %release/bin%
+cd ReliableCollectionBackupRestServer
+.\Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.exe --config %path\of\config.json%
 ```
 
-### Using Parser Nuget 
-Microsoft.ServiceFabric.ReliableCollectionBackup.Parser NuGet Package can be downloaded from Nuget.org official repository.
-Details of Using the Nuget provided are mentioned in the [Parser docs](docs/Parser)
+#### Using Parser Nuget
 
-## Developer Help and & Documentation
+[ReliableCollectionBackup Parser](https://www.nuget.org/packages/Microsoft.ServiceFabric.ReliableCollectionBackup.Parser/) NuGet Package can be downloaded from nuget.org official repository.
+Details of using the Nuget are mentioned in the [docs](docs/Parser) here.
 
-### Building Rest Server and Parser Code 
+### Developer Help and & Documentation
+
+#### Locally building the Parser and Rest Server
+
 From Repository root folder, run in Powershell:
 ```
  .\build.ps1 -build
 ```
 
-### Build and Consume bkpctl
+#### Build bkpctl CLI
+
 From Repository root folder , run in Powershell:
 ```
  .\build.ps1 -buildCli
@@ -95,32 +98,34 @@ From Repository root folder , run in Powershell:
 In order to use bkpctl, the REST Server must be up and running, so that CLI can fetch the required backup, and present it on the command line . 
 
 
-### Build all packages including Tests and Backup Command Line Tool
+#### Build all packages including Tests
+
 From Repository root folder , run in Powershell:
 ```
  .\build.ps1 -buildAll
 ```
 User can choose to specify the path of MSBuild or the Visual Studio Version installed in the system. Default Version for VS is 2017.
 
-### Generating Nuget Packages
+#### Generating Nuget Packages
 From Visual Studio Command Prompt which has MSBuild defined:
 ```
-.\build.ps1 -build -generateNupkg
+.\build.ps1 -nuget
 ```
 
-### Running Rest Server
+#### Running Rest Server
+
 From the Repository root folder, perform the following steps :
 ```
 pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
 dotnet build
-dotnet run --no-build --config configs\sampleconfig.json --configuration Debug
-
-# Testing REST API's
-curl -v http://localhost:5000/$query/testDictionary?$top=2
-
-popd
+dotnet run --no-build --config configs\sampleconfig.json
 ```
-### Configuring the Rest Server of Backup Viewer 
+
+Testing REST API's
+
+`curl -v http://localhost:5000/$query/testDictionary?$top=2`
+
+#### Configuring the Rest Server of Backup Viewer 
 The Rest Server takes in as input, path to config json file, where user can specify the necessary configuratins for the Backup Viewer to Read the Backups. 
 
 Sample Config file can be seen at [ sampleconfig.json](src/Microsoft.ServiceFabric.ReliableCollectionBackup/RestServer/configs/sampleconfig.json)
@@ -131,24 +136,25 @@ In the config file, user can define the following :
 3. CodePackagePath - Location to where binaries for Serializers and objects are located in the System. 
 4. Serializers - It's an array, where user needs to specify all the Classes, and their Serializers that are required for the Backup Viewer to read the Backups .
 
-### Running Tests
+#### Running Tests
+Once code and tests are locally built, you can run tests in order to validate your changes/ check whether everything works fine.
+
 ```
-pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser.Tests
+cd src\BackupExplorer\Parser.Tests
 dotnet build
 dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --configuration Debug
-popd
 
 # running one test
 dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --filter "FullyQualifiedName~BackupParser_EachTransactionHasRightChangesEvenWithBlockingTransactionAppliedEvents" --configuration Debug
 ```
 
-Running RestServer tests:
+#### Running Rest Server tests:
 ```
-cd service-fabric-backup-explorer\src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer.Tests
+cd src\BackupExplorer\RestServer.Tests
 dotnet build && \
 dotnet test --no-build --diag test_results.log --verbosity normal --logger "console;verbosity=detailed"
 ```
-## Contributing
+### Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
@@ -162,7 +168,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-## Ideas and Improvements
+### Ideas and Improvements
 
 We encourage community feedback and contribution to improve this application. To make any contribution, our contribution guidelines needs to be followed. If you have any new idea, please file an issue for that.
 
@@ -170,6 +176,7 @@ We encourage community feedback and contribution to improve this application. To
 Please create a branch and push your changes to that and then, create a pull request for that change.
 These is the check list that would be required to complete, for pushing your change to master branch.
 
-1. Build the application with your change.
+1. Build the application with your changes.
 2. The application should satisfy all the test cases written for Parser.
-3. Verify whether Rest Server is working correctly or not, using the Tests present in RestServer.Tests.
+3. Add additional test cases relevant to your changes.
+4. Verify whether Rest Server is working correctly or not, using the Tests present in RestServer.Tests.

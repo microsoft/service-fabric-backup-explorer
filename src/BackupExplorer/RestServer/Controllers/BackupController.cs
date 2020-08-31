@@ -9,7 +9,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.ModelBinding;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Data;
 
@@ -36,17 +35,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Controller
         public async Task<IActionResult> PostIncrementalBackup([FromBody] BackupRequestBody backupRequest)
         {
             return await TakeBackup(backupRequest, BackupOption.Incremental);
-        }
-
-        [HttpGet("/backup/getserializers", Name = "GetSerializers")]
-        public IActionResult GetSerializers()
-        {
-            return  ListSerializers();
-        }
-
-        private  IActionResult ListSerializers()
-        {
-            return  new JsonResult(backupParserManager.SerializersList);
         }
 
         private async Task<IActionResult> TakeBackup(BackupRequestBody backupRequest, Data.BackupOption backupOption)

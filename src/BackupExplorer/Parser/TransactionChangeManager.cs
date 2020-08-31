@@ -83,7 +83,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                             {
                                 var keyType = reliableStateType1.GetGenericArguments()[0];
                                 var valueType = reliableStateType1.GetGenericArguments()[1];
-                                this.reliableStateTypeKnown.Invoke(this, reliableState.Name.ToString() + ":- " +  keyType + "\n" + valueType);
 
                                 // use reflection to call my own method because key/value types are known at runtime.
                                 this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
@@ -112,7 +111,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                         var keyType = reliableStateType.GetGenericArguments()[0];
                         var valueType = reliableStateType.GetGenericArguments()[1];
 
-                        this.reliableStateTypeKnown.Invoke(this, addoperation.ReliableState.Name.ToString() + ":- " + keyType + "\n" + valueType);
                         // use reflection to call my own method because key/value types are known at runtime.
                         this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
                             .MakeGenericMethod(keyType, valueType)
@@ -154,8 +152,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         }
 
         private Dictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;
-        
-        public EventHandler<string> reliableStateTypeKnown;
         
         private ReliabilitySimulator reliabilitySimulator;
     }

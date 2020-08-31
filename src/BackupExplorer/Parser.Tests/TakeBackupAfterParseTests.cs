@@ -37,7 +37,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // read a back and then write more keys and take a full back.
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                 
                 {
                     
                 };
@@ -62,7 +62,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // Verify full backup
             using (var backupParser = new BackupParser(this.FullBackupFolderPath, ""))
             {
-                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                 
                 {
 
                 };
@@ -98,7 +98,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // read a back and then write more keys and take a full back.
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                 
                 {
 
                 };
@@ -129,7 +129,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // Verify full backup
             using (var backupParser = new BackupParser(this.FullBackupFolderPath, ""))
             {
-                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                 
                 {
 
                 };
@@ -175,7 +175,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // read a back and then write more keys and take a full back.
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                 
                 {
 
                 };
@@ -220,7 +220,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
             // Verify full+incremental backups
             using (var backupParser = new BackupParser(this.FullAndIncrementalBackupFolderPath, ""))
             {
-                backupParser.ReliableStateTypeKnown += (sender, args) =>
+                 
                 {
 
                 };
