@@ -58,6 +58,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
 
                 backupParser.TransactionApplied += (sender, args) =>
                 {
+                    totalDictionaryAdds = 0;
                     foreach (var reliableStateChange in args.Changes)
                     {
                         if (reliableStateChange.Name == DictionaryName)
@@ -128,92 +129,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
                 await backupParser.ParseAsync(CancellationToken.None);
 
                 Assert.IsTrue(totalUsers > 0, "Could not parse any user from backup");
-            }
-        }
-
-        [TestMethod]
-        public async Task BackupParser_EachTransactionHasRightChanges()
-        {
-            using (var backupParser = new BackupParser(BackupFolderPath, ""))
-            {
-                int totalDictionaryAdds = 0;
-                int totalTransactionsSeenForDictionary = 0;
-                int lastKeyAdded = -1;
-
-                backupParser.TransactionApplied += (sender, args) =>
-                {
-                    foreach (var reliableStateChange in args.Changes)
-                    {
-                        if (reliableStateChange.Name == DictionaryName)
-                        {
-                            foreach (var change in reliableStateChange.Changes)
-                            {
-                                var addChange = change as NotifyDictionaryItemAddedEventArgs<long, long>;
-                                if (null != addChange)
-                                {
-                                    totalDictionaryAdds++;
-                                    Assert.IsTrue(addChange.Key > lastKeyAdded,
-                                        string.Format("Found wrong changes within a transaction : False : key added {0} > lastKeyAdded {1}",
-                                            totalTransactionsSeenForDictionary, lastKeyAdded));
-                                }
-                            }
-
-                            Assert.AreEqual(NumOperationsPerTransaction, reliableStateChange.Changes.Count(), "Wrong number of changes within a transaction");
-
-                            totalTransactionsSeenForDictionary += 1;
-                        }
-                    }
-                };
-
-                await backupParser.ParseAsync(CancellationToken.None);
-
-                Assert.AreEqual(TotalDictionaryInserts, totalDictionaryAdds, "Not able to collect all Dictionary change events");
-                Assert.AreEqual(TotalDictionaryTransactions, totalTransactionsSeenForDictionary, "Wrong number of transactions");
-            }
-        }
-
-        [TestMethod]
-        public async Task BackupParser_EachTransactionHasRightChangesEvenWithBlockingTransactionAppliedEvents()
-        {
-            using (var backupParser = new BackupParser(BackupFolderPath, ""))
-            {
-                int totalDictionaryAdds = 0;
-                int totalTransactionsSeenForDictionary = 0;
-                int lastKeyAdded = -1;
-                var rand = new Random();
-
-                backupParser.TransactionApplied += (sender, args) =>
-                {
-                    foreach (var reliableStateChange in args.Changes)
-                    {
-                        if (reliableStateChange.Name == DictionaryName)
-                        {
-                            foreach (var change in reliableStateChange.Changes)
-                            {
-                                var addChange = change as NotifyDictionaryItemAddedEventArgs<long, long>;
-                                if (null != addChange)
-                                {
-                                    totalDictionaryAdds++;
-                                    Assert.IsTrue(addChange.Key > lastKeyAdded,
-                                        string.Format("Found wrong changes within a transaction : False : key added {0} > lastKeyAdded {1}",
-                                            totalTransactionsSeenForDictionary, lastKeyAdded));
-                                }
-                            }
-
-                            Assert.AreEqual(NumOperationsPerTransaction, reliableStateChange.Changes.Count(), "Wrong number of changes within a transaction");
-
-                            totalTransactionsSeenForDictionary += 1;
-                        }
-                    }
-
-                    // sleep for 10-200 ms.
-                    Thread.Sleep(rand.Next(10, 200));
-                };
-
-                await backupParser.ParseAsync(CancellationToken.None);
-
-                Assert.AreEqual(TotalDictionaryInserts, totalDictionaryAdds, "Not able to collect all Dictionary change events");
-                Assert.AreEqual(TotalDictionaryTransactions, totalTransactionsSeenForDictionary, "Wrong number of transactions");
             }
         }
 
