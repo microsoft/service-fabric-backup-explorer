@@ -64,7 +64,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             }
         }
 
-
         /// <summary>
         /// Parses a backup.
         /// Before parsing, one could register for <see cref="TransactionApplied" /> transaction events during parsing. These events are fired when a committed transaction is being parsed.

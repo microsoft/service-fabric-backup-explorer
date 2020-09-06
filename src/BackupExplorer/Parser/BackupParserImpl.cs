@@ -120,7 +120,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                     this.SetUpReplicaForReads();
                     this.seenFirstTransaction = true;
                 }
-
                 this.OnTransactionCommitted(sender, e);
             }
         }
