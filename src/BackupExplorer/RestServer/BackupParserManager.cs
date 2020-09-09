@@ -26,12 +26,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         public BackupParserManager(BackupParser backupParser)
         {
             this.BackupParser = backupParser;
-            //var serializerListed = false;
 
-            // todo : take NumMaxTransactionsInMemory from config.
             this.BackupParser.TransactionApplied += (sender, args) =>
             {
-                transactionsQueue = args;
+                transactionsList = args;
                 Console.WriteLine("Transaction Id {0}, CommitSequenceNumber {1}, Changes {2}", args.TransactionId, args.CommitSequenceNumber, args.Changes.Count());
             };
         }
@@ -59,7 +57,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         {
             lock(queueLock)
             {
-                return transactionsQueue;
+                return transactionsList;
             }
         }
 
@@ -95,7 +93,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         
         private Task parsingTask;
         
-        private NotifyTransactionAppliedEventArgs transactionsQueue;
+        private NotifyTransactionAppliedEventArgs transactionsList;
         
         // lock is used for taking N items from transactionsQueue atomically across concurrent requests.
         private static Object queueLock = new Object();

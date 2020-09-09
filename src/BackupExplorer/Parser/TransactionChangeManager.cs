@@ -44,13 +44,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             this.reliableCollectionsChanges[reliableCollectionName].Changes.Add(changes);
         }
 
-        /// <summary>
-        /// Clears the changes in the transaction to get prepared for next transaction.
-        /// </summary>
-        public void TransactionCompleted()
-        {
-            this.reliableCollectionsChanges = new Dictionary<Uri, ReliableCollectionChange>();
-        }
 
         /// <summary>
         /// Gets Reliable Collection changes collected till now.
@@ -83,7 +76,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                             {
                                 var keyType = reliableStateType1.GetGenericArguments()[0];
                                 var valueType = reliableStateType1.GetGenericArguments()[1];
-
                                 // use reflection to call my own method because key/value types are known at runtime.
                                 this.GetType().GetMethod("AddDictionaryChangedHandler", BindingFlags.Instance | BindingFlags.NonPublic)
                                     .MakeGenericMethod(keyType, valueType)

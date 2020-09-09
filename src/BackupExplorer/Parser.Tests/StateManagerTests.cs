@@ -33,9 +33,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                {
-
-                };
                 long countValuesInDictionary = 0;
 
                 backupParser.TransactionApplied += async (sender, args) =>
@@ -72,9 +69,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                {
-
-                };
                 long countValuesInDictionary = 0;
 
                 backupParser.TransactionApplied += async (sender, args) =>
@@ -125,9 +119,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                {
-
-                };
                 bool transactionSeen = false;
                 var stateManager = backupParser.StateManager;
 
@@ -198,9 +189,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests
         {
             using (var backupParser = new BackupParser(BackupFolderPath, ""))
             {
-                {
-
-                };
                 long countValuesInQueue = 0;
 
                 backupParser.TransactionApplied += async (sender, args) =>

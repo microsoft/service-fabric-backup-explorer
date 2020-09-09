@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using Microsoft.ServiceFabric.Data;
+using Microsoft.ServiceFabric.Replicator;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
@@ -22,7 +23,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     public class BackupParser : IDisposable
     {        
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         /// Constructor for BackupParser.
@@ -114,7 +115,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// Gets the stateful service context of the Replica.
         /// </summary>
         /// <returns>StatefulServiceContext associated with Replica of this Parser</returns>
-        internal StatefulServiceContext GetStatefulServiceContext()
+        public StatefulServiceContext GetStatefulServiceContext()
         {
             return this.backupParserImpl.GetStatefulServiceContext();
         }
