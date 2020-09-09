@@ -30,10 +30,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         }
 
         /// <summary>
-        /// Add a new change in the transaction.
+        /// Adds changes in the Reliable collections that take place.
         /// </summary>
         /// <param name="reliableCollectionName">Name of Reliable Collection which changed in this transaction.</param>
-        /// <param name="changes">Changes in ReliableCollection.</param>
+        /// <param name="changes">Changes in the Reliable collections after the checkpoint.</param>
         public void CollectChanges(Uri reliableCollectionName, EventArgs changes)
         {
             if (!this.reliableCollectionsChanges.ContainsKey(reliableCollectionName))

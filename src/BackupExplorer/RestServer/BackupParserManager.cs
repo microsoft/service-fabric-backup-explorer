@@ -55,27 +55,14 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         /// <returns>Returns list of transactions</returns>
         public NotifyTransactionAppliedEventArgs GetTransactions()
         {
-            lock(queueLock)
-            {
-                return transactionsList;
-            }
+            return transactionsList;
         }
 
-        ///// <summary>
-        ///// Checks if it has any unconsumed transactions.
-        ///// </summary>
-        ///// <returns>True if we have more transactions otherwise false.</returns>
-        //public bool HasNextTransaction()
-        //{
-        //    return this.transactionsQueue.Count > 0;
-        //}
 
         /// <summary>
         /// Checks if parsing operation has finished.
-        /// If this parsing has finished and <see cref="HasNextTransaction"/> also returns false,
-        /// then we will not have any more transactions in future.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Boolean true/false depending on whether Parsing has completed or not</returns>
         public bool HasParsingFinished()
         {
             return this.parsingTask.IsCompleted;
@@ -94,8 +81,5 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer
         private Task parsingTask;
         
         private NotifyTransactionAppliedEventArgs transactionsList;
-        
-        // lock is used for taking N items from transactionsQueue atomically across concurrent requests.
-        private static Object queueLock = new Object();
     }
 }
