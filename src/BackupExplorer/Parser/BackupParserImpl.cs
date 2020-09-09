@@ -48,7 +48,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
             this.stateManager = new StateManager(reliabilitySimulator);
             this.seenFirstTransaction = false;
-            this.transactionChangeManager = new TransactionChangeManager(this.reliabilitySimulator);
+            this.transactionChangeManager = new TransactionChangeManager( this.reliabilitySimulator);
         }
 
         /// <summary>
@@ -120,9 +120,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                     this.SetUpReplicaForReads();
                     this.seenFirstTransaction = true;
                 }
-
                 this.OnTransactionCommitted(sender, e);
-                this.transactionChangeManager.TransactionCompleted();
             }
         }
 

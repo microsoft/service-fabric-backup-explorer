@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
-  <Import Project="..\..\..\properties\service_fabric_common.props" />
+  <Import Project="..\..\..\properties\common.props" />
   <PropertyGroup>
     <ProjectGuid>{F9A204A8-4878-446B-B437-BAB888906760}</ProjectGuid>
     <AssemblyName>Microsoft.ServiceFabric.ReliableCollectionBackup.Parser</AssemblyName>
@@ -9,9 +9,9 @@
     <WarningsAsErrors>NU1605</WarningsAsErrors>
     <ErrorReport>prompt</ErrorReport>
     <DebugType>portable</DebugType>
-    <PublishDir>$(BinaryDropFolder)\$(TargetFramework)\$(AssemblyName)</PublishDir>
+    <PublishDir>$(BinaryDropFolder)\ReliableCollectionBackupParser\$(TargetFramework)\</PublishDir>
     <TargetFramework></TargetFramework>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net471</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>

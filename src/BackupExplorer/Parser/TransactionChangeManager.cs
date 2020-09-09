@@ -23,17 +23,17 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <summary>
         /// Constructor of TransactionChangeManager.
         /// </summary>
-        public TransactionChangeManager( ReliabilitySimulator reliabilitySimulator)
+        public TransactionChangeManager(ReliabilitySimulator reliabilitySimulator)
         {
             this.reliabilitySimulator = reliabilitySimulator;
             this.reliableCollectionsChanges = new Dictionary<Uri, ReliableCollectionChange>();
         }
 
         /// <summary>
-        /// Add a new change in the transaction.
+        /// Adds changes in the Reliable collections that take place.
         /// </summary>
         /// <param name="reliableCollectionName">Name of Reliable Collection which changed in this transaction.</param>
-        /// <param name="changes">Changes in ReliableCollection.</param>
+        /// <param name="changes">Changes in the Reliable collections after the checkpoint.</param>
         public void CollectChanges(Uri reliableCollectionName, EventArgs changes)
         {
             if (!this.reliableCollectionsChanges.ContainsKey(reliableCollectionName))
@@ -44,13 +44,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             this.reliableCollectionsChanges[reliableCollectionName].Changes.Add(changes);
         }
 
-        /// <summary>
-        /// Clears the changes in the transaction to get prepared for next transaction.
-        /// </summary>
-        public void TransactionCompleted()
-        {
-            this.reliableCollectionsChanges = new Dictionary<Uri, ReliableCollectionChange>();
-        }
 
         /// <summary>
         /// Gets Reliable Collection changes collected till now.
@@ -151,6 +144,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         }
 
         private Dictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;
+        
         private ReliabilitySimulator reliabilitySimulator;
     }
 }

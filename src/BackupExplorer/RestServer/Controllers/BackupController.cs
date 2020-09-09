@@ -9,7 +9,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.ModelBinding;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Data;
 

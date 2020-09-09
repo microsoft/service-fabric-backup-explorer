@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\properties\service_fabric_common_test.props" />
+  <Import Project="..\..\..\properties\common_test.props" />
   <PropertyGroup>
     <AssemblyName>Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>

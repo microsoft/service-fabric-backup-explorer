@@ -16,7 +16,7 @@ param
     [switch]$build,
 
     # Generate NuPkg
-    [switch]$generateNupkg,
+    [switch]$nuget,
 
     # Do All the Above tasks together
     [switch]$buildAll,
@@ -31,12 +31,16 @@ param
     [ValidateSet('2017','2019')]
     [string]$vsversion ="2017",
 
+    # Build configuration - Default is Debug
     [ValidateSet('Debug', 'Release')]
-    [string]$Configuration = 'Release'
+    [string]$Configuration = 'Debug'
 );
 
 # Include comman commands.
 . "./common.ps1"
+
+$PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
+$NugetFullPath = join-path $PSScriptRoot "nuget.exe"
 
 
 if ($MSBuildFullPath -eq "") {
@@ -68,7 +72,7 @@ if ($MSBuildFullPath -eq "") {
 }
 
 if (!(Test-Path $MSBuildFullPath)) {
-    throw "Unable to find MSBuild installed on this machine. Please install Visual Studio 2017 or if its installed at non-default location, provide the full ppath to msbuild using -MSBuildFullPath parameter."
+    throw "Unable to find MSBuild installed on this machine. Please install Visual Studio 2017 or if its installed at non-default location, provide the full path to msbuild using -MSBuildFullPath parameter."
 }
 
 $DisplayHelp = $true;
@@ -77,39 +81,39 @@ if ($showVersion) {
     $DisplayHelp = $false;
     Write-Host "Version of all tools:"
     dotnet --info
-    msbuild /version
-    nuget
+    Write-Host "MSBuild Version:"
+    & $MSBuildFullPath  /version
 }
 
 if ($build -Or $buildAll) {
     $DisplayHelp = $false;
     # build all projects
     Write-Host "Building Backup Explorer Code and Tests:"
-    Exec { dotnet build --packages .\packages service-fabric-backup-explorer.sln -c $Configuration }
+    Exec { dotnet build --packages .\packages backupExplorer.sln -c $Configuration }
 
     # publish for nupkg generation
-    pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\Parser\
+    pushd src\BackupExplorer\Parser\
     Exec { dotnet publish --no-build --framework netstandard2.0 -c $Configuration }
-    Exec { dotnet publish --no-build --framework net461 -c $Configuration }
+    Exec { dotnet publish --no-build --framework net471 -c $Configuration }
     popd
 
-    pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
+    pushd src\BackupExplorer\RestServer\
     Exec { dotnet publish --no-build -c $Configuration }
     popd
     
-    Copy-Item .\src\backup-explorer-cli\ -Destination .\bin -recurse 
+    xcopy .\src\backup-explorer-cli\* .\bin\backupCLI /E  /C /I /Y
 
 }
 
-if ($generateNupkg -Or $buildAll) {
+if ($nuget -Or $buildAll) {
     $DisplayHelp = $false;
-    Write-Host "Generating nupkg:"
+    Write-Host "Generating Nuget Package:"
 
     pushd nuprojs
     # nuget restore
-    Exec { nuget.exe restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages }
+    Exec { & $NugetFullPath restore -Verbosity detailed .nuget\packages.config -PackagesDirectory .\packages }
     # generate nupkg
-    Exec { & $MSBuildFullPath Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=..\bin\nupkg  /p:Configuration=$Configuration}
+    Exec { & $MSBuildFullPath Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj /p:OutputPath=..\bin\  /p:Configuration=$Configuration}
     popd
 } 
 
@@ -127,7 +131,7 @@ if ($DisplayHelp) {
     Write-Host "Following options are available :"
     Write-Host "1. -build Builds the Code"
     Write-Host "2. -buildAll Builds the Code and generate Nuget package"
-    Write-Host "3. -generateNupkg Generate the nuget package"
+    Write-Host "3. -nuget Generate the nuget package"
     Write-Host "4. -showVersion Displays versions of all tools"
     Write-Host "5. -buildCli Builds the bkpctl CLI tool for viewing and editing Backups"
     Write-Host "6. -vsversion  User can specify the version of Visual Studio to use , VS 2017 by default."

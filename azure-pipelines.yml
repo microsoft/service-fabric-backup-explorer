@@ -16,14 +16,14 @@ steps:
   displayName: 'Build Code'
   inputs:
     targetType: filePath
-    filePath: './build_all.ps1'
+    filePath: './build.ps1'
     arguments: ' -build'
 
 - task: PowerShell@2
   displayName: Tests
   inputs:
     targetType: filePath
-    filePath: './run_tests.ps1'
+    filePath: './runtests.ps1'
 
 
 - task: NuGetCommand@2
@@ -33,7 +33,7 @@ steps:
     restoreDirectory: '..\packages'
 
 - task: MSBuild@1
-  displayName: 'Build nuproj'
+  displayName: 'Build Nuget'
   inputs:
     solution: 'nuprojs\Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.nuproj '
     msbuildArchitecture: x64
