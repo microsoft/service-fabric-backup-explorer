@@ -1,26 +1,25 @@
-# Query Meta Data 
+# Backup Explorer Server
 
-Return the meta data of the reliable collection in the backup loaded.
+## Query Metadata
+Returns the meta data of the reliable collection in the backup.
 
-## Request 
+### Request
 
-| METHOD        | Request URI   | 
-| ------------- |:-------------:| 
-|  GET          | /$query/$metadata | 
+| METHOD        | Request URI   |
+| ------------- |:-------------:|
+|  GET          | \$query/\$metadata |
 
-
-
-## Parameters
-| NAME          | Type          | Required | 
+#### Parameters
+| NAME          | Type          | Required |
 | ------------- |:-------------:| :----:|
 |  NULL          |  | |
 
 
-## Response
+### Response
 
-| HTTP Status Code        | Description   | 
-| -------------           |:-------------:| 
-|  200                    | Success, with metadata of the reliable collection | 
+| HTTP Status Code        | Description   |
+| -------------           |:-------------:|
+|  200                    | Success, with metadata of the reliable collection |
 
 ## Examples
 
@@ -28,7 +27,7 @@ Return the meta data of the reliable collection in the backup loaded.
 GET http://localhost:5000/$query/$metadata
 ```
 
-### Response 200
+#### Response 200
 
 ```json
 
@@ -59,7 +58,7 @@ The entity type `ServiceFabric.Extensions.Services.Queryable.Entity_2OfString_In
 
 Return the values of the reliable collection loaded in the backup.
 
-## Request 
+### Request 
 
 | METHOD        | Request URI   | 
 | ------------- |:-------------:| 
@@ -67,13 +66,13 @@ Return the values of the reliable collection loaded in the backup.
 
 
 
-## Parameters
+### Parameters
 | NAME                    | Type          | Required  | 
 | -------------           |:-------------:| :----:    |
 | ReliableCollectionName  | string        |Yes        |
 
 
-## Response
+### Response
 
 | HTTP Status Code        | Description   | 
 | -------------           |:-------------:| 
@@ -85,7 +84,7 @@ Return the values of the reliable collection loaded in the backup.
 GET http://localhost:5000/$query/$metadata
 ```
 
-### Response 200
+#### Response 200
 
 ```json
 {
@@ -131,130 +130,13 @@ GET http://localhost:5000/$query/$metadata
 
 Contains the entries of Reliable collections, with Partition Id, Etag and Key, Value pair.
 
-
-# Get all transaction performed 
-
-Return the list of all transactions performed in the backup.
-
-## Request 
-
-| METHOD        | Request URI   | 
-| ------------- |:-------------:| 
-|  GET          | /transactions | 
-
-
-
-## Parameters
-| NAME                    | Type          | Required  | 
-| -------------           |:-------------:| :----:    |
-| NULL  |               |           |
-
-
-## Response
-
-| HTTP Status Code        | Description   | 
-| -------------           |:-------------:| 
-|  200                    | Success, with all the transaction in the reliable collection | 
-
 ## Examples
 
-```
-GET http://localhost:5000/transactions
-```
-
-### Response 200
-
-```json
-
-[{
-    "TransactionId": 132061041545879352,
-    "CommitSequenceNumber": 8,
-    "Changes": []
-}, {
-    "TransactionId": 132061041543659496,
-    "CommitSequenceNumber": 7,
-    "Changes": []
-}, {
-    "TransactionId": 132061041551272002,
-    "CommitSequenceNumber": 11,
-    "Changes": []
-}, {
-    "TransactionId": 132061041551276992,
-    "CommitSequenceNumber": 15,
-    "Changes": [{
-        "Name": "urn:myDictionary",
-        "Changes": [{
-            "Key": "Counter",
-            "Value": 0,
-            "Transaction": {
-                "TransactionId": 132061041551276992,
-                "CommitSequenceNumber": 15,
-                "Id": 132061041551276992,
-                "LockContexts": []
-            },
-            "Action": 0
-        }, {
-            "Key": "0",
-            "Value": 10,
-            "Transaction": {
-                "TransactionId": 132061041551276992,
-                "CommitSequenceNumber": 15,
-                "Id": 132061041551276992,
-                "LockContexts": []
-            },
-            "Action": 0
-        }]
-    }]
-}, {
-    "TransactionId": 132061042164808899,
-    "CommitSequenceNumber": 21,
-    "Changes": [{
-        "Name": "urn:myDictionary",
-        "Changes": [{
-            "Key": "1",
-            "Value": 11,
-            "Transaction": {
-                "TransactionId": 132061042164808899,
-                "CommitSequenceNumber": 21,
-                "Id": 132061042164808899,
-                "LockContexts": []
-            },
-            "Action": 0
-        }]
-    }]
-}, {
-    "TransactionId": 132061042214640855,
-    "CommitSequenceNumber": 24,
-    "Changes": []
-}, {
-    "TransactionId": 132061042775485912,
-    "CommitSequenceNumber": 31,
-    "Changes": [{
-        "Name": "urn:myDictionary",
-        "Changes": [{
-            "Key": "2",
-            "Value": 12,
-            "Transaction": {
-                "TransactionId": 132061042775485912,
-                "CommitSequenceNumber": 31,
-                "Id": 132061042775485912,
-                "LockContexts": []
-            },
-            "Action": 0
-        }]
-    }]
-}]
-
-```
-
-Returns the list of all the transaction .
-
-
-# Update Reliable Collection
+## Update Reliable Collection
 
 Update the values of the current reliable collection with operation perfomed in requests.
 
-## Request 
+### Request 
 
 | METHOD        | Request URI   | 
 | ------------- |:-------------:| 
@@ -262,37 +144,36 @@ Update the values of the current reliable collection with operation perfomed in 
 
 
 
-## Parameters
+### Parameters
 | NAME                    | Type          | Required  | 
 | -------------           |:-------------:| :----:    |
 | NULL                    |               |           |
 
-## Response
+### Response
 
 | HTTP Status Code        | Description   | 
 | -------------           |:-------------:| 
 |  200                    | Success, for updation of the reliable collection | 
 
-## Examples - Add new value
+## Add new value
 
 ```
-POST http://localhost:5000/$query/$metadata
+POST http://localhost:5000/$query/
 ```
-### Request Body
+#### Request Body
 ```json
 [
-	{ 
-	
-	"Collection" : "myDictionary",
-	"Operation": "Add",
-	"PartitionId": "ed70fb1c-6972-452a-b183-6114b336e9a1", 
-	"Key": "32",
-	"Value" : "64"
-	}
+    {
+    "Collection" : "myDictionary",
+    "Operation": "Add",
+    "PartitionId": "ed70fb1c-6972-452a-b183-6114b336e9a1",
+    "Key": "32",
+    "Value" : "64"
+    }
 ]
 ```
 
-### Response 200
+#### Response 200
 
 ```json
 [
@@ -309,29 +190,28 @@ POST http://localhost:5000/$query/$metadata
 
 Updates the reliable collection with addition of the new value
 
-## Examples - Update existing value
+## Update existing value
 
 ```
-POST http://localhost:5000/$query/$metadata
+POST http://localhost:5000/$query
 ```
 
 
-### Request Body
+#### Request Body
 ```json
 [
-	{ 
-	
-	"Collection" : "myDictionary",
-	"Operation": "Update",
-	"PartitionId": "ed70fb1c-6972-452a-b183-6114b336e9a1", 
-  "Etag" : "5597826295554902436",
-	"Key": "32",
-	"Value" : "96"
+    { 
+    "Collection" : "myDictionary",
+    "Operation": "Update",
+    "PartitionId": "ed70fb1c-6972-452a-b183-6114b336e9a1",
+    "Etag" : "5597826295554902436",
+    "Key": "32",
+    "Value" : "96"
   }
 ]
 ```
 
-### Response 200
+#### Response 200
 
 ```json
 [
@@ -351,24 +231,23 @@ Updates the reliable collection with update of the value
 
 ## Examples - Delete value
 ```
-POST http://localhost:5000/$query/$metadata
+POST http://localhost:5000/$query/
 ```
 
-### Request Body
+#### Request Body
 ```json
 [
-	{ 
-	
-	"Collection" : "myDictionary",
-	"Operation": "Delete",
-	"PartitionId": "ed70fb1c-6972-452a-b183-6114b336e9a1", 
-	"Key": "32",
-  "ETag": "3579969540437049356"
-	}
+    {
+    "Collection" : "myDictionary",
+    "Operation": "Delete",
+    "PartitionId": "ed70fb1c-6972-452a-b183-6114b336e9a1", 
+    "Key": "32",
+    "ETag": "3579969540437049356"
+    }
 ]
 ```
 
-### Response 200
+#### Response 200
 
 ```json
 [
@@ -386,24 +265,24 @@ POST http://localhost:5000/$query/$metadata
 Updates the reliable collection with deletion value.
 
 
-# Backup the current state
+## Backup the current state
 
 Update the values of the current reliable collection with operation perfomed in requests.
 
-## Request 
+### Request 
 
 | METHOD        | Request URI   | 
 | ------------- |:-------------:| 
-|  POST         | /api/backup/{backuptype} | 
+|  POST         | /backup/{backuptype} | 
 
 
 
-## Parameters
+### Parameters
 | NAME                    | Type                          | Required  | 
 | -------------           |:-------------:                | :----:    |
 | backuptype              | string : full or incremental  | Yes       |
 
-## Response
+### Response
 
 | HTTP Status Code        | Description   | 
 | -------------           |:-------------:| 
@@ -414,18 +293,16 @@ Update the values of the current reliable collection with operation perfomed in 
 ```
 POST http://localhost:5000/backup/full
 ```
-### Request Body
+#### Request Body
 ```json
-[
-	{ 
-      "BackupLocation " : "E:\\Newbackup",
-      "TimeoutInSecs " : "300",
-      "CancellationTokenInSecs " : "300"
-	}
-]
+{
+    "BackupLocation " : "E:\\Newbackup",
+    "TimeoutInSecs " : "300",
+    "CancellationTokenInSecs " : "300"
+}
 ```
 
-### Response 200
+#### Response 200
 
 ```json
 {
@@ -436,24 +313,20 @@ POST http://localhost:5000/backup/full
 
 Full Backup is taken successfully.
 
-
 ## Examples - Take incremental backup
 
 ```
 POST http://localhost:5000/backup/incremental
 ```
-### Request Body
+#### Request Body
 ```json
-[
-	{ 
-      "BackupLocation " : "E:\\Newbackup",
-      "TimeoutInSecs " : "300",
-      "CancellationTokenInSecs " : "300"
-	}
-]
+{
+    "BackupLocation " : "E:\\Newbackup",
+    "TimeoutInSecs " : "300",
+    "CancellationTokenInSecs " : "300"
+}
 ```
-
-### Response 200
+#### Response 200
 
 ```json
 {
