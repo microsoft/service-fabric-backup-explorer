@@ -94,7 +94,7 @@ if ($build -Or $buildAll) {
     # publish for nupkg generation
     pushd src\BackupExplorer\Parser\
     Exec { dotnet publish --no-build --framework netstandard2.0 -c $Configuration }
-    Exec { dotnet publish --no-build --framework net471 -c $Configuration }
+    Exec { dotnet publish --no-build --framework net48 -c $Configuration }
     popd
 
     pushd src\BackupExplorer\RestServer\

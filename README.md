@@ -22,21 +22,20 @@ With the help of Backup Explorer following tasks can be performed :
  
 * Querying of metadata for the collection.  
 * Current state and its entries in the collection of the backup loaded.
-* Enlist the transactions performed (since the last checkpoint).
 * Update the collection by adding, updating or deleting the entries in the collection. 
-* Take a fresh backup with the udpated state.
- 
+* Take a fresh backup with the updated state.
+
 The Service Fabric Backup Explorer can be consumed in any of the following ways for view/update of reliable collections of the backup.
 
-1. Binary -         Nuget package to view and alter the reliable collections.
-2. HTTP/Rest   -    HTTP based  Rest hosting to view and alter the reliable collections.
-3. bkpctl -         Service fabric backup controller CLI (command line interface) to view and alter the reliable collections. 
+1. Parser -         NuGet package to view and alter the reliable collections.
+2. HTTP Server   -    HTTP based  Rest hosting to view and alter the reliable collections.
+3. bkpctl -         Backup Controller CLI  to view and alter the reliable collections. 
 
 ### Reliable Collections Backup Parser
 
-The binary dll created to be consumed in application to view, enumerate and alter the reliable collection. [Details](docs/Parser)
+The NuGet package created to be consumed in application to view, enumerate and alter the reliable collection. [Details](docs/Parser)
 
-### HTTP Rest Server
+### HTTP Server
 
 An OWIN based REST API to view, enumerate and alter the state of Reliable Collections. [Details](docs/Server)
 
@@ -50,10 +49,10 @@ Details- [bkpctl](docs/bkpctl)
 
 ### Requirements
 
-1. .NET Framework
-2. MSBuild
-3. Python 3
-4. python-pip
+1. [.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48)
+2. [MSBuild](https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild?view=vs-2019)
+3. [Python 3](https://www.python.org/download/releases/3.0/)
+4. [python-pip](https://pip.pypa.io/en/stable/)
 
 ### Usage
 
