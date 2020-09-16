@@ -4,7 +4,7 @@
     <AssemblyName>Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup RestServer Tests</AssemblyDescription>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
