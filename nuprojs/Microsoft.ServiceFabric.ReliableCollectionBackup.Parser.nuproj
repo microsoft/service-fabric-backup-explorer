@@ -14,8 +14,8 @@
   <PropertyGroup Label="Configuration">
     <Id>Microsoft.ServiceFabric.ReliableCollectionBackup.Parser</Id>
     <Title>$(Id)</Title>
-    <Version>0.0.7-beta</Version>
-    <Owners>raunakp;saharsh</Owners>
+    <Version>0.0.8-beta</Version>
+    <Owners>ashank;roroutra</Owners>
     <Description>This package contains the Microsoft Service Fabric Reliable Collection Backup Parser</Description>
     <Summary>This package contains the Microsoft Service Fabric Reliable Collection Backup Parser</Summary>
     <Tags>Microsoft ServiceFabric ReliableCollection Backup Parser</Tags>

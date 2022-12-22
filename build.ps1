@@ -101,7 +101,7 @@ if ($build -Or $buildAll) {
     Exec { dotnet publish --no-build -c $Configuration }
     popd
     
-    xcopy .\src\backup-explorer-cli\* .\bin\backupCLI /E  /C /I /Y
+    xcopy .\src\backup-explorer-cli\* .\bin\backup-explorer-cli /E  /C /I /Y
 
 }
 

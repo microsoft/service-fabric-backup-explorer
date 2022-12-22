@@ -219,7 +219,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.RestServer.Tests
         async Task VerifyBackup(string backupDirectory, Data.BackupOption backupOption)
         {
             var backupName = backupOption == Data.BackupOption.Full ? "full" : "incremental";
-            var postUrl = Url + "/api/backup/" + backupName;
+            var postUrl = Url + "/backup/" + backupName;
             var twoMinuteInSecs = TimeSpan.FromMinutes(2).TotalSeconds;
             var jsonContent = $@"{{
                 'CancellationTokenInSecs' : {twoMinuteInSecs},
