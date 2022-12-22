@@ -38,7 +38,7 @@ The NuGet package created to be consumed in application to view, enumerate and a
 
 An OWIN based REST API to view, enumerate and alter the state of Reliable Collections. [Details](docs/Server)
 
-[!NOTE]
+> **_NOTE:_**
 Currently, only the Serializers which do not take any parameters as input are supported in Rest Server. Users with serializers having multiple params should use the Nuget in order to perform CRUD operations in the Backup
 
 ### bkpctl
