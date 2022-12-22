@@ -20,13 +20,13 @@ setuptools.setup(
     author_email='aagup@microsoft.com',
     license='MIT',
     keywords='servicefabric azure',
-    python_requires='>=2.7,!=3.4,!=3.3,!=3.2,!=3.1,!=3.0,<3.9',
+    python_requires='>=3.0,!=3.4,!=3.3,!=3.2,!=3.1,!=3.0,<3.12',
     packages=[
         'bkpctl',
         'bkpctl.helps'
     ],
     install_requires=[
-        'knack==0.1.1',
+        'knack',
         'xmljson',
         'jsbeautifier',
         'urllib3',

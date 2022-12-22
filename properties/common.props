@@ -22,7 +22,7 @@
     <!-- Version number -->
     <MajorVersion>0</MajorVersion>
     <MinorVersion>0</MinorVersion>
-    <BuildVersion>7</BuildVersion>
+    <BuildVersion>8</BuildVersion>
 
     <!-- Nupkg related settings to use in csproj -->
     <BinaryDropFolder>$(RepoRoot)bin\</BinaryDropFolder>

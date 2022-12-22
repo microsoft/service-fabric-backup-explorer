@@ -12,7 +12,7 @@ python function.
 
 from collections import OrderedDict
 from knack.arguments import ArgumentsContext
-from knack.commands import CLICommandsLoader, CommandSuperGroup
+from knack.commands import CLICommandsLoader, CommandGroup
 from knack.help import CLIHelp
 from bkpctl.swagger_client import api_client as client_create
 import copy
@@ -23,10 +23,10 @@ import bkpctl.helps.main # pylint: disable=unused-import
 class SFBackupExpCommandHelp(CLIHelp):
     """Service Fabric Backup Explorer CLI help loader"""
 
-    def __init__(self, ctx=None):
+    def __init__(self, cli_ctx=None):
         header_msg = 'Service Fabric Backup Explorer Command Line'
 
-        super(SFBackupExpCommandHelp, self).__init__(ctx=ctx,
+        super(SFBackupExpCommandHelp, self).__init__(cli_ctx=cli_ctx,
                                             welcome_message=header_msg)
 
 class SFBackupExpCommandLoader(CLICommandsLoader):
@@ -35,18 +35,22 @@ class SFBackupExpCommandLoader(CLICommandsLoader):
     def load_command_table(self, args): #pylint: disable=too-many-statements
         """Load all Service Fabric commands"""
 
-        with CommandSuperGroup(__name__, self, 'bkpctl.custom_backup_explorer#{}'
-                               ) as super_group: 
-            with super_group.group('query') as group:
+        with CommandGroup(self, 'query', 'bkpctl.custom_backup_explorer#{}'
+                               ) as group: 
                 group.command('metadata', 'query_metadata')
                 group.command('collection', 'query_collection')
-            with super_group.group('get') as group:
+        with CommandGroup( self, 'get', 'bkpctl.custom_backup_explorer#{}'
+                               ) as group:
                 group.command('transactions', 'get_transactions')
-            with super_group.group('update') as group:
+        with CommandGroup( self, 'update', 'bkpctl.custom_backup_explorer#{}'
+                               ) as group:
                 group.command('collection', 'add_transaction')
-            with super_group.group('backup') as group:
+        with CommandGroup( self, 'backup', 'bkpctl.custom_backup_explorer#{}'
+                               ) as group:
                 group.command('partition', 'trigger_backup')
-            
+        return super(SFBackupExpCommandLoader, self).load_command_table(args)
+        
+    def load_arguments(self, command):
         with ArgumentsContext(self, 'query') as ac:
             ac.argument('name', options_list=['--name', '-n'])
             
@@ -64,5 +68,4 @@ class SFBackupExpCommandLoader(CLICommandsLoader):
             ac.argument('path', options_list=['--path', '-p'])
             ac.argument('timeout', options_list=['--timeout', '-to'])
             ac.argument('cancellationInSecs', options_list=['--cancellationAfter', '-ca'])
-
-        return OrderedDict(self.command_table)
+        return super(SFBackupExpCommandLoader, self).load_arguments(command)
