@@ -32,7 +32,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         {
             this.backupChainPath = backupChainPath;
             this.codePackage = new CodePackageInfo(codePackagePath);
-            this.workFolder = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString());
+            this.workFolder = Path.Combine(backupChainPath, Guid.NewGuid().ToString());
 
             Console.WriteLine("Work Folder : {0}", this.workFolder);
 
