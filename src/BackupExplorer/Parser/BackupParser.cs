@@ -23,7 +23,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     public class BackupParser : IDisposable
     {        
-        private static readonly ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         /// Constructor for BackupParser.
@@ -33,6 +33,33 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         public BackupParser(string backupChainPath)
         {
             this.backupParserImpl = new BackupParserImpl(backupChainPath, String.Empty);
+        }
+
+        /// <summary>
+        /// Constructor for BackupParser.
+        /// </summary>
+        /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
+        /// <param name="userLog">User configurable log object. </param>
+        /// <param name="workFolderPath">Folder pah for work folder. </param>
+        /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.        
+        public BackupParser(string backupChainPath, ILog userLog, string workFolderPath)
+        {
+            if (userLog != null)  log = userLog;
+            this.backupParserImpl = new BackupParserImpl(backupChainPath, String.Empty, userLog, workFolderPath);
+        }
+
+        /// <summary>
+        /// Constructor for BackupParser.
+        /// </summary>
+        /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
+        /// <param name="codePackagePath">code package path.</param>
+        /// <param name="userLog">User configurable log object. </param>
+        /// <param name="workFolderPath">Folder path for work folder. </param>
+        /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.        
+        public BackupParser(string backupChainPath, string codePackagePath, ILog userLog, string workFolderPath)
+        {
+            if (userLog != null) log = userLog;
+            this.backupParserImpl = new BackupParserImpl(backupChainPath, codePackagePath, userLog, workFolderPath);
         }
 
         /// <summary>

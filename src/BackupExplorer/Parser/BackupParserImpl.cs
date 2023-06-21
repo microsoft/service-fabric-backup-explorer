@@ -22,7 +22,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     internal class BackupParserImpl : IDisposable
     {
-        private static readonly ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// Constructor for BackupParserImpl.
         /// </summary>
@@ -32,7 +32,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         {
             this.backupChainPath = backupChainPath;
             this.codePackage = new CodePackageInfo(codePackagePath);
-            this.workFolder = Path.Combine(backupChainPath, Guid.NewGuid().ToString());
+            this.workFolder = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString());
 
             Console.WriteLine("Work Folder : {0}", this.workFolder);
 
@@ -49,6 +49,39 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             this.stateManager = new StateManager(reliabilitySimulator);
             this.seenFirstTransaction = false;
             this.transactionChangeManager = new TransactionChangeManager( this.reliabilitySimulator);
+        }
+
+        public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath)
+        {
+            this.backupChainPath = backupChainPath;
+            this.codePackage = new CodePackageInfo(codePackagePath);
+            
+            if (String.IsNullOrEmpty(workFolderPath))
+            {
+                this.workFolder = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString()); 
+            }
+            else
+            {
+                this.workFolder = Path.Combine(backupChainPath, Guid.NewGuid().ToString());
+            }
+            
+            if (log != null) BackupParserImpl.log = log;
+
+            Console.WriteLine("Work Folder : {0}", this.workFolder);
+
+            Directory.CreateDirectory(this.workFolder);
+            this.reliabilitySimulator = new ReliabilitySimulator(
+                this.workFolder,
+                new Uri("fabric:/rcbackupapp/rcbackupservice"),
+                DateTime.UtcNow.ToFileTimeUtc(),
+                DateTime.UtcNow.ToFileTimeUtc(),
+                this.OnDataLossCallback,
+                this.CreateStateProvider);
+            this.reliabilitySimulator.CreateReplica(true, false);
+
+            this.stateManager = new StateManager(reliabilitySimulator);
+            this.seenFirstTransaction = false;
+            this.transactionChangeManager = new TransactionChangeManager(this.reliabilitySimulator);
         }
 
         /// <summary>
@@ -159,9 +192,16 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             // delete replica.
             this.reliabilitySimulator.DropReplicaAsync().GetAwaiter().GetResult();
             // delete work foler.
-            if (Directory.Exists(this.workFolder))
+            try
             {
-                Directory.Delete(this.workFolder, true);
+                if (Directory.Exists(this.workFolder))
+                {
+                    Directory.Delete(this.workFolder, true);
+                }
+            } catch (DirectoryNotFoundException e)
+            {
+                //Directory to be deleted has already been deleted
+                log.Info("Could not find directory "+ workFolder + " to delete. Exception: " + e.Message);
             }
             // remove assemblyresolver.
             this.codePackage.Dispose();
