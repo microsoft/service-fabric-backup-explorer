@@ -62,7 +62,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             }
             else
             {
-                this.workFolder = Path.Combine(backupChainPath, Guid.NewGuid().ToString());
+                this.workFolder = Path.Combine(workFolderPath, Guid.NewGuid().ToString());
             }
             
             if (log != null) BackupParserImpl.log = log;
