@@ -33,29 +33,21 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             this.backupChainPath = backupChainPath;
             this.codePackage = new CodePackageInfo(codePackagePath);
             this.workFolder = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString());
+            this.checkpointThreshold = 200;
 
             Console.WriteLine("Work Folder : {0}", this.workFolder);
-
-            Directory.CreateDirectory(this.workFolder);
-            this.reliabilitySimulator = new ReliabilitySimulator(
-                this.workFolder,
-                new Uri("fabric:/rcbackupapp/rcbackupservice"),
-                DateTime.UtcNow.ToFileTimeUtc(),
-                DateTime.UtcNow.ToFileTimeUtc(),
-                this.OnDataLossCallback,
-                this.CreateStateProvider);
-            this.reliabilitySimulator.CreateReplica(true, false);
-
-            this.stateManager = new StateManager(reliabilitySimulator);
-            this.seenFirstTransaction = false;
-            this.transactionChangeManager = new TransactionChangeManager( this.reliabilitySimulator);
+            InitializeBackupParser();
+           
         }
 
-        public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath)
+        public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath, int checkpointThreshold = 200)
         {
             this.backupChainPath = backupChainPath;
             this.codePackage = new CodePackageInfo(codePackagePath);
-            
+            this.checkpointThreshold = checkpointThreshold;
+
+            if (log != null) BackupParserImpl.log = log;
+
             if (String.IsNullOrEmpty(workFolderPath))
             {
                 this.workFolder = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString()); 
@@ -64,11 +56,13 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             {
                 this.workFolder = Path.Combine(workFolderPath, Guid.NewGuid().ToString());
             }
-            
-            if (log != null) BackupParserImpl.log = log;
 
             Console.WriteLine("Work Folder : {0}", this.workFolder);
+            InitializeBackupParser();
+        }
 
+        private void InitializeBackupParser()
+        {
             Directory.CreateDirectory(this.workFolder);
             this.reliabilitySimulator = new ReliabilitySimulator(
                 this.workFolder,
@@ -103,7 +97,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 var transactionalReplicatorSettings = TransactionalReplicatorSettingsHelper.Create(
                     this.workFolder,
                     "Ktl",
-                    checkpointThresholdMB: 200, // TODO: keep these settings configurable for the user to play for performance.
+                    checkpointThresholdMB: this.checkpointThreshold,
                     useDefaultSharedLogId: true,
                     LogManagerLoggerType : System.Fabric.Data.Log.LogManager.LoggerType.Inproc);
 
@@ -235,5 +229,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private string workFolder;
         private bool seenFirstTransaction; // maintains state to see if we have seen first Transaction or not.
         private TransactionChangeManager transactionChangeManager;
+        private int checkpointThreshold;
     }
 }
