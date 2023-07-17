@@ -29,51 +29,15 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// Constructor for BackupParser.
         /// </summary>
         /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
-        /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.        
-        public BackupParser(string backupChainPath)
-        {
-            this.backupParserImpl = new BackupParserImpl(backupChainPath, String.Empty);
-        }
-
-        /// <summary>
-        /// Constructor for BackupParser.
-        /// </summary>
-        /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
-        /// <param name="userLog">User configurable log object. </param>
-        /// <param name="workFolderPath">Folder pah for work folder. </param>
-        /// <param name="checkpointThreshold">Configurable checkpointThreshold. </param>
-        /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.        
-        public BackupParser(string backupChainPath, ILog userLog, string workFolderPath, int checkpointThreshold = 200)
-        {
-            if (userLog != null)  log = userLog;
-            this.backupParserImpl = new BackupParserImpl(backupChainPath, String.Empty, userLog, workFolderPath, checkpointThreshold);
-        }
-
-        /// <summary>
-        /// Constructor for BackupParser.
-        /// </summary>
-        /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
         /// <param name="codePackagePath">code package path.</param>
         /// <param name="userLog">User configurable log object. </param>
         /// <param name="workFolderPath">Folder path for work folder. </param>
-        /// <param name="checkpointThreshold">Configurable checkpointThreshold. </param>
-        /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.        
-        public BackupParser(string backupChainPath, string codePackagePath, ILog userLog, string workFolderPath, int checkpointThreshold = 200)
+        /// <param name="checkpointThresholdInMB">Configurable checkpointThreshold. </param>
+        /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.
+        public BackupParser(string backupChainPath, string codePackagePath="", ILog userLog = null, string workFolderPath = null, int checkpointThresholdInMB = 200)
         {
             if (userLog != null) log = userLog;
-            this.backupParserImpl = new BackupParserImpl(backupChainPath, codePackagePath, userLog, workFolderPath, checkpointThreshold);
-        }
-
-        /// <summary>
-        /// Constructor for BackupParser.
-        /// </summary>
-        /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
-        /// <param name="codePackagePath">Code packages of the service whose backups are provided in <paramref name="backupChainPath" />.
-        /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.
-        /// </param>
-        public BackupParser(string backupChainPath, string codePackagePath)
-        {
-            this.backupParserImpl = new BackupParserImpl(backupChainPath, codePackagePath);
+            this.backupParserImpl = new BackupParserImpl(backupChainPath, codePackagePath, log, workFolderPath, checkpointThresholdInMB);
         }
 
         /// <summary>

@@ -28,23 +28,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </summary>
         /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
         /// <param name="codePackagePath">Code packages of the service whose backups are provided in <paramref name="backupChainPath" />.</param>
-        public BackupParserImpl(string backupChainPath, string codePackagePath)
+        public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath, int checkpointThresholdInMB = 200)
         {
             this.backupChainPath = backupChainPath;
             this.codePackage = new CodePackageInfo(codePackagePath);
-            this.workFolder = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString());
-            this.checkpointThreshold = 200;
-
-            Console.WriteLine("Work Folder : {0}", this.workFolder);
-            InitializeBackupParser();
-           
-        }
-
-        public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath, int checkpointThreshold = 200)
-        {
-            this.backupChainPath = backupChainPath;
-            this.codePackage = new CodePackageInfo(codePackagePath);
-            this.checkpointThreshold = checkpointThreshold;
+            this.checkpointThresholdInMB = checkpointThresholdInMB;
 
             if (log != null) BackupParserImpl.log = log;
 
@@ -97,7 +85,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 var transactionalReplicatorSettings = TransactionalReplicatorSettingsHelper.Create(
                     this.workFolder,
                     "Ktl",
-                    checkpointThresholdMB: this.checkpointThreshold,
+                    checkpointThresholdMB: this.checkpointThresholdInMB,
                     useDefaultSharedLogId: true,
                     LogManagerLoggerType : System.Fabric.Data.Log.LogManager.LoggerType.Inproc);
 
@@ -229,6 +217,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private string workFolder;
         private bool seenFirstTransaction; // maintains state to see if we have seen first Transaction or not.
         private TransactionChangeManager transactionChangeManager;
-        private int checkpointThreshold;
+        private int checkpointThresholdInMB;
     }
 }
