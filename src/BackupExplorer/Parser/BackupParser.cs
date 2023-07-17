@@ -23,28 +23,21 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     public class BackupParser : IDisposable
     {        
-        private static readonly ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         /// Constructor for BackupParser.
         /// </summary>
         /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
-        /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.        
-        public BackupParser(string backupChainPath)
-        {
-            this.backupParserImpl = new BackupParserImpl(backupChainPath, String.Empty);
-        }
-
-        /// <summary>
-        /// Constructor for BackupParser.
-        /// </summary>
-        /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
-        /// <param name="codePackagePath">Code packages of the service whose backups are provided in <paramref name="backupChainPath" />.
+        /// <param name="codePackagePath">code package path.</param>
+        /// <param name="userLog">User configurable log object. </param>
+        /// <param name="workFolderPath">Folder path for work folder. </param>
+        /// <param name="checkpointThresholdInMB">Configurable checkpointThreshold. </param>
         /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.
-        /// </param>
-        public BackupParser(string backupChainPath, string codePackagePath)
+        public BackupParser(string backupChainPath, string codePackagePath="", ILog userLog = null, string workFolderPath = null, int checkpointThresholdInMB = 200)
         {
-            this.backupParserImpl = new BackupParserImpl(backupChainPath, codePackagePath);
+            if (userLog != null) log = userLog;
+            this.backupParserImpl = new BackupParserImpl(backupChainPath, codePackagePath, log, workFolderPath, checkpointThresholdInMB);
         }
 
         /// <summary>

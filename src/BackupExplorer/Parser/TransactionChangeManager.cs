@@ -4,6 +4,7 @@
 // ------------------------------------------------------------
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
 using log4net;
@@ -26,7 +27,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         public TransactionChangeManager(ReliabilitySimulator reliabilitySimulator)
         {
             this.reliabilitySimulator = reliabilitySimulator;
-            this.reliableCollectionsChanges = new Dictionary<Uri, ReliableCollectionChange>();
+            this.reliableCollectionsChanges = new ConcurrentDictionary<Uri, ReliableCollectionChange>();
         }
 
         /// <summary>
@@ -143,7 +144,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
         }
 
-        private Dictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;
+        private ConcurrentDictionary<Uri, ReliableCollectionChange> reliableCollectionsChanges;
         
         private ReliabilitySimulator reliabilitySimulator;
     }

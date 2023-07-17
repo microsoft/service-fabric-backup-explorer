@@ -22,20 +22,35 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
     /// </summary>
     internal class BackupParserImpl : IDisposable
     {
-        private static readonly ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// Constructor for BackupParserImpl.
         /// </summary>
         /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
         /// <param name="codePackagePath">Code packages of the service whose backups are provided in <paramref name="backupChainPath" />.</param>
-        public BackupParserImpl(string backupChainPath, string codePackagePath)
+        public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath, int checkpointThresholdInMB = 200)
         {
             this.backupChainPath = backupChainPath;
             this.codePackage = new CodePackageInfo(codePackagePath);
-            this.workFolder = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString());
+            this.checkpointThresholdInMB = checkpointThresholdInMB;
+
+            if (log != null) BackupParserImpl.log = log;
+
+            if (String.IsNullOrEmpty(workFolderPath))
+            {
+                this.workFolder = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString()); 
+            }
+            else
+            {
+                this.workFolder = Path.Combine(workFolderPath, Guid.NewGuid().ToString());
+            }
 
             Console.WriteLine("Work Folder : {0}", this.workFolder);
+            InitializeBackupParser();
+        }
 
+        private void InitializeBackupParser()
+        {
             Directory.CreateDirectory(this.workFolder);
             this.reliabilitySimulator = new ReliabilitySimulator(
                 this.workFolder,
@@ -48,7 +63,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 
             this.stateManager = new StateManager(reliabilitySimulator);
             this.seenFirstTransaction = false;
-            this.transactionChangeManager = new TransactionChangeManager( this.reliabilitySimulator);
+            this.transactionChangeManager = new TransactionChangeManager(this.reliabilitySimulator);
         }
 
         /// <summary>
@@ -70,7 +85,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 var transactionalReplicatorSettings = TransactionalReplicatorSettingsHelper.Create(
                     this.workFolder,
                     "Ktl",
-                    checkpointThresholdMB: 200, // TODO: keep these settings configurable for the user to play for performance.
+                    checkpointThresholdMB: this.checkpointThresholdInMB,
                     useDefaultSharedLogId: true,
                     LogManagerLoggerType : System.Fabric.Data.Log.LogManager.LoggerType.Inproc);
 
@@ -159,9 +174,16 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             // delete replica.
             this.reliabilitySimulator.DropReplicaAsync().GetAwaiter().GetResult();
             // delete work foler.
-            if (Directory.Exists(this.workFolder))
+            try
             {
-                Directory.Delete(this.workFolder, true);
+                if (Directory.Exists(this.workFolder))
+                {
+                    Directory.Delete(this.workFolder, true);
+                }
+            } catch (DirectoryNotFoundException e)
+            {
+                //Directory to be deleted has already been deleted
+                log.Info("Could not find directory "+ workFolder + " to delete. Exception: " + e.Message);
             }
             // remove assemblyresolver.
             this.codePackage.Dispose();
@@ -195,5 +217,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private string workFolder;
         private bool seenFirstTransaction; // maintains state to see if we have seen first Transaction or not.
         private TransactionChangeManager transactionChangeManager;
+        private int checkpointThresholdInMB;
     }
 }
