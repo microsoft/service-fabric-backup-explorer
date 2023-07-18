@@ -34,7 +34,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <param name="workFolderPath">Folder path for work folder. </param>
         /// <param name="checkpointThresholdInMB">Configurable checkpointThreshold. </param>
         /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.
-        public BackupParser(string backupChainPath, string codePackagePath="", ILog userLog = null, string workFolderPath = null, int checkpointThresholdInMB = 200)
+        public BackupParser(string backupChainPath, string codePackagePath="", ILog userLog = null, string workFolderPath = null, int checkpointThresholdInMB = 50)
         {
             if (userLog != null) log = userLog;
             this.backupParserImpl = new BackupParserImpl(backupChainPath, codePackagePath, log, workFolderPath, checkpointThresholdInMB);

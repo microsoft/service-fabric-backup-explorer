@@ -28,7 +28,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </summary>
         /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
         /// <param name="codePackagePath">Code packages of the service whose backups are provided in <paramref name="backupChainPath" />.</param>
-        public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath, int checkpointThresholdInMB = 200)
+        public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath, int checkpointThresholdInMB = 50)
         {
             this.backupChainPath = backupChainPath;
             this.codePackage = new CodePackageInfo(codePackagePath);
