@@ -33,11 +33,12 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <param name="userLog">User configurable log object. </param>
         /// <param name="workFolderPath">Folder path for work folder. </param>
         /// <param name="checkpointThresholdInMB">Configurable checkpointThreshold. </param>
+        /// <param name="logFolderPath">Folder path for logs folder. </param>
         /// Pass an empty string if code package is not required for backup parsing. e.g. when backup has only primitive types.
-        public BackupParser(string backupChainPath, string codePackagePath="", ILog userLog = null, string workFolderPath = null, int checkpointThresholdInMB = 50)
+        public BackupParser(string backupChainPath, string codePackagePath="", ILog userLog = null, string workFolderPath = null, int checkpointThresholdInMB = 50, string logFolderPath = null)
         {
             if (userLog != null) log = userLog;
-            this.backupParserImpl = new BackupParserImpl(backupChainPath, codePackagePath, log, workFolderPath, checkpointThresholdInMB);
+            this.backupParserImpl = new BackupParserImpl(backupChainPath, codePackagePath, log, workFolderPath, checkpointThresholdInMB, logFolderPath);
         }
 
         /// <summary>
