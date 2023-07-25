@@ -4,7 +4,7 @@ platforms: .NET, windows
 owner: roshanroutray, anantshankar17
 ---
 
-# Service Fabric Backup Explorer (Preview)
+# Service Fabric Backup Explorer (Preview) (Should not be used in Production deployments)
 
 [![Build Status](https://dev.azure.com/ms/service-fabric-backup-explorer/_apis/build/status/microsoft.service-fabric-backup-explorer?branchName=master)](https://dev.azure.com/ms/service-fabric-backup-explorer/_build/latest?definitionId=330&branchName=master)
 
