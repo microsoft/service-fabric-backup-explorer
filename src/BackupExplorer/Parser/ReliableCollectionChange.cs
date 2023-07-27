@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using log4net;
 using System.Reflection;
+using System.Collections.Concurrent;
 
 namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
 {
@@ -23,7 +24,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         public ReliableCollectionChange(Uri name)
         {
             this.Name = name;
-            this.Changes = new List<EventArgs>();
+            this.Changes = new ConcurrentQueue<EventArgs>();
         }
 
         /// <summary>
@@ -34,6 +35,6 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// <summary>
         /// List of changes that are received for this Reliable State.
         /// </summary>
-        public List<EventArgs> Changes { get; }
+        public ConcurrentQueue<EventArgs> Changes { get; }
     }
 }

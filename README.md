@@ -123,7 +123,7 @@ From Visual Studio Command Prompt which has MSBuild defined:
 From the Repository root folder, perform the following steps :
 
 ```powershell
-pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
+pushd src\BackupExplorer\RestServer\
 dotnet build
 dotnet run --no-build --config configs\sampleconfig.json
 ```
@@ -161,6 +161,8 @@ dotnet test --no-build --diag test_results.log --verbosity n --logger "console;v
 ```
 
 #### Running Rest Server tests
+
+Start the Rest Server.
 
 ```powershell
 cd src\BackupExplorer\RestServer.Tests
