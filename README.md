@@ -124,7 +124,6 @@ From the Repository root folder, perform the following steps :
 
 ```powershell
 pushd src\BackupExplorer\RestServer\
-dotnet build
 dotnet run --no-build --config configs\sampleconfig.json
 ```
 
@@ -153,7 +152,6 @@ Once code and tests are locally built, you can run tests in order to validate yo
 
 ```powershell
 cd src\BackupExplorer\Parser.Tests
-dotnet build
 dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --configuration Debug
 
 # running one test
@@ -166,7 +164,6 @@ Start the Rest Server.
 
 ```powershell
 cd src\BackupExplorer\RestServer.Tests
-dotnet build
 dotnet test --no-build --diag test_results.log --verbosity normal --logger "console;verbosity=detailed"
 ```
 
