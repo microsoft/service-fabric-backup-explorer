@@ -42,7 +42,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 this.reliableCollectionsChanges[reliableCollectionName] = new ReliableCollectionChange(reliableCollectionName);
             }
 
-            this.reliableCollectionsChanges[reliableCollectionName].Changes.Add(changes);
+            this.reliableCollectionsChanges[reliableCollectionName].Changes.Enqueue(changes);
         }
 
 

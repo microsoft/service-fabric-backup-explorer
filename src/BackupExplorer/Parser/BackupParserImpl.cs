@@ -28,7 +28,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </summary>
         /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
         /// <param name="codePackagePath">Code packages of the service whose backups are provided in <paramref name="backupChainPath" />.</param>
-        public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath, int checkpointThresholdInMB = 200)
+        public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath, int checkpointThresholdInMB = 50, string logFolderPath = null)
         {
             this.backupChainPath = backupChainPath;
             this.codePackage = new CodePackageInfo(codePackagePath);
@@ -45,6 +45,8 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
                 this.workFolder = Path.Combine(workFolderPath, Guid.NewGuid().ToString());
             }
 
+            this.logFolder = logFolderPath ?? this.workFolder;
+
             Console.WriteLine("Work Folder : {0}", this.workFolder);
             InitializeBackupParser();
         }
@@ -52,6 +54,11 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private void InitializeBackupParser()
         {
             Directory.CreateDirectory(this.workFolder);
+            if (!Directory.Exists(this.logFolder))
+            {
+                Directory.CreateDirectory(this.logFolder);
+            }
+
             this.reliabilitySimulator = new ReliabilitySimulator(
                 this.workFolder,
                 new Uri("fabric:/rcbackupapp/rcbackupservice"),
@@ -83,7 +90,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
             await ComMtaHelper.WrapNativeSyncInvokeInMTA(async () =>
             {
                 var transactionalReplicatorSettings = TransactionalReplicatorSettingsHelper.Create(
-                    this.workFolder,
+                    this.logFolder,
                     "Ktl",
                     checkpointThresholdMB: this.checkpointThresholdInMB,
                     useDefaultSharedLogId: true,
@@ -215,6 +222,7 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         private ReliabilitySimulator reliabilitySimulator;
         private StateManager stateManager;
         private string workFolder;
+        private string logFolder;
         private bool seenFirstTransaction; // maintains state to see if we have seen first Transaction or not.
         private TransactionChangeManager transactionChangeManager;
         private int checkpointThresholdInMB;

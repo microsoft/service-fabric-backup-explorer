@@ -4,7 +4,7 @@ platforms: .NET, windows
 owner: roshanroutray, anantshankar17
 ---
 
-# Service Fabric Backup Explorer (Preview)
+# Service Fabric Backup Explorer (Preview) (Should not be used in Production deployments)
 
 [![Build Status](https://dev.azure.com/ms/service-fabric-backup-explorer/_apis/build/status/microsoft.service-fabric-backup-explorer?branchName=master)](https://dev.azure.com/ms/service-fabric-backup-explorer/_build/latest?definitionId=330&branchName=master)
 
@@ -123,8 +123,7 @@ From Visual Studio Command Prompt which has MSBuild defined:
 From the Repository root folder, perform the following steps :
 
 ```powershell
-pushd src\Microsoft.ServiceFabric.ReliableCollectionBackup\RestServer\
-dotnet build
+pushd src\BackupExplorer\RestServer\
 dotnet run --no-build --config configs\sampleconfig.json
 ```
 
@@ -153,7 +152,6 @@ Once code and tests are locally built, you can run tests in order to validate yo
 
 ```powershell
 cd src\BackupExplorer\Parser.Tests
-dotnet build
 dotnet test --no-build --diag test_results.log --verbosity n --logger "console;verbosity=detailed" --configuration Debug
 
 # running one test
@@ -162,9 +160,10 @@ dotnet test --no-build --diag test_results.log --verbosity n --logger "console;v
 
 #### Running Rest Server tests
 
+Start the Rest Server.
+
 ```powershell
 cd src\BackupExplorer\RestServer.Tests
-dotnet build
 dotnet test --no-build --diag test_results.log --verbosity normal --logger "console;verbosity=detailed"
 ```
 
