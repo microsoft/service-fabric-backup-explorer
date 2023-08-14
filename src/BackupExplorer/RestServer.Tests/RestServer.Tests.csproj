@@ -16,8 +16,10 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0-preview-23364-03" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageReference Include="System.Net.Http" Version="4.0.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.dll" Version="9.1.1833" />
     <ProjectReference Include="..\Parser.Tests\UserType\UserType.csproj" />
     <ProjectReference Include="..\RestServer\RestServer.csproj" />
   </ItemGroup>

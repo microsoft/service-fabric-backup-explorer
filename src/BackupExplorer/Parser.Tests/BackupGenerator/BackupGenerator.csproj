@@ -17,6 +17,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UserType\UserType.csproj" />
-    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="9.1.1833-beta" />
+    <Reference Include="..\..\..\..\refs\Microsoft.ServiceFabric.Data.Impl.dll" Version="9.1.1833" />
+    <Reference Include="..\..\..\..\refs\Microsoft.ServiceFabric.Tools.ReliabilitySimulator.dll" Version="9.1.1833-beta" />
+    <Reference Include="..\..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.dll" Version="9.1.1833" />
+    <Reference Include="..\..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.V2.dll" Version="9.1.1833" />
+    <Reference Include ="..\..\..\..\refs\System.Fabric.dll" Version="9.1.1833" />
   </ItemGroup>
 </Project>

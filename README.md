@@ -160,8 +160,6 @@ dotnet test --no-build --diag test_results.log --verbosity n --logger "console;v
 
 #### Running Rest Server tests
 
-Start the Rest Server.
-
 ```powershell
 cd src\BackupExplorer\RestServer.Tests
 dotnet test --no-build --diag test_results.log --verbosity normal --logger "console;verbosity=detailed"

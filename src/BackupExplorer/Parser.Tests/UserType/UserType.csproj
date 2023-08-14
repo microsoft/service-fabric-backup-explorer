@@ -33,7 +33,10 @@
     <Compile Include="UserUtitilites.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ServiceFabric.Data" Version="6.1.1833" />
+    <Reference Include="..\..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.dll" Version="9.1.1833" />
+    <Reference Include="..\..\..\..\refs\Microsoft.ServiceFabric.Data.dll" Version="9.1.1833" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 </Project>

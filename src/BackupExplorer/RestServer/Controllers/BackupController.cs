@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http.ModelBinding;
+using System.Web.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Data;
 
