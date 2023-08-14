@@ -44,31 +44,12 @@ $NugetFullPath = join-path $PSScriptRoot "nuget.exe"
 
 
 if ($MSBuildFullPath -eq "") {
-    if (Test-Path "env:\ProgramFiles(x86)") {
-        $progFilesPath = ${env:ProgramFiles(x86)}
-    }
-    elseif (Test-Path "env:\ProgramFiles") {
-        $progFilesPath = ${env:ProgramFiles}
-    }
-
-    $VS2017InstallPath = join-path $progFilesPath "Microsoft Visual Studio\${vsversion}"
-    $versions = 'Community', 'Professional', 'Enterprise'
-
-    $versionno=''
-    foreach ($version in $versions) {
-        if ($vsversion -eq "2019") {
-            $versionno = '\Current'
-        }
-        else {
-            $versionno = '15.0'
-        }
-        $VS2017VersionPath = join-path $VS2017InstallPath $version
-        $MSBuildFullPath = join-path $VS2017VersionPath "MSBuild\${versionno}\Bin\MSBuild.exe"
-
-        if (Test-Path $MSBuildFullPath) {
-           break
-        }
-    }    
+     $MSBuildFullPath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
+     Write-Host "Auto detected MSBuild path: " $MSBuildFullPath
+     if ($MSBuildFullPath -eq "" -or $MSBuildFullPath -eq $null)
+     {
+         throw "Could not auto detect MSBuild path"
+     }
 }
 
 if (!(Test-Path $MSBuildFullPath)) {
