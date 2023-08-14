@@ -40,11 +40,16 @@
     <Compile Include="StateManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ServiceFabric.Tools.ReliabilitySimulator" Version="9.1.1833-beta" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.15" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Tools.ReliabilitySimulator.dll" Version="9.1.1833-beta" />
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Impl.dll" Version="9.1.1833" />
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.dll" Version="9.1.1833" />
+    <Reference Include ="..\..\..\refs\System.Fabric.dll" Version="9.1.1833" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.config">
