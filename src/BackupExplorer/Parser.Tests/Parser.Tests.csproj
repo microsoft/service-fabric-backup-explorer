@@ -5,7 +5,7 @@
     <AssemblyName>Microsoft.ServiceFabric.ReliableCollectionBackup.Parser.Tests</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <AssemblyTitle>$(AssemblyName)</AssemblyTitle>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp6.0</TargetFramework>
     <AssemblyDescription>Microsoft Azure Service Fabric Reliable Collection Backup Parser Tests</AssemblyDescription>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
