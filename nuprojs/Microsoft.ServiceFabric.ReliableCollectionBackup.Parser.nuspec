@@ -8,17 +8,6 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <language>en-US</language>
     <description>This package contains the Microsoft Service Fabric Reliable Collection Backup Parser.</description>
-    <contentFiles>
-      <files include="**" buildAction="None" copyToOutput="true" />
-    </contentFiles>
-    <dependencies>
-      <group targetFramework="netstandard2.0">
-        <dependency id="Microsoft.Logic.Guan" version="1.0.4" />
-      </group>
-      <group targetFramework="net6.0">
-        <dependency id="Microsoft.ServiceFabric.Services" version="6.0.1017" />
-	  </group>
-    </dependencies>
     <projectUrl>https://github.com/microsoft/service-fabric-backup-explorer</projectUrl>
     <tags>Microsoft ServiceFabric ReliableCollection Backup Parser</tags>
     <copyright>© Microsoft Corporation. All rights reserved.</copyright>
