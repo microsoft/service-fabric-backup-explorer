@@ -28,6 +28,10 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// </summary>
         /// <param name="backupChainPath">Folder path that contains sub folders of one full and multiple incremental backups.</param>
         /// <param name="codePackagePath">Code packages of the service whose backups are provided in <paramref name="backupChainPath" />.</param>
+        /// <param name="log">Log object to log the events during backup parsing.</param>
+        /// <param name="workFolderPath">Work folder for BackupParser to use for its internal operations. If not provided, a random folder will be created in current directory.</param>
+        /// <param name="checkpointThresholdInMB">Checkpoint threshold in MB for the replicator used in backup parsing. Default value is 50 MB.</param>
+        /// <param name="logFolderPath">Log folder for the replicator used in backup parsing. If not provided, work folder will be used as log folder.</param>  
         public BackupParserImpl(string backupChainPath, string codePackagePath, ILog log, string workFolderPath, int checkpointThresholdInMB = 50, string logFolderPath = null)
         {
             this.backupChainPath = backupChainPath;
@@ -82,30 +86,46 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// Parses the backup.
         /// </summary>
         /// <param name="cancellationToken">Cancellation token to stop backup parsing.</param>
-        /// <returns>Task associated with parsing.</returns>
-        public async Task ParseAsync(CancellationToken cancellationToken)
+        /// <returns>Task associated with parsing. The result is the last committed sequence number.</returns>
+        public async Task<long> ParseAsync(CancellationToken cancellationToken)
         {
+            long lastCommittedSequenceNumber = 0;
+
             // Since these are COM calls, we need to wrap them to run in MTA.
             // asnegi: I am still not sure why we need this even when lower native layer has a similar wrapper.
             await ComMtaHelper.WrapNativeSyncInvokeInMTA(async () =>
             {
-                var transactionalReplicatorSettings = TransactionalReplicatorSettingsHelper.Create(
-                    this.logFolder,
-                    "Ktl",
-                    checkpointThresholdMB: this.checkpointThresholdInMB,
-                    useDefaultSharedLogId: true,
-                    LogManagerLoggerType : System.Fabric.Data.Log.LogManager.LoggerType.Inproc);
+                try
+                {
+                    var transactionalReplicatorSettings = TransactionalReplicatorSettingsHelper.Create(
+                        this.logFolder,
+                        "Ktl",
+                        checkpointThresholdMB: this.checkpointThresholdInMB,
+                        useDefaultSharedLogId: true,
+                        LogManagerLoggerType : System.Fabric.Data.Log.LogManager.LoggerType.Inproc);
 
-                await this.reliabilitySimulator.OpenReplicaWithSettingsAsync(ReplicaOpenMode.New, transactionalReplicatorSettings).ConfigureAwait(false);
-                await this.reliabilitySimulator.PromoteReplicaAsync(false).ConfigureAwait(false);
-                await this.reliabilitySimulator.PrepareForDataLossAsync().ConfigureAwait(false);
+                    await this.reliabilitySimulator.OpenReplicaWithSettingsAsync(ReplicaOpenMode.New, transactionalReplicatorSettings).ConfigureAwait(false);
+                    await this.reliabilitySimulator.PromoteReplicaAsync(false).ConfigureAwait(false);
+                    await this.reliabilitySimulator.PrepareForDataLossAsync().ConfigureAwait(false);
 
-                this.Replicator.TransactionChanged += this.OnTransactionChanged;
-                this.Replicator.StateManager.StateManagerChanged += this.transactionChangeManager.OnStateManagerChanged;
-                this.stateManager.ReAddStateSerializers();
+                    this.Replicator.TransactionChanged += this.OnTransactionChanged;
+                    this.Replicator.StateManager.StateManagerChanged += this.transactionChangeManager.OnStateManagerChanged;
+                    this.stateManager.ReAddStateSerializers();
 
-                await this.reliabilitySimulator.OnDataLossAsync(cancellationToken).ConfigureAwait(false);
+                    await this.reliabilitySimulator.OnDataLossAsync(cancellationToken).ConfigureAwait(false);
+
+                    // Get the last committed sequence number after parsing completes
+                    lastCommittedSequenceNumber = this.Replicator.GetLastCommittedSequenceNumber();
+                    log.Info($"Parsing completed. Last committed sequence number: {lastCommittedSequenceNumber}");
+                }
+                catch (Exception ex)
+                {
+                    log.Error($"Exception in ParseAsync", ex);
+                    throw;
+                }
             });
+
+            return lastCommittedSequenceNumber;
         }
 
         /// <summary>
@@ -128,6 +148,15 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         public async Task BackupAsync(Func<BackupInfo, CancellationToken, Task<bool>> backupCallback, BackupOption backupOption, TimeSpan timeout, CancellationToken cancellationToken)
         {
             await this.Replicator.BackupAsync(backupCallback, backupOption, timeout, cancellationToken);
+        }
+
+        /// <summary>
+        /// Close the parser and underlying replica.
+        /// </summary>
+        /// <returns></returns>
+        public async Task CloseAsync()
+        {
+            await this.reliabilitySimulator.CloseAsync();
         }
 
         private void OnTransactionChanged(object sender, NotifyTransactionChangedEventArgs e)

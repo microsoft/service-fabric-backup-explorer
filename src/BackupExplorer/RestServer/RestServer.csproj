@@ -41,13 +41,13 @@
     <PackageReference Include="Microsoft.Data.OData" Version="5.8.5" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="..\..\..\refs\ServiceFabric.Extensions.Services.Queryable.dll" Version="3.1.659" />
-    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Impl.dll" Version="9.1.1833" />
-    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Tools.ReliabilitySimulator.dll" Version="9.1.1833-beta" />
-    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.dll" Version="9.1.1833" />
-    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.V2.dll" Version="9.1.1833" />
-    <Reference Include ="..\..\..\refs\System.Fabric.dll" Version="9.1.1833" />
-    <Reference Include ="..\..\..\refs\Microsoft.ServiceFabric.Data.dll" Version="9.1.1833" />
+    <Reference Include="..\..\..\refs\ServiceFabric.Extensions.Services.Queryable.dll" />
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Impl.dll" />
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Tools.ReliabilitySimulator.dll" />
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.dll" />
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.V2.dll" />
+    <Reference Include ="..\..\..\refs\System.Fabric.dll" />
+    <Reference Include ="..\..\..\refs\Microsoft.ServiceFabric.Data.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Parser\Parser.csproj" />

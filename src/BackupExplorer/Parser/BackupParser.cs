@@ -65,11 +65,13 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         /// After parsing has finished, one can write to the Reliable Collections using <see cref="StateManager" />
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
-        /// <returns>Task that represents the asynchronous parse operation.</returns>
-        public async Task ParseAsync(CancellationToken cancellationToken)
+        /// <returns>Task that represents the asynchronous parse operation. The result is the last committed sequence number.</returns>
+        public async Task<long> ParseAsync(CancellationToken cancellationToken)
         {
             log.Info("Parser ParseAsync Call");
-            await this.backupParserImpl.ParseAsync(cancellationToken);
+            long lastCommittedSequenceNumber = await this.backupParserImpl.ParseAsync(cancellationToken);
+            log.Info($"Parser ParseAsync completed with LastCommittedSequenceNumber: {lastCommittedSequenceNumber}");
+            return lastCommittedSequenceNumber;
         }
 
         /// <summary>
@@ -84,6 +86,15 @@ namespace Microsoft.ServiceFabric.ReliableCollectionBackup.Parser
         {
             log.Info("Parser BackupAsync Call");
             await this.backupParserImpl.BackupAsync(backupCallback, backupOption, timeout, cancellationToken);
+        }
+
+        /// <summary>
+        /// Close the parser and release all resources.
+        /// </summary>
+        /// <returns></returns>
+        public async Task CloseAsync()
+        {
+            await this.backupParserImpl.CloseAsync();
         }
 
         /// <summary>
