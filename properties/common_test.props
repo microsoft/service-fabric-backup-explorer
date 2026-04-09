@@ -3,5 +3,6 @@
   <Import Project="common.props" />
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>$(RepoRoot)/properties/TestKey.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 </Project>

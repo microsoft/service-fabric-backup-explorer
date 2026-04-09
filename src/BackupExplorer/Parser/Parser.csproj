@@ -24,7 +24,7 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup>
-    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ComMtaHelper.cs" />
@@ -46,10 +46,10 @@
     <PackageReference Include="log4net" Version="2.0.15" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Tools.ReliabilitySimulator.dll" Version="9.1.1833-beta" />
-    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Impl.dll" Version="9.1.1833" />
-    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.dll" Version="9.1.1833" />
-    <Reference Include ="..\..\..\refs\System.Fabric.dll" Version="9.1.1833" />
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Tools.ReliabilitySimulator.dll" />
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Impl.dll"  />
+    <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Data.Interfaces.dll" />
+    <Reference Include ="..\..\..\refs\System.Fabric.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.config">

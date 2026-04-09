@@ -20,7 +20,7 @@ setuptools.setup(
     author_email='aagup@microsoft.com',
     license='MIT',
     keywords='servicefabric azure',
-    python_requires='>=3.0,!=3.4,!=3.3,!=3.2,!=3.1,!=3.0,<3.12',
+    python_requires='>=3.5',
     packages=[
         'bkpctl',
         'bkpctl.helps'
