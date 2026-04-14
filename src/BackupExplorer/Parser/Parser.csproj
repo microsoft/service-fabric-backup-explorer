@@ -43,7 +43,7 @@
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.15" />
+    <PackageReference Include="log4net" Version="3.3.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="..\..\..\refs\Microsoft.ServiceFabric.Tools.ReliabilitySimulator.dll" Version="9.1.1833-beta" />
